@@ -444,7 +444,8 @@ public class StudentController extends ToolController {
             MessageDialog.showDialog(res.getMsg());
         }
     }
-    public void doImport(){
+    @FXML
+    public void onImportFeeButtonClick(){
         FileChooser fileDialog = new FileChooser();
         fileDialog.setTitle("前选择消费数据表");
         fileDialog.setInitialDirectory(new File("C:/"));
