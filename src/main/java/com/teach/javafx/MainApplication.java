@@ -75,6 +75,7 @@ public class MainApplication extends Application {
     }
 
     public static void main(String[] args) {
+        HttpRequestUtil.serverUrl = "http://"+ args[0];
         launch();
     }
 

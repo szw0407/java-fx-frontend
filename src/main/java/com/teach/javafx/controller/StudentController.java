@@ -193,7 +193,7 @@ public class StudentController extends ToolController {
         emailField.setText(CommonMethod.getString(form, "email"));
         phoneField.setText(CommonMethod.getString(form, "phone"));
         addressField.setText(CommonMethod.getString(form, "address"));
-
+        displayPhoto();
     }
 
     /**
@@ -418,6 +418,13 @@ public class StudentController extends ToolController {
         req.add("fileName", "photo/" + personId + ".jpg");  //个人照片显示
         byte[] bytes = HttpRequestUtil.requestByteData("/api/base/getFileByteData", req);
         if (bytes != null) {
+            try {
+                FileOutputStream out = new FileOutputStream("d:/temp/photo.jpg");
+                out.write(bytes);
+                out.close();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
             ByteArrayInputStream in = new ByteArrayInputStream(bytes);
             Image img = new Image(in);
             photoImageView.setImage(img);
