@@ -1,9 +1,7 @@
 package com.teach.javafx.models;
 
-import org.fatmansoft.teach.models.Person;
 
 public class Student {
-    private Integer studentId;
     private Integer personId;
     private String num;
     private String name;
@@ -25,13 +23,6 @@ public class Student {
     public Student(String num, String name){
         this.num = num;
         this.name = name;
-    }
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
     }
 
 

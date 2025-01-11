@@ -19,7 +19,6 @@ public class MessageDialog {
 
     private  MessageController messageController= null;
     private  ChoiceController choiceController= null;
-    private  PdfViewerController pdfViewerController = null;
     private static MessageDialog instance = new MessageDialog();
 
     /**
@@ -61,20 +60,6 @@ public class MessageDialog {
             choiceController = (ChoiceController) fxmlLoader.getController();
             choiceController.setStage(stage);
 
-            fxmlLoader = new FXMLLoader(MainApplication.class.getResource("base/pdf-viewer-dialog.fxml"));
-            scene = new Scene(fxmlLoader.load(), 600, 820);
-            stage = new Stage();
-            stage.initOwner(MainApplication.getMainStage());
-            stage.setAlwaysOnTop(true);
-            stage.initModality(Modality.NONE);
-            stage.setOnCloseRequest(e->{
-                MainApplication.setCanClose(true);
-            });
-            stage.setScene(scene);
-            stage.setTitle("PDF显示对话框");
-            pdfViewerController = (PdfViewerController) fxmlLoader.getController();
-            pdfViewerController.setStage(stage);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -108,17 +93,5 @@ public class MessageDialog {
         return instance.choiceController.choiceDialog(msg);
     }
 
-    /**
-     * pdfViewerDialog 显示PDF
-     * @param data  PDF二进制数据
-     */
-    public static void pdfViewerDialog(byte []data) {
-        if(instance == null)
-            return ;
-        if(instance.pdfViewerController == null)
-            return ;
-        MainApplication.setCanClose(false);
-        instance.pdfViewerController.showPdf(data);
-    }
 
 }

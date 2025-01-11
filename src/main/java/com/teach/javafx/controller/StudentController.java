@@ -6,6 +6,8 @@ import com.teach.javafx.controller.base.ToolController;
 import com.teach.javafx.request.*;
 import javafx.scene.Scene;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -22,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.stage.FileChooser;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import java.util.Map;
  * @FXML 方法 对应于fxml文件中的 on***Click的属性
  */
 public class StudentController extends ToolController {
+    private ImageView photoImageView;
     @FXML
     private TableView<Map> dataTableView;  //学生信息表
     @FXML
@@ -60,6 +64,8 @@ public class StudentController extends ToolController {
     private TableColumn<Map, String> phoneColumn; //学生信息表 电话列
     @FXML
     private TableColumn<Map, String> addressColumn;//学生信息表 地址列
+    @FXML
+    private Button photoButton;  //照片显示和上传按钮
 
     @FXML
     private TextField numField; //学生信息  学号输入域
@@ -87,7 +93,7 @@ public class StudentController extends ToolController {
     @FXML
     private TextField numNameTextField;  //查询 姓名学号输入域
 
-    private Integer studentId = null;  //当前编辑修改的学生的主键
+    private Integer personId = null;  //当前编辑修改的学生的主键
 
     private ArrayList<Map> studentList = new ArrayList();  // 学生信息列表数据
     private List<OptionItem> genderList;   //性别选择列表数据
@@ -111,6 +117,10 @@ public class StudentController extends ToolController {
 
     @FXML
     public void initialize() {
+        photoImageView = new ImageView();
+        photoImageView.setFitHeight(100);
+        photoImageView.setFitWidth(100);
+        photoButton.setGraphic(photoImageView);
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
@@ -143,7 +153,7 @@ public class StudentController extends ToolController {
      * 清除学生表单中输入信息
      */
     public void clearPanel() {
-        studentId = null;
+        personId = null;
         numField.setText("");
         nameField.setText("");
         deptField.setText("");
@@ -163,9 +173,9 @@ public class StudentController extends ToolController {
             clearPanel();
             return;
         }
-        studentId = CommonMethod.getInteger(form, "studentId");
+        personId = CommonMethod.getInteger(form, "personId");
         DataRequest req = new DataRequest();
-        req.add("studentId", studentId);
+        req.add("personId", personId);
         DataResponse res = HttpRequestUtil.request("/api/student/getStudentInfo", req);
         if (res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
@@ -187,7 +197,7 @@ public class StudentController extends ToolController {
     }
 
     /**
-     * 点击学生列表的某一行，根据studentId ,从后台查询学生的基本信息，切换学生的编辑信息
+     * 点击学生列表的某一行，根据personId ,从后台查询学生的基本信息，切换学生的编辑信息
      */
 
     public void onTableRowSelect(ListChangeListener.Change<? extends Integer> change) {
@@ -232,9 +242,9 @@ public class StudentController extends ToolController {
         if (ret != MessageDialog.CHOICE_YES) {
             return;
         }
-        studentId = CommonMethod.getInteger(form, "studentId");
+        personId = CommonMethod.getInteger(form, "personId");
         DataRequest req = new DataRequest();
-        req.add("studentId", studentId);
+        req.add("personId", personId);
         DataResponse res = HttpRequestUtil.request("/api/student/studentDelete", req);
         if (res.getCode() == 0) {
             MessageDialog.showDialog("删除成功！");
@@ -267,11 +277,11 @@ public class StudentController extends ToolController {
         form.put("phone", phoneField.getText());
         form.put("address", addressField.getText());
         DataRequest req = new DataRequest();
-        req.add("studentId", studentId);
+        req.add("personId", personId);
         req.add("form", form);
         DataResponse res = HttpRequestUtil.request("/api/student/studentEditSave", req);
         if (res.getCode() == 0) {
-            studentId = CommonMethod.getIntegerFromObject(res.getData());
+            personId = CommonMethod.getIntegerFromObject(res.getData());
             MessageDialog.showDialog("提交成功！");
             onQueryButtonClick();
         } else {
@@ -342,7 +352,7 @@ public class StudentController extends ToolController {
     @FXML
     protected void onFamilyButtonClick() {
         DataRequest req = new DataRequest();
-        req.add("studentId", studentId);
+        req.add("personId", personId);
         DataResponse res = HttpRequestUtil.request("/api/student/getFamilyMemberList", req);
         if (res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
@@ -403,4 +413,52 @@ public class StudentController extends ToolController {
         });
         stage.showAndWait();
     }
+    public void displayPhoto(){
+        DataRequest req = new DataRequest();
+        req.add("fileName", "photo/" + personId + ".jpg");  //个人照片显示
+        byte[] bytes = HttpRequestUtil.requestByteData("/api/base/getFileByteData", req);
+        if (bytes != null) {
+            ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+            Image img = new Image(in);
+            photoImageView.setImage(img);
+        }
+
+    }
+
+    @FXML
+    public void onPhotoButtonClick(){
+        FileChooser fileDialog = new FileChooser();
+        fileDialog.setTitle("图片上传");
+//        fileDialog.setInitialDirectory(new File("C:/"));
+        fileDialog.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JPG 文件", "*.jpg"));
+        File file = fileDialog.showOpenDialog(null);
+        if(file == null)
+            return;
+        DataResponse res =HttpRequestUtil.uploadFile("/api/base/uploadPhoto",file.getPath(),"photo/" + personId + ".jpg");
+        if(res.getCode() == 0) {
+            MessageDialog.showDialog("上传成功！");
+            displayPhoto();
+        }
+        else {
+            MessageDialog.showDialog(res.getMsg());
+        }
+    }
+    public void doImport(){
+        FileChooser fileDialog = new FileChooser();
+        fileDialog.setTitle("前选择消费数据表");
+        fileDialog.setInitialDirectory(new File("C:/"));
+        fileDialog.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XLSX 文件", "*.xlsx"));
+        File file = fileDialog.showOpenDialog(null);
+        String paras = "personId="+personId;
+        DataResponse res =HttpRequestUtil.importData("/api/student/importFeeData",file.getPath(),paras);
+        if(res.getCode() == 0) {
+            MessageDialog.showDialog("上传成功！");
+        }
+        else {
+            MessageDialog.showDialog(res.getMsg());
+        }
+    }
+
 }

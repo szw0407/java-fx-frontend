@@ -91,6 +91,7 @@
                     <columnConstraints>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="124.0" minWidth="10.0" prefWidth="67.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="193.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100" minWidth="10.0" prefWidth="100" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -128,6 +129,7 @@
                         <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                         <Label text="地址" GridPane.rowIndex="10" />
                         <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Button fx:id="photoButton" onAction="#onPhotoButtonClick" styleClass="border_black_1" GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="4" />
                     </children>
                 </GridPane>
                <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="36.0">

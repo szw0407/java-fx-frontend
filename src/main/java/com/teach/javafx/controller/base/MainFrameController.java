@@ -88,40 +88,8 @@ public class MainFrameController {
     }
     public void initMenuBar(List<Map> mList){
         Menu menu;
-        MenuItem item;
-        String role = AppStore.getJwt().getRoles();
-        menu = new Menu("编辑");
-        item = new MenuItem();
-        item.setText("新建");
-        item.setOnAction(e->doNewCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("保存");
-        item.setOnAction(e->doSaveCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("删除");
-        item.setOnAction(e->doDeleteCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("打印");
-        item.setOnAction(e->doPrintCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("导入");
-        item.setOnAction(e->doImportCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("导出");
-        item.setOnAction(e->doExportCommand());
-        menu.getItems().add(item);
-        item = new MenuItem();
-        item.setText("测试");
-        item.setOnAction(e->doTestCommand());
-        menu.getItems().add(item);
-        menuBar.getMenus().add(menu);
-        int i,j;
         Map m;
+        int i;
         List<Map> sList;
         for(i = 0; i < mList.size();i++) {
             m = mList.get(i);

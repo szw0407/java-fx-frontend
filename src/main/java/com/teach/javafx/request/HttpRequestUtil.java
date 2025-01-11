@@ -23,7 +23,6 @@ import java.util.Map;
  *  String serverUrl = "http://localhost:9090" 后台服务的机器地址和端口号
  */
 public class HttpRequestUtil {
-    public static boolean isLocal = false;
     private static Gson gson = new Gson();
     private static HttpClient client = HttpClient.newHttpClient();
     public static String serverUrl = "http://localhost:22222";
@@ -33,8 +32,6 @@ public class HttpRequestUtil {
      *  应用关闭是需要做关闭处理
      */
     public static void close(){
-        if(isLocal)
-            SQLiteJDBC.getInstance().close();
     }
 
     /**
@@ -44,9 +41,6 @@ public class HttpRequestUtil {
      */
 
     public static String login(LoginRequest request){
-        if(isLocal) {
-            return SQLiteJDBC.getInstance().login(request.getUsername(),request.getPassword());
-        }else {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(serverUrl + "/auth/login"))
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
@@ -68,7 +62,6 @@ public class HttpRequestUtil {
                 e.printStackTrace();
             }
             return "登录失败";
-        }
     }
 
     /**
@@ -78,16 +71,6 @@ public class HttpRequestUtil {
      * @return DataResponse 返回后台返回数据
      */
     public static DataResponse request(String url, DataRequest request){
-        if(isLocal) {
-            int index = url.lastIndexOf('/');
-            String methodName = url.substring(index+1,url.length());
-            try {
-                Method method = SQLiteJDBC.class.getMethod(methodName, DataRequest.class);
-                return (DataResponse)method.invoke(SQLiteJDBC.getInstance(), request);
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-        }else {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(serverUrl + url))
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
@@ -109,7 +92,6 @@ public class HttpRequestUtil {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
         return null;
     }
 
@@ -300,12 +282,5 @@ public class HttpRequestUtil {
      * @return html 序列号
      */
 
-    public static int uploadHtmlString(String html)  {
-            DataRequest req = new DataRequest();
-            String str = new String(Base64.getEncoder().encode(html.getBytes(StandardCharsets.UTF_8)));
-            req.add("html", str);
-            DataResponse res =request("/api/base/uploadHtmlString",req);
-            return CommonMethod.getIntegerFromObject(res.getData());
-    }
 
 }

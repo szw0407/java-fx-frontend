@@ -69,18 +69,18 @@ public class ScoreTableController {
 
     @FXML
     private void onQueryButtonClick(){
-        Integer studentId = 0;
+        Integer personId = 0;
         Integer courseId = 0;
         OptionItem op;
         op = studentComboBox.getSelectionModel().getSelectedItem();
         if(op != null)
-            studentId = Integer.parseInt(op.getValue());
+            personId = Integer.parseInt(op.getValue());
         op = courseComboBox.getSelectionModel().getSelectedItem();
         if(op != null)
             courseId = Integer.parseInt(op.getValue());
         DataResponse res;
         DataRequest req =new DataRequest();
-        req.add("studentId",studentId);
+        req.add("personId",personId);
         req.add("courseId",courseId);
         res = HttpRequestUtil.request("/api/score/getScoreList",req); //从后台获取所有学生信息列表集合
         if(res != null && res.getCode()== 0) {
@@ -172,8 +172,8 @@ public class ScoreTableController {
         if(!"ok".equals(cmd))
             return;
         DataResponse res;
-        Integer studentId = CommonMethod.getInteger(data,"studentId");
-        if(studentId == null) {
+        Integer personId = CommonMethod.getInteger(data,"personId");
+        if(personId == null) {
             MessageDialog.showDialog("没有选中学生不能添加保存！");
             return;
         }
@@ -183,7 +183,7 @@ public class ScoreTableController {
             return;
         }
         DataRequest req =new DataRequest();
-        req.add("studentId",studentId);
+        req.add("personId",personId);
         req.add("courseId",courseId);
         req.add("scoreId",CommonMethod.getInteger(data,"scoreId"));
         req.add("mark",CommonMethod.getInteger(data,"mark"));
