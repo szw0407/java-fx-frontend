@@ -1,14 +1,10 @@
 module com.teach.javafx {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.web;
     requires javafx.swing;
-    requires org.apache.pdfbox;
     requires java.logging;
     requires com.google.gson;
     requires java.net.http;
-    requires spring.security.crypto;
-    requires javafx.media;
 
     opens com.teach.javafx to javafx.fxml;
     opens com.teach.javafx.request to com.google.gson, javafx.fxml;
