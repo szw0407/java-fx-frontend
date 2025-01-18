@@ -12,8 +12,8 @@ public class JwtResponse {
     private String tokenType;
     private Integer id;
     private String username;
-    private String accessToken;
-    private String roles;
+    private String token;
+    private String role;
 
     public String getTokenType() {
         return tokenType;
@@ -39,20 +39,19 @@ public class JwtResponse {
         this.username = username;
     }
 
-
-    public String getAccessToken() {
-        return accessToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

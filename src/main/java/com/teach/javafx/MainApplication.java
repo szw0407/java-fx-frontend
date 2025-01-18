@@ -14,8 +14,6 @@ import java.io.IOException;
 public class MainApplication extends Application {
     /**
      * 加载登录对话框，设置登录Scene到Stage,显示该场景
-     * @param stage
-     * @throws IOException
      */
     private static Stage mainStage;
     private static double stageWidth = -1;

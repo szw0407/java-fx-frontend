@@ -112,7 +112,7 @@ public class MyTreeNode {
         this.children = children;
     }
 
-    public MyTreeNode(Map map){
+    public MyTreeNode(Map<String,Object> map){
         this.id  = CommonMethod.getInteger(map,"id");
         this.value = CommonMethod.getString(map,"value");
         this.label = CommonMethod.getString(map,"label");
@@ -122,10 +122,9 @@ public class MyTreeNode {
         this.userTypeIds = CommonMethod.getString(map,"userTypeIds");
         this.parentTitle = CommonMethod.getString(map,"parentTitle");
         this.children= new ArrayList<MyTreeNode>();
-        List children = CommonMethod.getList(map,"children");
-        if(children != null && children.size() > 0) {
-            for(int i = 0; i < children.size();i++)
-            this.children.add(new MyTreeNode((Map)children.get(i)));
+        List<?> children = CommonMethod.getList(map,"children");
+        if(!children.isEmpty()) {
+            for (Object child : children) this.children.add(new MyTreeNode((Map) child));
         }
     }
 

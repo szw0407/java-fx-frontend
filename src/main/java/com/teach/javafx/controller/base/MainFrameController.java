@@ -116,7 +116,7 @@ public class MainFrameController {
     }
 
     public void initMenuTree(List<Map> mList) {
-        String role = AppStore.getJwt().getRoles();
+        String role = AppStore.getJwt().getRole();
         MyTreeNode node = new MyTreeNode(null, null,"菜单",0);
         TreeItem<MyTreeNode> root = new TreeItem<>(node);
         TreeItem<MyTreeNode>  menu;

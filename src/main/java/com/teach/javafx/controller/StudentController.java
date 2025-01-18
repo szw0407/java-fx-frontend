@@ -128,7 +128,7 @@ public class StudentController extends ToolController {
         if (res != null && res.getCode() == 0) {
             studentList = (ArrayList<Map>) res.getData();
         }
-        numColumn.setCellValueFactory(new MapValueFactory("num"));  //设置列值工程属性
+        numColumn.setCellValueFactory(new MapValueFactory<>("num"));  //设置列值工程属性
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         deptColumn.setCellValueFactory(new MapValueFactory<>("dept"));
         majorColumn.setCellValueFactory(new MapValueFactory<>("major"));
@@ -168,7 +168,7 @@ public class StudentController extends ToolController {
     }
 
     protected void changeStudentInfo() {
-        Map form = dataTableView.getSelectionModel().getSelectedItem();
+        Map<String,Object> form = dataTableView.getSelectionModel().getSelectedItem();
         if (form == null) {
             clearPanel();
             return;
@@ -246,11 +246,13 @@ public class StudentController extends ToolController {
         DataRequest req = new DataRequest();
         req.add("personId", personId);
         DataResponse res = HttpRequestUtil.request("/api/student/studentDelete", req);
-        if (res.getCode() == 0) {
-            MessageDialog.showDialog("删除成功！");
-            onQueryButtonClick();
-        } else {
-            MessageDialog.showDialog(res.getMsg());
+        if(res!= null) {
+            if (res.getCode() == 0) {
+                MessageDialog.showDialog("删除成功！");
+                onQueryButtonClick();
+            } else {
+                MessageDialog.showDialog(res.getMsg());
+            }
         }
     }
 
@@ -259,11 +261,11 @@ public class StudentController extends ToolController {
      */
     @FXML
     protected void onSaveButtonClick() {
-        if (numField.getText().equals("")) {
+        if (numField.getText().isEmpty()) {
             MessageDialog.showDialog("学号为空，不能修改");
             return;
         }
-        Map form = new HashMap();
+        Map<String,Object> form = new HashMap<>();
         form.put("num", numField.getText());
         form.put("name", nameField.getText());
         form.put("dept", deptField.getText());
@@ -375,19 +377,19 @@ public class StudentController extends ToolController {
         });
         table.getColumns().add(relationColumn);
         TableColumn<Map, String> nameColumn = new TableColumn<>("姓名");
-        nameColumn.setCellValueFactory(new MapValueFactory("name"));
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.<Map>forTableColumn());
         table.getColumns().add(nameColumn);
         TableColumn<Map, String> genderColumn = new TableColumn<>("性别");
-        genderColumn.setCellValueFactory(new MapValueFactory("gender"));
+        genderColumn.setCellValueFactory(new MapValueFactory<>("gender"));
         genderColumn.setCellFactory(TextFieldTableCell.<Map>forTableColumn());
         table.getColumns().add(genderColumn);
         TableColumn<Map, String> ageColumn = new TableColumn<>("年龄");
-        ageColumn.setCellValueFactory(new MapValueFactory("age"));
+        ageColumn.setCellValueFactory(new MapValueFactory<>("age"));
         ageColumn.setCellFactory(TextFieldTableCell.<Map>forTableColumn());
         table.getColumns().add(ageColumn);
         TableColumn<Map, String> unitColumn = new TableColumn<>("单位");
-        unitColumn.setCellValueFactory(new MapValueFactory("unit"));
+        unitColumn.setCellValueFactory(new MapValueFactory<>("unit"));
         unitColumn.setCellFactory(TextFieldTableCell.<Map>forTableColumn());
         table.getColumns().add(unitColumn);
         BorderPane root = new BorderPane();
@@ -418,13 +420,6 @@ public class StudentController extends ToolController {
         req.add("fileName", "photo/" + personId + ".jpg");  //个人照片显示
         byte[] bytes = HttpRequestUtil.requestByteData("/api/base/getFileByteData", req);
         if (bytes != null) {
-            try {
-                FileOutputStream out = new FileOutputStream("d:/temp/photo.jpg");
-                out.write(bytes);
-                out.close();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
             ByteArrayInputStream in = new ByteArrayInputStream(bytes);
             Image img = new Image(in);
             photoImageView.setImage(img);

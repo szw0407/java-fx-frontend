@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class CourseController {
     @FXML
-    private TableView<Map> dataTableView;
+    private TableView<Map<String, Object>> dataTableView;
     @FXML
     private TableColumn<Map,String> numColumn;
     @FXML
@@ -37,8 +37,8 @@ public class CourseController {
     @FXML
     private TableColumn<Map,FlowPane> operateColumn;
 
-    private List<Map> courseList = new ArrayList();  // 学生信息列表数据
-    private ObservableList<Map> observableList= FXCollections.observableArrayList();  // TableView渲染列表
+    private List<Map<String,Object>> courseList = new ArrayList<>();  // 学生信息列表数据
+    private final ObservableList<Map<String,Object>> observableList= FXCollections.observableArrayList();  // TableView渲染列表
 
     @FXML
     private void onQueryButtonClick(){
@@ -46,14 +46,14 @@ public class CourseController {
         DataRequest req =new DataRequest();
         res = HttpRequestUtil.request("/api/course/getCourseList",req); //从后台获取所有学生信息列表集合
         if(res != null && res.getCode()== 0) {
-            courseList = (ArrayList<Map>)res.getData();
+            courseList = (List<Map<String, Object>>) res.getData();
         }
         setTableViewData();
     }
 
     private void setTableViewData() {
        observableList.clear();
-       Map map;
+       Map<String,Object> map;
         FlowPane flowPane;
         Button saveButton,deleteButton;
             for (int j = 0; j < courseList.size(); j++) {
@@ -80,45 +80,45 @@ public class CourseController {
     public void saveItem(String name){
         if(name == null)
             return;
-        int j = Integer.parseInt(name.substring(4,name.length()));
-        Map data = courseList.get(j);
+        int j = Integer.parseInt(name.substring(4));
+        Map<String,Object> data = courseList.get(j);
         System.out.println(data);
     }
     public void deleteItem(String name){
         if(name == null)
             return;
-        int j = Integer.parseInt(name.substring(5,name.length()));
-        Map data = courseList.get(j);
+        int j = Integer.parseInt(name.substring(5));
+        Map<String,Object> data = courseList.get(j);
         System.out.println(data);
     }
 
     @FXML
     public void initialize() {
-        numColumn.setCellValueFactory(new MapValueFactory("num"));
+        numColumn.setCellValueFactory(new MapValueFactory<>("num"));
         numColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         numColumn.setOnEditCommit(event -> {
-            Map<String, Object> map = event.getRowValue();
+            Map<String,Object> map = event.getRowValue();
             map.put("num", event.getNewValue());
         });
-        nameColumn.setCellValueFactory(new MapValueFactory("name"));
+        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(event -> {
             Map<String, Object> map = event.getRowValue();
             map.put("name", event.getNewValue());
         });
-        creditColumn.setCellValueFactory(new MapValueFactory("credit"));
+        creditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         creditColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         creditColumn.setOnEditCommit(event -> {
             Map<String, Object> map = event.getRowValue();
             map.put("credit", event.getNewValue());
         });
-        preCourseColumn.setCellValueFactory(new MapValueFactory("preCourse"));
+        preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourse"));
         preCourseColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         preCourseColumn.setOnEditCommit(event -> {
             Map<String, Object> map = event.getRowValue();
             map.put("preCourse", event.getNewValue());
         });
-        operateColumn.setCellValueFactory(new MapValueFactory("operate"));
+        operateColumn.setCellValueFactory(new MapValueFactory<>("operate"));
         dataTableView.setEditable(true);
         onQueryButtonClick();
     }

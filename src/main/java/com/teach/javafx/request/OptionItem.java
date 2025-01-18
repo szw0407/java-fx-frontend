@@ -23,7 +23,7 @@ public class OptionItem {
         this.value = value;
         this.title = title;
     }
-    public OptionItem(Map map){
+    public OptionItem(Map<String,Object> map){
         this.id = CommonMethod.getInteger(map,"id");
         this.value = CommonMethod.getString(map,"value");
         this.title = CommonMethod.getString(map,"title");

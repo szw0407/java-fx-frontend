@@ -33,7 +33,7 @@ public class ScoreEditController {
 
     @FXML
     public void okButtonClick(){
-        Map data = new HashMap();
+        Map<String,Object> data = new HashMap<>();
         OptionItem op;
         op = studentComboBox.getSelectionModel().getSelectedItem();
         if(op != null) {

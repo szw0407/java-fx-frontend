@@ -120,7 +120,7 @@ public class ScoreTableController {
     public void initialize() {
 
 
-        studentNumColumn.setCellValueFactory(new MapValueFactory("studentNum"));  //设置列值工程属性
+        studentNumColumn.setCellValueFactory(new MapValueFactory<>("studentNum"));  //设置列值工程属性
         studentNameColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
         classNameColumn.setCellValueFactory(new MapValueFactory<>("className"));
         courseNumColumn.setCellValueFactory(new MapValueFactory<>("courseNum"));
@@ -166,7 +166,7 @@ public class ScoreTableController {
             throw new RuntimeException(e);
         }
     }
-    public void doClose(String cmd, Map data) {
+    public void doClose(String cmd, Map<String, Object> data) {
         MainApplication.setCanClose(true);
         stage.close();
         if(!"ok".equals(cmd))
@@ -214,7 +214,7 @@ public class ScoreTableController {
     }
     @FXML
     private void onDeleteButtonClick() {
-        Map form = dataTableView.getSelectionModel().getSelectedItem();
+        Map<String,Object> form = dataTableView.getSelectionModel().getSelectedItem();
         if(form == null) {
             MessageDialog.showDialog("没有选择，不能删除");
             return;

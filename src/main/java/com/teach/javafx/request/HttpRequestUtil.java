@@ -19,8 +19,8 @@ import java.util.Map;
  *  String serverUrl = "http://localhost:9090" 后台服务的机器地址和端口号
  */
 public class HttpRequestUtil {
-    private static Gson gson = new Gson();
-    private static HttpClient client = HttpClient.newHttpClient();
+    private static final Gson gson = new Gson();
+    private static final HttpClient client = HttpClient.newHttpClient();
     public static String serverUrl = "http://localhost:22222";
 //    public static String serverUrl = "http://202.194.7.29:22222";
 
@@ -52,12 +52,10 @@ public class HttpRequestUtil {
                 } else if (response.statusCode() == 401) {
                     return "用户名或密码不存在！";
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-            return "登录失败";
+        return "登录失败";
     }
 
     /**
@@ -71,7 +69,7 @@ public class HttpRequestUtil {
                     .uri(URI.create(serverUrl + url))
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                     .headers("Content-Type", "application/json")
-                    .headers("Authorization", "Bearer " + AppStore.getJwt().getAccessToken())
+                    .headers("Authorization", "Bearer " + AppStore.getJwt().getToken())
                     .build();
             request.add("username",AppStore.getJwt().getUsername());
             HttpClient client = HttpClient.newHttpClient();
@@ -80,12 +78,9 @@ public class HttpRequestUtil {
                 System.out.println("url=" + url +"    response.statusCode="+response.statusCode());
                 if (response.statusCode() == 200) {
                     //                System.out.println(response.body());
-                    DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
-                    return dataResponse;
+                    return gson.fromJson(response.body(), DataResponse.class);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         return null;
@@ -102,7 +97,7 @@ public class HttpRequestUtil {
                 .uri(URI.create(serverUrl + url))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                 .headers("Content-Type", "application/json")
-                .headers("Authorization", "Bearer "+AppStore.getJwt().getAccessToken())
+                .headers("Authorization", "Bearer "+AppStore.getJwt().getToken())
                 .build();
         HttpClient client = HttpClient.newHttpClient();
         try {
@@ -110,9 +105,7 @@ public class HttpRequestUtil {
             if(response.statusCode() == 200) {
                 return gson.fromJson(response.body(), MyTreeNode.class);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -123,22 +116,20 @@ public class HttpRequestUtil {
                 .uri(URI.create(serverUrl + url))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                 .headers("Content-Type", "application/json")
-                .headers("Authorization", "Bearer "+AppStore.getJwt().getAccessToken())
+                .headers("Authorization", "Bearer "+AppStore.getJwt().getToken())
                 .build();
         HttpClient client = HttpClient.newHttpClient();
         try {
             HttpResponse<String>  response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == 200) {
-                List list = gson.fromJson(response.body(),List.class);
+                List<Map<String,Object>> list = gson.fromJson(response.body(),List.class);
                 List<MyTreeNode> rList = new ArrayList<>();
-                for(int i = 0; i < list.size();i++) {
-                    rList.add(new MyTreeNode((Map)list.get(i)));
+                for (Map<String, Object> stringObjectMap : list) {
+                    rList.add(new MyTreeNode(stringObjectMap));
                 }
                 return rList;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -155,19 +146,16 @@ public class HttpRequestUtil {
                 .uri(URI.create(serverUrl + url))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                 .headers("Content-Type", "application/json")
-                .headers("Authorization", "Bearer "+AppStore.getJwt().getAccessToken())
+                .headers("Authorization", "Bearer "+AppStore.getJwt().getToken())
                 .build();
         HttpClient client = HttpClient.newHttpClient();
         try {
             HttpResponse<String>  response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == 200) {
                 OptionItemList o = gson.fromJson(response.body(), OptionItemList.class);
-                if(o != null)
                 return o.getItemList();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -196,7 +184,7 @@ public class HttpRequestUtil {
                 .uri(URI.create(serverUrl + url))
                 .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(request)))
                 .headers("Content-Type", "application/json")
-                .headers("Authorization", "Bearer "+AppStore.getJwt().getAccessToken())
+                .headers("Authorization", "Bearer "+AppStore.getJwt().getToken())
                 .build();
         HttpClient client = HttpClient.newHttpClient();
         try {
@@ -204,9 +192,7 @@ public class HttpRequestUtil {
             if(response.statusCode() == 200) {
                 return response.body();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -226,16 +212,13 @@ public class HttpRequestUtil {
                     .uri(URI.create(serverUrl+uri+"?uploader=HttpTestApp&remoteFile="+remoteFile + "&fileName="
                             + file.getFileName()))
                     .POST(HttpRequest.BodyPublishers.ofFile(file))
-                    .headers("Authorization", "Bearer " + AppStore.getJwt().getAccessToken())
+                    .headers("Authorization", "Bearer " + AppStore.getJwt().getToken())
                     .build();
             HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == 200) {
-                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
-                return dataResponse;
+                return gson.fromJson(response.body(), DataResponse.class);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
@@ -252,31 +235,24 @@ public class HttpRequestUtil {
         try {
             Path file = Path.of(fileName);
             String urlStr = serverUrl+url+"?uploader=HttpTestApp&fileName=" + file.getFileName() ;
-            if(paras != null && paras.length() > 0)
+            if(paras != null && !paras.isEmpty())
                 urlStr += "&"+paras;
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(urlStr))
                     .POST(HttpRequest.BodyPublishers.ofFile(file))
-                    .headers("Authorization", "Bearer " + AppStore.getJwt().getAccessToken())
+                    .headers("Authorization", "Bearer " + AppStore.getJwt().getToken())
                     .build();
             HttpResponse<String>  response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if(response.statusCode() == 200) {
-                DataResponse dataResponse = gson.fromJson(response.body(), DataResponse.class);
-                return dataResponse;
+                return gson.fromJson(response.body(), DataResponse.class);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
     }
-    /**
-     * DataResponse int uploadHtmlString(String html) 加密上传html模板字符串，用于生成htmp网页和PDF文件
-     * @param html 上传的HTML字符串
-     * @return html 序列号
-     */
+
 
 
 }

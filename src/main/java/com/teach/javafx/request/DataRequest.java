@@ -9,17 +9,17 @@ import java.util.*;
  * Map data 保存前端请求参数的Map集合
  */
 public class DataRequest {
-    private Map data;
+    private Map<String,Object> data;
 
     public DataRequest() {
-        data = new HashMap();
+        data = new HashMap<>();
     }
 
-    public Map getData() {
+    public Map<String,Object> getData() {
         return data;
     }
 
-    public void setData(Map data) {
+    public void setData(Map<String,Object> data) {
         this.data = data;
     }
 
@@ -44,31 +44,28 @@ public class DataRequest {
             return false;
         if(obj instanceof Boolean)
             return (Boolean)obj;
-        if("true".equals(obj.toString()))
-            return true;
-        else
-            return false;
+        return "true".equals(obj.toString());
     }
 
-    public List getList(String key){
+    public List<?> getList(String key){
         Object obj = data.get(key);
         if(obj == null)
-            return new ArrayList();
+            return new ArrayList<>();
         if(obj instanceof List)
-            return (List)obj;
+            return (List<?>)obj;
         else
-            return new ArrayList();
+            return new ArrayList<>();
     }
-    public Map getMap(String key){
+    public Map<String,Object> getMap(String key){
         if(data == null)
-            return new HashMap();
+            return new HashMap<>();
         Object obj = data.get(key);
         if(obj == null)
-            return new HashMap();
+            return new HashMap<>();
         if(obj instanceof Map)
-            return (Map)obj;
+            return (Map<String,Object>)obj;
         else
-            return new HashMap();
+            return new HashMap<>();
     }
 
     public Integer getInteger(String key) {
