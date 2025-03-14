@@ -25,11 +25,11 @@
   <bottom>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS" fx:id="dataBaseUserName" >
           <font>
             <Font size="11.0" fx:id="x3" />
           </font>
-          <textFill>
+          <textFill >
             <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
           </textFill>
         </Label>

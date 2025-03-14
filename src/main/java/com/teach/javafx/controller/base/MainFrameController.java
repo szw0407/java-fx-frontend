@@ -43,6 +43,8 @@ public class MainFrameController {
     private TreeView<MyTreeNode> menuTree;
     @FXML
     protected TabPane contentTabPane;
+    @FXML
+    private Label dataBaseUserName;
 
     private ChangePanelHandler handler= null;
 
@@ -164,7 +166,11 @@ public class MainFrameController {
     @FXML
     public void initialize() {
         handler =new ChangePanelHandler();
-        DataResponse res = HttpRequestUtil.request("/api/base/getMenuList",new DataRequest());
+        DataRequest req= new DataRequest();
+        DataResponse res;
+        res = HttpRequestUtil.request("/api/base/getDataBaseUserName",req);
+        dataBaseUserName.setText((String)res.getData());
+        res = HttpRequestUtil.request("/api/base/getMenuList",req);
         List<Map> mList = (List<Map>)res.getData();
         initMenuBar(mList);
         initMenuTree(mList);
