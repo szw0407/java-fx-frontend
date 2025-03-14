@@ -25,7 +25,7 @@
   <bottom>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS" fx:id="dataBaseUserName" >
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS" fx:id="systemPrompt" >
           <font>
             <Font size="11.0" fx:id="x3" />
           </font>

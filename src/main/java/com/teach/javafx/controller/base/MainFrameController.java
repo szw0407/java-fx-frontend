@@ -44,7 +44,7 @@ public class MainFrameController {
     @FXML
     protected TabPane contentTabPane;
     @FXML
-    private Label dataBaseUserName;
+    private Label systemPrompt;
 
     private ChangePanelHandler handler= null;
 
@@ -169,7 +169,8 @@ public class MainFrameController {
         DataRequest req= new DataRequest();
         DataResponse res;
         res = HttpRequestUtil.request("/api/base/getDataBaseUserName",req);
-        dataBaseUserName.setText((String)res.getData());
+        String userName = (String)res.getData();
+        systemPrompt.setText("服务器：" + HttpRequestUtil.serverUrl + " 数据库：" + userName);
         res = HttpRequestUtil.request("/api/base/getMenuList",req);
         List<Map> mList = (List<Map>)res.getData();
         initMenuBar(mList);
