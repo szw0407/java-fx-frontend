@@ -33,12 +33,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * StudentController 登录交互控制类 对应 student_panel.fxml  对应于学生管理的后台业务处理的控制器，主要获取数据和保存数据的方法不同
+ * TeacherController 登录交互控制类 对应 teacher_panel.fxml  对应于学生管理的后台业务处理的控制器，主要获取数据和保存数据的方法不同
  *
  * @FXML 属性 对应fxml文件中的
  * @FXML 方法 对应于fxml文件中的 on***Click的属性
  */
-public class StudentController extends ToolController {
+public class TeacherController extends ToolController {
     private ImageView photoImageView;
     @FXML
     private TableView<Map> dataTableView;  //学生信息表
@@ -95,7 +95,7 @@ public class StudentController extends ToolController {
 
     private Integer personId = null;  //当前编辑修改的学生的主键
 
-    private ArrayList<Map> studentList = new ArrayList();  // 学生信息列表数据
+    private ArrayList<Map> teacherList = new ArrayList();  // 学生信息列表数据
     private List<OptionItem> genderList;   //性别选择列表数据
     private ObservableList<Map> observableList = FXCollections.observableArrayList();  // TableView渲染列表
 
@@ -105,8 +105,8 @@ public class StudentController extends ToolController {
      */
     private void setTableViewData() {
         observableList.clear();
-        for (int j = 0; j < studentList.size(); j++) {
-            observableList.addAll(FXCollections.observableArrayList(studentList.get(j)));
+        for (int j = 0; j < teacherList.size(); j++) {
+            observableList.addAll(FXCollections.observableArrayList(teacherList.get(j)));
         }
         dataTableView.setItems(observableList);
     }
@@ -124,9 +124,9 @@ public class StudentController extends ToolController {
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
-        res = HttpRequestUtil.request("/api/student/getStudentList", req); //从后台获取所有学生信息列表集合
+        res = HttpRequestUtil.request("/api/teacher/getTeacherList", req); //从后台获取所有学生信息列表集合
         if (res != null && res.getCode() == 0) {
-            studentList = (ArrayList<Map>) res.getData();
+            teacherList = (ArrayList<Map>) res.getData();
         }
         numColumn.setCellValueFactory(new MapValueFactory<>("num"));  //设置列值工程属性
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -167,7 +167,7 @@ public class StudentController extends ToolController {
         addressField.setText("");
     }
 
-    protected void changeStudentInfo() {
+    protected void changeTeacherInfo() {
         Map<String,Object> form = dataTableView.getSelectionModel().getSelectedItem();
         if (form == null) {
             clearPanel();
@@ -176,7 +176,7 @@ public class StudentController extends ToolController {
         personId = CommonMethod.getInteger(form, "personId");
         DataRequest req = new DataRequest();
         req.add("personId", personId);
-        DataResponse res = HttpRequestUtil.request("/api/student/getStudentInfo", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/getTeacherInfo", req);
         if (res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
             return;
@@ -201,7 +201,7 @@ public class StudentController extends ToolController {
      */
 
     public void onTableRowSelect(ListChangeListener.Change<? extends Integer> change) {
-        changeStudentInfo();
+        changeTeacherInfo();
     }
 
     /**
@@ -212,9 +212,9 @@ public class StudentController extends ToolController {
         String numName = numNameTextField.getText();
         DataRequest req = new DataRequest();
         req.add("numName", numName);
-        DataResponse res = HttpRequestUtil.request("/api/student/getStudentList", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/getTeacherList", req);
         if (res != null && res.getCode() == 0) {
-            studentList = (ArrayList<Map>) res.getData();
+            teacherList = (ArrayList<Map>) res.getData();
             setTableViewData();
         }
     }
@@ -259,7 +259,7 @@ public class StudentController extends ToolController {
         DataRequest req = new DataRequest();
         req.add("personId", personId);  // 新增时personId为null
         req.add("form", form);
-        DataResponse res = HttpRequestUtil.request("/api/student/studentEditSave", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/teacherEditSave", req);
 
         // 处理结果
         if (res.getCode() == 0) {
@@ -289,7 +289,7 @@ public class StudentController extends ToolController {
         personId = CommonMethod.getInteger(form, "personId");
         DataRequest req = new DataRequest();
         req.add("personId", personId);
-        DataResponse res = HttpRequestUtil.request("/api/student/studentDelete", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/teacherDelete", req);
         if(res!= null) {
             if (res.getCode() == 0) {
                 MessageDialog.showDialog("删除成功！");
@@ -325,7 +325,7 @@ public class StudentController extends ToolController {
         DataRequest req = new DataRequest();
         req.add("personId", personId);
         req.add("form", form);
-        DataResponse res = HttpRequestUtil.request("/api/student/studentEditSave", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/teacherEditSave", req);
         if (res.getCode() == 0) {
             personId = CommonMethod.getIntegerFromObject(res.getData());
             MessageDialog.showDialog("提交成功！");
@@ -357,7 +357,7 @@ public class StudentController extends ToolController {
         String numName = numNameTextField.getText();
         DataRequest req = new DataRequest();
         req.add("numName", numName);
-        byte[] bytes = HttpRequestUtil.requestByteData("/api/student/getStudentListExcl", req);
+        byte[] bytes = HttpRequestUtil.requestByteData("/api/teacher/getTeacherListExcl", req);
         if (bytes != null) {
             try {
                 FileChooser fileDialog = new FileChooser();
@@ -387,7 +387,7 @@ public class StudentController extends ToolController {
                 new FileChooser.ExtensionFilter("XLSX 文件", "*.xlsx"));
         File file = fileDialog.showOpenDialog(null);
         String paras = "";
-        DataResponse res = HttpRequestUtil.importData("/api/term/importStudentData", file.getPath(), paras);
+        DataResponse res = HttpRequestUtil.importData("/api/term/importTeacherData", file.getPath(), paras);
         if (res.getCode() == 0) {
             MessageDialog.showDialog("上传成功！");
         } else {
@@ -399,7 +399,7 @@ public class StudentController extends ToolController {
     protected void onFamilyButtonClick() {
         DataRequest req = new DataRequest();
         req.add("personId", personId);
-        DataResponse res = HttpRequestUtil.request("/api/student/getFamilyMemberList", req);
+        DataResponse res = HttpRequestUtil.request("/api/teacher/getFamilyMemberList", req);
         if (res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
             return;
@@ -499,7 +499,7 @@ public class StudentController extends ToolController {
                 new FileChooser.ExtensionFilter("XLSX 文件", "*.xlsx"));
         File file = fileDialog.showOpenDialog(null);
         String paras = "personId="+personId;
-        DataResponse res =HttpRequestUtil.importData("/api/student/importFeeData",file.getPath(),paras);
+        DataResponse res =HttpRequestUtil.importData("/api/teacher/importFeeData",file.getPath(),paras);
         if(res.getCode() == 0) {
             MessageDialog.showDialog("上传成功！");
         }
