@@ -1,4 +1,4 @@
-package com.teach.javafx.util;
+package cn.edu.sdu.java.server.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,24 +11,30 @@ import java.util.Date;
 public class DateTimeTool {
     /**
      * formatDateTime 字串串转换日期
+     * @param timeSrc
+     * @param f "yyyy-MM-dd"
+     * @return
      */
     public static Date formatDateTime(String timeSrc, String f) {
         SimpleDateFormat sdFormat = new SimpleDateFormat(f);
         sdFormat.setLenient(true);
         try {
-            if (timeSrc == null || timeSrc.trim().isEmpty())
+            if (timeSrc == null || timeSrc.trim().equals(""))
                 return null;
 
-            return sdFormat.parse(timeSrc);
+            Date tmpDate = sdFormat.parse(timeSrc);
+            return tmpDate;
         } catch (ParseException e) {
             // TODO Auto-generated catch block
-//			e.printStackTrace();
             return null;
         }
     }
 
     /**
      *   parseDateTime 日期转换字符串
+     * @param timeSrc
+     * @param f
+     * @return
      */
     public static String parseDateTime(Date timeSrc) {
         return parseDateTime(timeSrc,"yyyy-MM-dd HH:mm:ss");
@@ -38,11 +44,17 @@ public class DateTimeTool {
         if (timeSrc == null)
             return null;
         SimpleDateFormat sdFormat = new SimpleDateFormat(f);
-        return sdFormat.format(timeSrc);
+        String result = sdFormat.format(timeSrc);
+        if (result != null)
+            return result;
+        else
+            return "";
     }
 
     /**
      * nextDay 后一天日期
+     * @param date
+     * @return
      */
     public static Date nextDay(Date date) {
         if (date != null) {
@@ -56,6 +68,9 @@ public class DateTimeTool {
 
     /**
      * nextDay 后n天日期
+     * @param date
+     * @param num
+     * @return
      */
     public static Date nextDay(Date date, int num) {
         if (date != null) {
@@ -71,6 +86,8 @@ public class DateTimeTool {
 
     /**
      * prevDay 前一天日期
+     * @param date
+     * @return
      */
     public static Date prevDay(Date date) {
         if (date != null) {
@@ -85,6 +102,9 @@ public class DateTimeTool {
 
     /**
      * prevDay 前n天日期
+     * @param date
+     * @param n
+     * @return
      */
     public static Date prevDay(Date date, int n) {
         if (date != null) {
@@ -98,6 +118,8 @@ public class DateTimeTool {
 
     /**
      * nextWeek 下一周日期
+     * @param date
+     * @return
      */
     public static Date nextWeek(Date date) {
         if (date != null) {
@@ -111,6 +133,8 @@ public class DateTimeTool {
 
     /**
      *  其一周日期
+     * @param date
+     * @return
      */
     public static Date prevWeek(Date date) {
         if (date != null) {
@@ -124,6 +148,8 @@ public class DateTimeTool {
 
     /**
      * nextMonth 下一月日期
+     * @param date
+     * @return
      */
     public static Date nextMonth(Date date) {
         if (date != null) {
@@ -137,6 +163,9 @@ public class DateTimeTool {
 
     /**
      * nextMonth 获得后n个月日期
+     * @param date
+     * @param n
+     * @return
      */
     public static Date nextMonth(Date date,int n) {
         if (date != null) {
@@ -150,6 +179,8 @@ public class DateTimeTool {
 
     /**
      * prevMonth 获得前一月的日期
+     * @param date
+     * @return
      */
     public static Date prevMonth(Date date) {
         if (date != null) {
@@ -163,6 +194,9 @@ public class DateTimeTool {
 
     /**
      * prevMonth 获得前n个月的日期
+     * @param date
+     * @param n
+     * @return
      */
     public static Date prevMonth(Date date, int n) {
         if (date != null) {
@@ -176,6 +210,9 @@ public class DateTimeTool {
 
     /**
      * nextYear 获得后n年的日期
+     * @param date
+     * @param n
+     * @return
      */
     public static Date nextYear(Date date,int n) {
         if (date != null) {
@@ -189,6 +226,8 @@ public class DateTimeTool {
 
     /**
      * prevYear 获得前一年的日期
+     * @param date
+     * @return
      */
     public static Date prevYear(Date date) {
         if (date != null) {
@@ -202,6 +241,7 @@ public class DateTimeTool {
 
     /**
      * getCurrentWeekDay 获得当前的星期几
+     * @return
      */
     public static int getCurrentWeekDay(){
         Calendar cal = Calendar.getInstance();
@@ -215,5 +255,13 @@ public class DateTimeTool {
     public static void main(String args[]){
         System.out.println(getCurrentWeekDay());
 
+    }
+
+    public static Object getDateString(Date enterTime) {
+        return parseDateTime(enterTime);
+    }
+
+    public static Date parseDate(String enterTime) {
+        return formatDateTime(enterTime, "yyyy-MM-dd");
     }
 }
