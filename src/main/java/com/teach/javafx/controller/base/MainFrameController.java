@@ -28,7 +28,12 @@ import java.util.Map;
  *  @FXML 方法 对应于fxml文件中的 on***Click的属性
  */
 public class MainFrameController {
-
+    class ChangePanelHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            changeContent(actionEvent);
+        }
+    }
     private Map<String,Tab> tabMap = new HashMap<String,Tab>();
     private Map<String,Scene> sceneMap = new HashMap<String,Scene>();
     private Map<String,ToolController> controlMap =new HashMap<String,ToolController>();
@@ -41,7 +46,7 @@ public class MainFrameController {
     @FXML
     private Label systemPrompt;
 
-
+    private ChangePanelHandler handler= null;
 
     void addMenuItems(Menu parent, List<Map> mList) {
         String name, title;
@@ -160,7 +165,7 @@ public class MainFrameController {
     }
     @FXML
     public void initialize() {
-
+        handler =new ChangePanelHandler();
         DataRequest req= new DataRequest();
         DataResponse res;
         res = HttpRequestUtil.request("/api/base/getDataBaseUserName",req);

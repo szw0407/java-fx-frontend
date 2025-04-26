@@ -124,9 +124,9 @@ public class StudentController extends ToolController {
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
-        res = HttpRequestUtil.request("/api/student/getStudentList", req); //从后台获取所有学生信息列表集合（现在是获取所有列表，因为要查询的为‘’，也就是where中的条?1=‘’）
+        res = HttpRequestUtil.request("/api/student/getStudentList", req); //从后台获取所有学生信息列表集合
         if (res != null && res.getCode() == 0) {
-            studentList = (ArrayList<Map>) res.getData();//把得到的键值列表返回
+            studentList = (ArrayList<Map>) res.getData();
         }
         numColumn.setCellValueFactory(new MapValueFactory<>("num"));  //设置列值工程属性
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -177,7 +177,7 @@ public class StudentController extends ToolController {
         DataRequest req = new DataRequest();
         req.add("personId", personId);
         DataResponse res = HttpRequestUtil.request("/api/student/getStudentInfo", req);
-        if (res.getCode() != 0) {//getCode()方法，结果状态码，为0表示成功，1表示失败，2表示权限不足，3表示参数错误，4表示数据错误，5表示业务错误，6表示服务器错误，7表示网络错误，8表示其他错误
+        if (res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
             return;
         }
