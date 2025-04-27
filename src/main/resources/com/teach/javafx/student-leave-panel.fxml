@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.teach.javafx.controller.StudentLeaveController"
+            prefWidth="800.0">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="5.0">
+            <children>
+                <FlowPane prefHeight="40.0" prefWidth="200.0">
+                    <children>
+                        <Button text="新增" onAction="#onAddButtonClick"/>
+                        <Button text="删除" onAction="#onDeleteButtonClick"/>
+                        <Button text="查询" onAction="#onQueryButtonClick"/>
+                    </children>
+                </FlowPane>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="400.0">
+                    <children>
+                        <Label text="学生姓名"/>
+                        <TextField fx:id="searchStudentNameField" prefWidth="100.0"/>
+                        <Button text="查询" onAction="#onSearchByNameButtonClick"/>
+                    </children>
+                </FlowPane>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.7">
+            <items>
+                <TableView fx:id="leaveTableView">
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="studentIdColumn" text="学生ID" prefWidth="80"/>
+                        <TableColumn fx:id="studentNameColumn" text="学生姓名" prefWidth="100"/>
+                        <TableColumn fx:id="collegeColumn" text="学院" prefWidth="100"/>
+                        <TableColumn fx:id="startDateColumn" text="开始日期" prefWidth="80"/>
+                        <TableColumn fx:id="endDateColumn" text="结束日期" prefWidth="80"/>
+                        <TableColumn fx:id="reasonColumn" text="请假原因" prefWidth="120"/>
+                        <TableColumn fx:id="approverIdColumn" text="审批人ID" prefWidth="80"/>
+                        <TableColumn fx:id="isApprovedColumn" text="已批准\?" prefWidth="80"/>
+                    </columns>
+                </TableView>
+
+                <VBox spacing="10.0" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="20" bottom="20" left="20" right="20"/>
+                    </padding>
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="学生ID" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="studentIdField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="学生姓名" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="studentNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="学院" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="collegeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="开始日期" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <DatePicker fx:id="startDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="结束日期" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <DatePicker fx:id="endDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                        <Label text="请假原因" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                        <TextField fx:id="reasonField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                        <Label text="审批人ID" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                        <TextField fx:id="approverIdField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                        <Label text="是否批准" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                        <CheckBox fx:id="approvedCheckBox" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                    </GridPane>
+
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="保存" onAction="#onSaveButtonClick"/>
+                    </HBox>
+                </VBox>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>
