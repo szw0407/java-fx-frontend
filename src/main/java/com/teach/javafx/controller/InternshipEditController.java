@@ -1,5 +1,8 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.AppStore;
+import com.teach.javafx.controller.base.MessageDialog;
+import com.teach.javafx.request.JwtResponse;
 import com.teach.javafx.request.OptionItem;
 import com.teach.javafx.util.CommonMethod;
 import javafx.fxml.FXML;
@@ -35,10 +38,16 @@ public class InternshipEditController {
 
     @FXML
     public void okButtonClick(){
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         Map<String,Object> data = new HashMap<>();
         OptionItem op;
         op = studentComboBox.getSelectionModel().getSelectedItem();
         if(op != null) {
+            if (!op.getValue().equals(currentStudentId)){
+                MessageDialog.showDialog("不能添加其他学生的信息！");
+                return;
+            }
             data.put("studentId",Integer.parseInt(op.getValue()));
         }
         data.put("id",id);

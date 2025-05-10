@@ -13,7 +13,8 @@ import javafx.scene.control.*;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.collections.ObservableList;
+import com.teach.javafx.request.JwtResponse;
+import com.teach.javafx.AppStore;
 
 
 
@@ -71,19 +72,51 @@ public class StudentHonorController extends ToolController {
         loadHonorList();
     }
 
+//    private void loadHonorList() {
+//        DataRequest req = new DataRequest();
+//        req.add("numName", "");
+//        DataResponse res = HttpRequestUtil.request("/api/studentHonor/getStudentHonorList", req);
+//        if (res != null && res.getCode() == 0) {
+//            // 将ArrayList转换为ObservableList
+//            honorList.setAll(FXCollections.observableArrayList((ArrayList<Map>) res.getData()));
+//        } else {
+//            MessageDialog.showDialog("加载数据失败：" + res.getMsg());
+//        }
+//    }
+
     private void loadHonorList() {
         DataRequest req = new DataRequest();
         req.add("numName", "");
         DataResponse res = HttpRequestUtil.request("/api/studentHonor/getStudentHonorList", req);
         if (res != null && res.getCode() == 0) {
-            // 将ArrayList转换为ObservableList
-            honorList.setAll(FXCollections.observableArrayList((ArrayList<Map>) res.getData()));
+            String currentStudentId = getCurrentStudentId();
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for (Map record : (ArrayList<Map>) res.getData()) {
+                // 将 record.get("studentId") 转换为字符串后再比较
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            honorList.setAll(FXCollections.observableArrayList(filteredList));
         } else {
-            MessageDialog.showDialog("加载数据失败：" + res.getMsg());
+            MessageDialog.showDialog("加载数据失败：" + (res != null ? res.getMsg() : "未知错误"));
         }
     }
 
+    private String getCurrentStudentId() { // 用于得到登录者ID
 
+        JwtResponse jwtResponse = AppStore. getJwt(); // AppStore 中存储了当前登录用户的 JwtResponse
+        if (jwtResponse != null) {
+//            System.out.println("Username:"+ jwtResponse.getUsername());
+//            System.out.println("ID:"+ jwtResponse.getId());
+//            System.out.println("Token:"+ jwtResponse.getToken());
+//            System.out.println("Role:"+ jwtResponse.getRole());
+//            System.out.println("获取当前学生ID成功");
+            return String.valueOf(jwtResponse.getId()); // 返回用户的 ID
+        }
+        System.out.println("获取当前学生ID失败");
+        return null; //
+    }
 
 
     @FXML

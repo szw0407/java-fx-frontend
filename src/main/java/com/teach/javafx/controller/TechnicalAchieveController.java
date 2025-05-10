@@ -1,5 +1,6 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.AppStore;
 import com.teach.javafx.MainApplication;
 import com.teach.javafx.controller.base.LocalDateStringConverter;
 import com.teach.javafx.controller.base.ToolController;
@@ -61,12 +62,21 @@ public class TechnicalAchieveController {
     }
 
     public void initialize() {
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
         res = HttpRequestUtil.request("/api/technicalAchieve/getTechnicalAchieveList", req); //从后台获取所有学生信息列表集合（现在是获取所有列表，因为要查询的为‘’，也就是where中的条?1=‘’）
         if (res != null && res.getCode() == 0) {
-            techList = (ArrayList<Map>) res.getData();//把得到的键值列表返回
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for(Map record : (ArrayList<Map>) res.getData()){
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            techList = filteredList;//把得到的键值列表返回
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")) techList = (ArrayList<Map>) res.getData();
         }
 
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
@@ -128,12 +138,21 @@ public class TechnicalAchieveController {
     }
     @FXML
     protected void onQueryButtonClick() {
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         String search = searchField.getText();
         DataRequest req = new DataRequest();
         req.add("numName", search);
         DataResponse res = HttpRequestUtil.request("/api/technicalAchieve/getTechnicalAchieveList", req);
         if (res != null && res.getCode() == 0) {
-            techList = (ArrayList<Map>) res.getData();
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for(Map record : (ArrayList<Map>) res.getData()){
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            techList = filteredList;
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")) techList = (ArrayList<Map>) res.getData();
             setTableViewData();
         }
     }
