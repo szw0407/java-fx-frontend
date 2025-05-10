@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.teach.javafx.controller.StudentLeaveStudentController" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 20;">
+    <Label text="学生请假申请" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <!-- 表单区域 -->
+    <GridPane hgap="10" vgap="10">
+        <Label text="人员ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="studentIdField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="true" />
+
+        <Label text="姓名:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="studentNameField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="true" />
+
+        <Label text="学院:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextField fx:id="collegeField" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="true" />
+
+        <Label text="开始日期:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <DatePicker fx:id="startDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+        <Label text="结束日期:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <DatePicker fx:id="endDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+        <Label text="请假原因:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+        <TextField fx:id="reasonField" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+
+        <Label text="审批人ID:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+        <TextField fx:id="approverIdField" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <!-- 按钮区域 -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="发送申请" onAction="#onSaveButtonClick" />
+    </HBox>
+
+    <!-- 表格区域 -->
+    <TableView fx:id="leaveTableView" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="studentIdColumn" text="学号" />
+            <TableColumn fx:id="studentNameColumn" text="姓名" />
+            <TableColumn fx:id="collegeColumn" text="学院" />
+            <TableColumn fx:id="startDateColumn" text="开始日期" />
+            <TableColumn fx:id="endDateColumn" text="结束日期" />
+            <TableColumn fx:id="reasonColumn" text="请假原因" />
+            <TableColumn fx:id="approverIdColumn" text="审批人ID" />
+            <TableColumn fx:id="isApprovedColumn" text="是否批准" />
+        </columns>
+    </TableView>
+</VBox>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.teach.javafx.controller.StudentLeaveTeacherController">
+    <center>
+        <VBox spacing="10" prefWidth="-1" prefHeight="-1">
+            <!-- 表格视图 -->
+            <TableView fx:id="leaveTableView" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="studentIdColumn" text="学生ID" prefWidth="100"/>
+                    <TableColumn fx:id="studentNameColumn" text="学生姓名" prefWidth="100"/>
+                    <TableColumn fx:id="collegeColumn" text="学院" prefWidth="100"/>
+                    <TableColumn fx:id="startDateColumn" text="开始日期" prefWidth="100"/>
+                    <TableColumn fx:id="endDateColumn" text="结束日期" prefWidth="100"/>
+                    <TableColumn fx:id="reasonColumn" text="请假原因" prefWidth="150"/>
+                    <TableColumn fx:id="approverIdColumn" text="审批人ID" prefWidth="100"/>
+                    <TableColumn fx:id="isApprovedColumn" text="审批状态" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+            <!-- 操作区域 -->
+            <HBox spacing="10" alignment="CENTER">
+                <CheckBox fx:id="approvedCheckBox" text="是否同意"/>
+                <Button text="审批" onAction="#onApproveButtonClick"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
