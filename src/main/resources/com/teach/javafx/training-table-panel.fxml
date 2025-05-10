@@ -64,7 +64,7 @@
         <TableView fx:id="dataTableView"  >
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="140.0" text="培训id" />
-                <TableColumn fx:id="studentIdColumn" prefWidth="120.0" text="学号" />
+                <TableColumn fx:id="studentIdColumn" prefWidth="120.0" text="学生id" />
                 <TableColumn fx:id="nameColumn" prefWidth="90.0" text="姓名" />
                 <TableColumn fx:id="themeColumn" prefWidth="140.0" text="主题" />
                 <TableColumn fx:id="timeColumn" prefWidth="120.0" text="时间" />

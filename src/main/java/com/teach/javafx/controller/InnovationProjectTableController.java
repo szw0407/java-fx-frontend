@@ -1,11 +1,9 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.AppStore;
 import com.teach.javafx.MainApplication;
 import com.teach.javafx.controller.base.MessageDialog;
-import com.teach.javafx.request.HttpRequestUtil;
-import com.teach.javafx.request.OptionItem;
-import com.teach.javafx.request.DataRequest;
-import com.teach.javafx.request.DataResponse;
+import com.teach.javafx.request.*;
 import com.teach.javafx.util.CommonMethod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,6 +51,8 @@ public class InnovationProjectTableController {
 
     @FXML
     private void onQueryButtonClick() {
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         Integer studentId=0;
         OptionItem op;
         op = studentComboBox.getSelectionModel().getSelectedItem();
@@ -63,7 +63,14 @@ public class InnovationProjectTableController {
         req.add("studentId",studentId);
         res = HttpRequestUtil.request("/api/innovationProject/getInnovationProjectList",req);
         if(res != null && res.getCode()== 0) {
-            iList = (ArrayList<Map>)res.getData();
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for(Map record : (ArrayList<Map>) res.getData()){
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            iList = filteredList;
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")) iList = (ArrayList<Map>) res.getData();
         }
         setTableViewData();
     }

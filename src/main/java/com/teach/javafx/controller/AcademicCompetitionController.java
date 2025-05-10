@@ -2,6 +2,7 @@
 
 package com.teach.javafx.controller;
 
+import com.teach.javafx.AppStore;
 import com.teach.javafx.MainApplication;
 import com.teach.javafx.controller.base.LocalDateStringConverter;
 import com.teach.javafx.controller.base.ToolController;
@@ -78,12 +79,21 @@ public class AcademicCompetitionController extends ToolController{
 
     @FXML
     public void initialize() {
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
         res = HttpRequestUtil.request("/api/academicCompetition/getAcademicCompetitionList", req);
         if (res != null && res.getCode() == 0) {
-            competitionList = (ArrayList<Map>) res.getData();
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for(Map record : (ArrayList<Map>) res.getData()){
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            competitionList = filteredList;
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")) competitionList = (ArrayList<Map>) res.getData();
         }
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         timeColumn.setCellValueFactory(new MapValueFactory<>("time"));
@@ -136,12 +146,21 @@ public class AcademicCompetitionController extends ToolController{
 
     @FXML
     protected void onQueryButtonClick() {
+        JwtResponse jwtResponse = AppStore. getJwt();
+        String currentStudentId = String.valueOf(jwtResponse.getId());
         String search = searchField.getText();
         DataRequest req = new DataRequest();
         req.add("numName", search);
         DataResponse res = HttpRequestUtil.request("/api/academicCompetition/getAcademicCompetitionList", req);
         if (res != null && res.getCode() == 0) {
-            competitionList = (ArrayList<Map>) res.getData();
+            ArrayList<Map> filteredList = new ArrayList<>();
+            for(Map record : (ArrayList<Map>) res.getData()){
+                if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                    filteredList.add(record);
+                }
+            }
+            competitionList = filteredList;
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")) competitionList = (ArrayList<Map>) res.getData();
             setTableViewData();
         }
     }
