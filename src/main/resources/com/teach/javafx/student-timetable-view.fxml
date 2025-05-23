@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.teach.javafx.controller.StudentTimetableController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+            <Label text="学年:"/>
+            <TextField fx:id="yearField" prefWidth="80.0"/>
+            <Label text="学期:"/>
+            <ComboBox fx:id="termComboBox" prefWidth="60.0"/>
+            <Button mnemonicParsing="false" onAction="#onQueryButtonClick" text="查询"/>
+        </HBox>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox>
+                <TableView fx:id="timetableTableView">
+                    <columns>
+                        <TableColumn prefWidth="80.0" text="时间\星期"/>
+                        <TableColumn fx:id="monColumn" prefWidth="120.0" text="周一"/>
+                        <TableColumn fx:id="tueColumn" prefWidth="120.0" text="周二"/>
+                        <TableColumn fx:id="wedColumn" prefWidth="120.0" text="周三"/>
+                        <TableColumn fx:id="thuColumn" prefWidth="120.0" text="周四"/>
+                        <TableColumn fx:id="friColumn" prefWidth="120.0" text="周五"/>
+                        <TableColumn fx:id="satColumn" prefWidth="120.0" text="周六"/>
+                        <TableColumn fx:id="sunColumn" prefWidth="120.0" text="周日"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
