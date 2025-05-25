@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,6 @@ public class StudentSocialActivityController {
     @FXML
     private TableColumn<Map, String> studentId;
 
-
     @FXML
     private TableColumn<Map, String> typeColumn;
 
@@ -50,7 +50,6 @@ public class StudentSocialActivityController {
     @FXML
     private TableColumn<Map, String> roleColumn;
 
-
     @FXML
     private TextField idField;
 
@@ -64,10 +63,13 @@ public class StudentSocialActivityController {
     private ComboBox<OptionItem> typeComboBox;
 
     @FXML
-    private DatePicker startTimePicker;
+    private DatePicker rangeDatePicker;
 
     @FXML
-    private DatePicker endTimePicker;
+    private Label startDateLabel;
+
+    @FXML
+    private Label endDateLabel;
 
     @FXML
     private TextField locationField;
@@ -79,24 +81,21 @@ public class StudentSocialActivityController {
     private ComboBox<OptionItem> roleComboBox;
 
     private Integer Id = null;  //当前编辑修改的学生的主键
-
     private ArrayList<Map> studentSocialActList = new ArrayList();  // 学生信息列表数据
-    private List<OptionItem> typelist;//性别选择列表数据
+    private List<OptionItem> typelist; //性别选择列表数据
     private List<OptionItem> rolelist;   //性别选择列表数据
     private ObservableList<Map> observableList = FXCollections.observableArrayList();  // TableView渲染列表
 
     private void setStudentSocialActData() {
         observableList.clear();
         observableList.addAll(studentSocialActList);
-        dataTableView.setItems(observableList);//这里的dataTableView的数据源是observableList
-        //observablelist的数据源是studentSocialActList，所以datatableview的数据源是studentSocialActList
+        dataTableView.setItems(observableList);
     }
 
-    private String getCurrentStudentId() { // 用于得到登录者ID
-        JwtResponse jwtResponse = AppStore. getJwt();
-        // AppStore 中存储了当前登录用户的 JwtResponse
+    private String getCurrentStudentId() {
+        JwtResponse jwtResponse = AppStore.getJwt();
         if (jwtResponse != null) {
-            return String.valueOf(jwtResponse.getUsername()); // 返回用户的 ID
+            return String.valueOf(jwtResponse.getUsername());
         }
         System.out.println("获取当前学生ID失败");
         return null;
@@ -106,14 +105,12 @@ public class StudentSocialActivityController {
     public void initialize() {
         DataResponse res;
         DataRequest req = new DataRequest();
-        //req.add("numName", "");
-        res = HttpRequestUtil.request("/api/studentSocialAct/getlist", req); //从后台获取所有学生社会活动信息列表集合
+        res = HttpRequestUtil.request("/api/studentSocialAct/getlist", req);
         if (res != null && res.getCode() == 0) {
             String currentStudentId = getCurrentStudentId();
             ArrayList<Map> filteredList = new ArrayList<>();
 
-            if (currentStudentId.equals("admin")) {//如果是管理员，则显示所有学生的社会活动信息
-                //这里我就使用了一个姓名的判断
+            if (currentStudentId.equals("admin")) {
                 studentSocialActList = (ArrayList<Map>) res.getData();
                 for (Map record : studentSocialActList) {
                     if (record.get("type").equals("1")) {
@@ -129,11 +126,9 @@ public class StudentSocialActivityController {
                     } else if (record.get("role").equals("2")) {
                         record.put("role", "队员");
                     }
-
                 }
             } else {
                 for (Map record : (ArrayList<Map>) res.getData()) {
-                    // 将 record.get("studentId") 转换为字符串后再比较
                     if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
                         filteredList.add(record);
                     }
@@ -141,23 +136,23 @@ public class StudentSocialActivityController {
                     for (Map records : studentSocialActList) {
                         if (records.get("type").equals("1")) {
                             records.put("type", "志愿服务");
-                        } else if (record.get("type").equals("2")) {
+                        } else if (records.get("type").equals("2")) {
                             records.put("type", "体育活动");
-                        } else if (record.get("type").equals("3")) {
+                        } else if (records.get("type").equals("3")) {
                             records.put("type", "文艺演出");
                         }
 
-                        if (record.get("role").equals("1")) {
-                            record.put("role", "负责人");
-                        } else if (record.get("role").equals("2")) {
-                            record.put("role", "队员");
+                        if (records.get("role").equals("1")) {
+                            records.put("role", "负责人");
+                        } else if (records.get("role").equals("2")) {
+                            records.put("role", "队员");
                         }
-
                     }
                 }
             }
         }
-        id.setCellValueFactory(new MapValueFactory<>("id"));  //设置列值工程属性
+
+        id.setCellValueFactory(new MapValueFactory<>("id"));
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentId.setCellValueFactory(new MapValueFactory<>("studentId"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
@@ -166,8 +161,76 @@ public class StudentSocialActivityController {
         locationColumn.setCellValueFactory(new MapValueFactory<>("location"));
         descriptionColumn.setCellValueFactory(new MapValueFactory<>("description"));
         roleColumn.setCellValueFactory(new MapValueFactory<>("role"));
-        TableView.TableViewSelectionModel<Map> tsm = dataTableView.getSelectionModel();
 
+        rangeDatePicker.setPromptText("选择日期范围");
+        startDateLabel.setText("未选择");
+        endDateLabel.setText("未选择");
+
+        final LocalDate[] selectedStartDate = {null};
+        final LocalDate[] selectedEndDate = {null};
+
+        rangeDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (empty || date == null) {
+                    return;
+                }
+
+                // 禁用过去的日期（可选）
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
+
+                // 高亮显示选中的范围
+                if (selectedStartDate[0] != null && selectedEndDate[0] != null) {
+                    if (date.isAfter(selectedStartDate[0]) && date.isBefore(selectedEndDate[0])) {
+                        setStyle("-fx-background-color: #a9d0f5;");
+                    }
+                }
+
+                // 高亮显示开始和结束日期
+                if (date.equals(selectedStartDate[0]) || date.equals(selectedEndDate[0])) {
+                    setStyle("-fx-background-color: #4a90e2; -fx-text-fill: white;");
+                }
+            }
+        });
+
+        rangeDatePicker.setOnAction(event -> {
+            LocalDate selectedDate = rangeDatePicker.getValue();
+
+            // 添加null检查
+            if (selectedDate == null) {
+                return;
+            }
+
+            if (selectedStartDate[0] == null && selectedEndDate[0] == null) {
+                // 第一次选择 - 设为开始日期
+                selectedStartDate[0] = selectedDate;
+                startDateLabel.setText(selectedDate.toString());
+                endDateLabel.setText("请选择结束日期");
+                rangeDatePicker.setValue(null);
+            } else if (selectedStartDate[0] != null && selectedEndDate[0] == null) {
+                // 选择结束日期
+                if (selectedDate.isBefore(selectedStartDate[0])) {
+                    // 如果结束日期早于开始日期，交换它们
+                    selectedEndDate[0] = selectedStartDate[0];
+                    selectedStartDate[0] = selectedDate;
+                } else {
+                    selectedEndDate[0] = selectedDate;
+                }
+                endDateLabel.setText(selectedEndDate[0].toString());
+
+                // 重置选择状态，准备新的选择
+                rangeDatePicker.setValue(null);
+                selectedStartDate[0] = null;
+                selectedEndDate[0] = null;
+            }
+        });
+
+        TableView.TableViewSelectionModel<Map> tsm = dataTableView.getSelectionModel();
         typelist = HttpRequestUtil.getDictionaryOptionItemList("HDM");
         rolelist = HttpRequestUtil.getDictionaryOptionItemList("HDR");
         typeComboBox.getItems().addAll(typelist);
@@ -175,17 +238,19 @@ public class StudentSocialActivityController {
         ObservableList<Integer> list = tsm.getSelectedIndices();
         setStudentSocialActData();
     }
+
     public void clearPanel() {
         idField.setText("");
         nameField.setText("");
         studentField.setText("");
-        typeComboBox.getSelectionModel().select(-1);//这里将活动类型认为是可选的
-        startTimePicker.getEditor().setText("");
-        endTimePicker.getEditor().setText("");
+        typeComboBox.getSelectionModel().select(-1);
         locationField.setText("");
         descriptionField.setText("");
         roleComboBox.getSelectionModel().select(-1);
+        startDateLabel.setText("未选择");
+        endDateLabel.setText("未选择");
     }
+
     @FXML
     protected void onSaveButtonClick() {
         if (idField.getText().isEmpty()) {
@@ -196,19 +261,30 @@ public class StudentSocialActivityController {
         newSocialAct.put("id", idField.getText());
         newSocialAct.put("name", nameField.getText());
         newSocialAct.put("studentId", studentField.getText());
-        //这里就是学着学生中的性别将活动类型作为一个可选的
 
         if (typeComboBox.getSelectionModel() != null && typeComboBox.getSelectionModel().getSelectedItem() != null)
             newSocialAct.put("type", typeComboBox.getSelectionModel().getSelectedItem().getValue());
 
-        newSocialAct.put("startTime", startTimePicker.getEditor().getText());
-        //System.out.println(startTimePicker.getEditor().getText());
-        //System.out.println(endTimePicker.getEditor().getText());
-        newSocialAct.put("endTime", endTimePicker.getEditor().getText());
+        // 获取日期
+        String startTimeText = startDateLabel.getText();
+        String endTimeText = endDateLabel.getText();
+
+        if ("未选择".equals(startTimeText) || "未选择".equals(endTimeText)) {
+            MessageDialog.showDialog("请选择完整的日期范围");
+            return;
+        }
+
+        // 转换日期格式从 "2025-05-25" 到 "2025/05/25"
+        startTimeText = startTimeText.replace("-", "/");
+        endTimeText = endTimeText.replace("-", "/");
+
+        newSocialAct.put("startTime", startTimeText);
+        newSocialAct.put("endTime", endTimeText);
         newSocialAct.put("location", locationField.getText());
         if (roleComboBox.getSelectionModel() != null && roleComboBox.getSelectionModel().getSelectedItem() != null)
             newSocialAct.put("role", roleComboBox.getSelectionModel().getSelectedItem().getValue());
         newSocialAct.put("description", descriptionField.getText());
+
         DataRequest req = new DataRequest();
         req.add("form", newSocialAct);
         DataResponse res = HttpRequestUtil.request("/api/studentSocialAct/SocialActEditsave", req);
@@ -223,6 +299,7 @@ public class StudentSocialActivityController {
             MessageDialog.showDialog("请求失败，服务器无响应");
         }
     }
+
     @FXML
     protected void onQueryButtonClick() {
         DataRequest req = new DataRequest();
@@ -235,8 +312,7 @@ public class StudentSocialActivityController {
                 String currentStudentId = getCurrentStudentId();
                 ArrayList<Map> filteredList = new ArrayList<>();
 
-                if (currentStudentId.equals("admin")) {//如果是管理员，则显示所有学生的社会活动信息
-                    //这里我就使用了一个姓名的判断
+                if (currentStudentId.equals("admin")) {
                     studentSocialActList = (ArrayList<Map>) res.getData();
                     for (Map record : studentSocialActList) {
                         if (record.get("type").equals("1")) {
@@ -252,11 +328,9 @@ public class StudentSocialActivityController {
                         } else if (record.get("role").equals("2")) {
                             record.put("role", "队员");
                         }
-
                     }
                 } else {
                     for (Map record : (ArrayList<Map>) res.getData()) {
-                        // 将 record.get("studentId") 转换为字符串后再比较
                         if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
                             filteredList.add(record);
                         }
@@ -264,16 +338,16 @@ public class StudentSocialActivityController {
                         for (Map records : studentSocialActList) {
                             if (records.get("type").equals("1")) {
                                 records.put("type", "志愿服务");
-                            } else if (record.get("type").equals("2")) {
+                            } else if (records.get("type").equals("2")) {
                                 records.put("type", "体育活动");
-                            } else if (record.get("type").equals("3")) {
+                            } else if (records.get("type").equals("3")) {
                                 records.put("type", "文艺演出");
                             }
 
-                            if (record.get("role").equals("1")) {
-                                record.put("role", "负责人");
-                            } else if (record.get("role").equals("2")) {
-                                record.put("role", "队员");
+                            if (records.get("role").equals("1")) {
+                                records.put("role", "负责人");
+                            } else if (records.get("role").equals("2")) {
+                                records.put("role", "队员");
                             }
                         }
                     }
@@ -298,13 +372,11 @@ public class StudentSocialActivityController {
         if (ret != MessageDialog.CHOICE_YES) {
             return;
         }
-        Id = CommonMethod.getInteger(form, "id");//这里把id作为学生活动的主键
-        //这里的key一定要输入已经存在的，不能是自己编造的，而下面的是可以自己编的，怎么起名都没有问题
-//        System.out.println(Id);
+        Id = CommonMethod.getInteger(form, "id");
         DataRequest req = new DataRequest();
         req.add("Id", Id);
         DataResponse res = HttpRequestUtil.request("/api/studentSocialAct/SocialActDelete", req);
-        if(res!= null) {
+        if(res != null) {
             if (res.getCode() == 0) {
                 MessageDialog.showDialog("删除成功！");
                 onQueryButtonClick();
@@ -314,10 +386,8 @@ public class StudentSocialActivityController {
         }
     }
 
-
     @FXML
     protected void onAddButtonClick() {
         clearPanel();
     }
-
 }
