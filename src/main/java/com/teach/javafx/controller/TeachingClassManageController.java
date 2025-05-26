@@ -1,5 +1,7 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.request.*;
+import com.teach.javafx.util.DateTimeTool;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +12,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 
 /**
  * 教学班管理页面控制器
@@ -25,12 +32,24 @@ public class TeachingClassManageController {
 
     private ObservableList<TeachingClassRecord> allTeachingClasses = FXCollections.observableArrayList();
     private ObservableList<Course> allCourses = FXCollections.observableArrayList();
-    private ObservableList<Teacher> allTeachers = FXCollections.observableArrayList();
-
-    @FXML
+    private ObservableList<Teacher> allTeachers = FXCollections.observableArrayList();    @FXML
     public void initialize() {
-        initMockData();
 
+
+        yearField.setPromptText("学年");
+        termComboBox.setPromptText("学期");
+        // decide the current semester
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
+        if (month >= 2 && month <= 7) {
+            termComboBox.setValue("1");
+        } else {
+            termComboBox.setValue("2");
+        }
+        yearField.setText(
+                calendar.get(Calendar.YEAR) + ""
+        );
+        loadDataFromAPIs();
         termComboBox.setItems(FXCollections.observableArrayList("1", "2"));
         courseComboBox.setItems(allCourses);
 
@@ -57,10 +76,11 @@ public class TeachingClassManageController {
         });
 
         teachingClassTableView.setItems(allTeachingClasses);
-    }
-
-    @FXML
+    }    @FXML
     public void onQueryButtonClick(ActionEvent event) {
+        // refresh all
+        loadTeachingClasses();
+        // 可以改为使用后端API进行查询，当前保持前端过滤
         Course course = courseComboBox.getValue();
         String year = yearField.getText().trim();
         String term = termComboBox.getValue();
@@ -173,9 +193,50 @@ public class TeachingClassManageController {
         ComboBox<String> termBox = new ComboBox<>(FXCollections.observableArrayList("1", "2"));
         if (editRecord != null) termBox.setValue(editRecord.getTerm());
         TextField teachClassNumField = new TextField(editRecord == null ? "" : editRecord.getTeachClassNum());
-        teachClassNumField.setPromptText("班级号码");
-        TextField classTimeField = new TextField(editRecord == null ? "" : editRecord.getClassTime());
-        classTimeField.setPromptText("上课时间");
+        teachClassNumField.setPromptText("班级号码");        // ----上课时间选择网格----
+        String[] weekdays = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+        String[] timeSlots = {"8:00-10:00", "10:00-12:00", "14:00-16:00", "16:00-18:00", "19:00-21:00"};
+        
+        GridPane timeGrid = new GridPane();
+        timeGrid.setHgap(5);
+        timeGrid.setVgap(5);
+        timeGrid.setPadding(new Insets(5));
+        
+        // 添加表头
+        for (int j = 0; j < timeSlots.length; j++) {
+            Label header = new Label(timeSlots[j]);
+            header.setStyle("-fx-font-weight: bold;");
+            timeGrid.add(header, j + 1, 0);
+        }
+        
+        // 创建复选框矩阵
+        CheckBox[][] timeCheckBoxes = new CheckBox[weekdays.length][timeSlots.length];
+        for (int i = 0; i < weekdays.length; i++) {
+            Label dayLabel = new Label(weekdays[i]);
+            dayLabel.setStyle("-fx-font-weight: bold;");
+            timeGrid.add(dayLabel, 0, i + 1);
+            
+            for (int j = 0; j < timeSlots.length; j++) {
+                CheckBox cb = new CheckBox();
+                timeCheckBoxes[i][j] = cb;
+                timeGrid.add(cb, j + 1, i + 1);
+            }
+        }
+        
+        // 如果是编辑模式，解析已有的上课时间并设置复选框
+        if (editRecord != null) {
+            parseClassTimeToCheckBoxes(editRecord.getClassTime(), timeCheckBoxes, weekdays, timeSlots);
+            // 解码当前的课程信息
+            courseBox.setValue(allCourses.stream()
+                    .filter(c -> c.getCourseNum().equals(editRecord.getCourseNum()))
+                    .findFirst().orElse(null));
+        }
+
+        
+        ScrollPane timeScrollPane = new ScrollPane(timeGrid);
+        timeScrollPane.setPrefHeight(180);
+        timeScrollPane.setFitToWidth(true);
+        
         TextField classLocationField = new TextField(editRecord == null ? "" : editRecord.getClassLocation());
         classLocationField.setPromptText("上课地点");
 
@@ -188,24 +249,23 @@ public class TeachingClassManageController {
                 new Label("学年:"), yearField,
                 new Label("学期:"), termBox,
                 new Label("班级号码:"), teachClassNumField,
-                new Label("上课时间:"), classTimeField,
+                new Label("上课时间:"), timeScrollPane,
                 new Label("上课地点:"), classLocationField
         );
 
         HBox content = new HBox(20, leftBox, rightBox);
         content.setPadding(new Insets(10, 10, 10, 10));
         dialog.getDialogPane().setContent(content);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.setResultConverter(btn -> {
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);        dialog.setResultConverter(btn -> {
             if (btn == ButtonType.OK && courseBox.getValue() != null &&
                     !yearField.getText().isEmpty() && termBox.getValue() != null &&
                     !teachClassNumField.getText().isEmpty() &&
                     !selectedTeachers.isEmpty() &&
-                    !classTimeField.getText().isEmpty() && !classLocationField.getText().isEmpty()) {
+                    hasSelectedTime(timeCheckBoxes) && !classLocationField.getText().isEmpty()) {
                 Course course = courseBox.getValue();
                 String teachers = selectedTeachers.stream()
                         .map(Teacher::getName).collect(Collectors.joining(","));
+                String classTime = convertCheckBoxesToClassTime(timeCheckBoxes, weekdays, timeSlots);
                 return new TeachingClassRecord(
                         editRecord == null ? UUID.randomUUID().toString().substring(0, 8) : editRecord.getId(),
                         course.getCourseName(),
@@ -214,48 +274,269 @@ public class TeachingClassManageController {
                         termBox.getValue(),
                         teachClassNumField.getText().trim(),
                         teachers,
-                        classTimeField.getText().trim(),
+                        classTime,
                         classLocationField.getText().trim()
                 );
             }
             return null;
-        });
+        });        Optional<TeachingClassRecord> result = dialog.showAndWait();
+        if (result.isEmpty()) {
+            // alert invalid
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("输入错误");
+            alert.setHeaderText(null);
+            alert.setContentText("无效输入，请确保所有必填项已填写且格式正确。");
+            alert.show();
 
-        Optional<TeachingClassRecord> result = dialog.showAndWait();
+        }
         result.ifPresent(record -> {
             if (editRecord == null) {
-                allTeachingClasses.add(record);
+                // 创建新教学班
+                saveTeachingClass(record, selectedTeachers);
             } else {
-                int idx = allTeachingClasses.indexOf(editRecord);
-                allTeachingClasses.set(idx, record);
+                // 更新现有教学班
+                updateTeachingClass(record, selectedTeachers);
             }
-            teachingClassTableView.setItems(FXCollections.observableArrayList(allTeachingClasses));
         });
     }
 
-    @FXML
-    public void onDeleteButtonClick(ActionEvent event) {
-        TeachingClassRecord selected = teachingClassTableView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            allTeachingClasses.remove(selected);
-            teachingClassTableView.setItems(FXCollections.observableArrayList(allTeachingClasses));
+    /**
+     * 保存新的教学班到后端
+     */
+    private void saveTeachingClass(TeachingClassRecord record, ObservableList<Teacher> selectedTeachers) {
+        try {
+            DataRequest request = new DataRequest();
+            
+            // 根据课程编号获取课程ID
+            Course course = allCourses.stream()
+                    .filter(c -> c.getCourseNum().equals(record.getCourseNum()))
+                    .findFirst().orElse(null);
+            
+            if (course != null && course.getCourseId() != null) {
+                request.add("courseId", course.getCourseId());
+            }
+            
+            request.add("year", record.getYear());
+            request.add("semester", record.getTerm());
+            request.add("classNumber", Integer.parseInt(record.getTeachClassNum()));
+            request.add("classTime", record.getClassTime());
+            request.add("classLocation", record.getClassLocation());
+            
+            // 添加教师ID列表
+            List<Integer> teacherIds = selectedTeachers.stream()
+                    .map(Teacher::getId)
+                    .collect(Collectors.toList());
+            request.add("teacherIds", teacherIds);
+            
+            DataResponse response = HttpRequestUtil.request("/api/teachplan/createClassSchedule", request);
+              if (response != null && response.getCode() == 0) {
+                // 保存成功，重新加载数据
+                loadTeachingClasses();
+                // click query button
+                showSuccessAlert("保存成功", "教学班创建成功！");
+            } else {
+                showErrorAlert("保存失败", response != null ? response.getMsg() : "服务器错误");
+            }        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("保存失败", "保存过程中发生错误：" + e.getMessage());
         }
     }
 
-    // ==== 数据结构 ====
+    /**
+     * 更新现有教学班到后端
+     */
+    private void updateTeachingClass(TeachingClassRecord record, ObservableList<Teacher> selectedTeachers) {
+        try {
+            DataRequest request = new DataRequest();
+            request.add("classScheduleId", Integer.parseInt(record.getId()));
+            
+            // 根据课程编号获取课程ID
+            Course course = allCourses.stream()
+                    .filter(c -> c.getCourseNum().equals(record.getCourseNum()))
+                    .findFirst().orElse(null);
+            
+            if (course != null && course.getCourseId() != null) {
+                request.add("courseId", course.getCourseId());
+            }
+            
+            request.add("year", record.getYear());
+            request.add("semester", record.getTerm());
+            request.add("classNumber", Integer.parseInt(record.getTeachClassNum()));
+            request.add("classTime", record.getClassTime());
+            request.add("classLocation", record.getClassLocation());
+            
+            // 添加教师ID列表
+            List<Integer> teacherIds = selectedTeachers.stream()
+                    .map(Teacher::getId)
+                    .collect(Collectors.toList());
+            request.add("teacherIds", teacherIds);
+            
+            DataResponse response = HttpRequestUtil.request("/api/teachplan/updateClassSchedule", request);
+            
+            if (response != null && response.getCode() == 0) {
+                // 更新成功，重新加载数据
+                loadTeachingClasses();
+                showAlert("更新成功", "教学班信息更新成功！");
+            } else {
+                showAlert("更新失败", response != null ? response.getMsg() : "服务器错误");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("更新失败", "更新过程中发生错误：" + e.getMessage());
+        }
+    }    /**
+     * 显示提示对话框
+     */
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * 显示错误提示对话框
+     */
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * 显示成功提示对话框
+     */
+    private void showSuccessAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }@FXML
+    public void onDeleteButtonClick(ActionEvent event) {
+        TeachingClassRecord selected = teachingClassTableView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            // 显示确认对话框
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("确认删除");
+            alert.setHeaderText(null);
+            alert.setContentText("确定要删除教学班 " + selected.getTeachClassNum() + " 吗？");
+            
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                deleteTeachingClass(selected);
+            }
+        }
+    }
+
+    /**
+     * 删除教学班
+     */
+    private void deleteTeachingClass(TeachingClassRecord record) {
+        try {
+            DataRequest request = new DataRequest();
+            request.add("classScheduleId", Integer.parseInt(record.getId()));
+            
+            // 注意：后端可能没有删除API，这里使用removeTeacherPlan作为示例
+            // 实际应该有专门的删除教学班的API
+            DataResponse response = HttpRequestUtil.request("/api/teachplan/removeTeacherPlan", request);
+            
+            if (response != null && response.getCode() == 0) {
+                // 删除成功，重新加载数据
+                loadTeachingClasses();
+                showAlert("删除成功", "教学班删除成功！");
+            } else {
+                showAlert("删除失败", response != null ? response.getMsg() : "服务器错误");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("删除失败", "删除过程中发生错误：" + e.getMessage());
+            // 如果API调用失败，回退到本地删除
+            allTeachingClasses.remove(record);
+            teachingClassTableView.setItems(FXCollections.observableArrayList(allTeachingClasses));        }
+    }
+
+    // ==== 时间选择辅助方法 ====
+    
+    /**
+     * 检查是否选择了至少一个时间段
+     */
+    private boolean hasSelectedTime(CheckBox[][] timeCheckBoxes) {
+        for (CheckBox[] row : timeCheckBoxes) {
+            for (CheckBox cb : row) {
+                if (cb.isSelected()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * 将复选框选择转换为时间字符串
+     * 格式：周一1-2节,周一3-4节,周三5-6节
+     */
+    private String convertCheckBoxesToClassTime(CheckBox[][] timeCheckBoxes, String[] weekdays, String[] timeSlots) {
+        List<String> selectedTimes = new ArrayList<>();
+        for (int i = 0; i < weekdays.length; i++) {
+            for (int j = 0; j < timeSlots.length; j++) {
+                if (timeCheckBoxes[i][j].isSelected()) {
+                    selectedTimes.add(weekdays[i] + timeSlots[j]);
+                }
+            }
+        }
+        return String.join(",", selectedTimes);
+    }
+    
+    /**
+     * 解析时间字符串并设置复选框状态
+     * 解析格式：周一1-2节,周一3-4节,周三5-6节
+     */
+    private void parseClassTimeToCheckBoxes(String classTime, CheckBox[][] timeCheckBoxes, String[] weekdays, String[] timeSlots) {
+        if (classTime == null || classTime.trim().isEmpty()) {
+            return;
+        }
+        
+        String[] times = classTime.split(",");
+        for (String time : times) {
+            time = time.trim();
+            for (int i = 0; i < weekdays.length; i++) {
+                for (int j = 0; j < timeSlots.length; j++) {
+                    if (time.equals(weekdays[i] + timeSlots[j])) {
+                        timeCheckBoxes[i][j].setSelected(true);
+                        break;
+                    }
+                }
+            }
+        }
+    }    // ==== 数据结构 ====
     public static class Course {
         private final String courseNum, courseName;
-        public Course(String num, String name) { courseNum = num; courseName = name; }
+        private Integer courseId;
+        
+        public Course(String num, String name) { 
+            courseNum = num; 
+            courseName = name; 
+        }
+        
         public String getCourseNum() { return courseNum; }
         public String getCourseName() { return courseName; }
+        public Integer getCourseId() { return courseId; }
+        public void setCourseId(Integer courseId) { this.courseId = courseId; }
+        
         @Override public String toString() { return courseName + "(" + courseNum + ")"; }
     }
 
     public static class Teacher {
-        private final String id, name;
-        public Teacher(String id, String name) { this.id = id; this.name = name; }
-        public String getId() { return id; }
+        private final String num, name;
+        Integer id;
+        public Teacher(Integer id,String num, String name) { this.id = id; this.name = name; this.num = num; }
+        public Integer getId() { return id; }
         public String getName() { return name; }
+        public String getNum() { return num; }
         @Override public String toString() { return name; }
     }
 
@@ -291,31 +572,128 @@ public class TeachingClassManageController {
         public SimpleStringProperty teachersProperty() { return teachers; }
         public SimpleStringProperty classTimeProperty() { return classTime; }
         public SimpleStringProperty classLocationProperty() { return classLocation; }
+    }    // ==== API数据加载 ====
+    private void loadDataFromAPIs() {
+        loadCourses();
+        loadTeachers();
+        loadTeachingClasses();
     }
 
-    // ==== mock数据 ====
-    private void initMockData() {
-        // 课程
-        Course c1 = new Course("CS101", "程序设计");
-        Course c2 = new Course("MA101", "高等数学");
-        Course c3 = new Course("EN101", "大学英语");
-        allCourses.addAll(c1, c2, c3);
+    /**
+     * 从后端API加载课程数据
+     */
+    private void loadCourses() {
+        try {
+            DataRequest request = new DataRequest();
+            DataResponse response = HttpRequestUtil.request("/api/course/getCourseList", request);
+            
+            if (response != null && response.getCode() == 0) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
+                List<Map<String, Object>> courseData = gson.fromJson(gson.toJson(response.getData()), listType);
+                
+                allCourses.clear();
+                for (Map<String, Object> courseMap : courseData) {
+                    String courseNum = String.valueOf(courseMap.get("num"));
+                    String courseName = String.valueOf(courseMap.get("name"));
+                    Integer courseId = Integer.parseInt(courseMap.get("courseId").toString());
+                    
+                    Course course = new Course(courseNum, courseName);
+                    course.setCourseId(courseId);
+                    allCourses.add(course);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 加载失败时使用部分模拟数据
+        }
+    }    /**
+     * 从后端API加载教师数据
+     */
+    private void loadTeachers() {
+        try {
+            DataRequest request = new DataRequest();
+            List<OptionItem> response = HttpRequestUtil.requestOptionItemList("/api/teachplan/getTeacherOptionList", request);
+            
+            if (response != null) {
+                allTeachers.clear();
+                for (OptionItem item : response) {
+                    String v = item.getTitle();
+                    Integer id = Integer.valueOf(item.getValue());
 
-        // 教师
-        Teacher t1 = new Teacher("T001", "王老师");
-        Teacher t2 = new Teacher("T002", "李老师");
-        Teacher t3 = new Teacher("T003", "赵老师");
-        Teacher t4 = new Teacher("T004", "刘老师");
-        allTeachers.addAll(t1, t2, t3, t4);
+                    // split v on -
+                    String[] parts = v.split("-");
+                    var name = parts[1].trim();
+                    var num = parts[0].trim();
+                    allTeachers.add(new Teacher(id,num, name));
 
-        // 教学班
-        allTeachingClasses.add(new TeachingClassRecord(
-                "1", c1.getCourseName(), c1.getCourseNum(), "2024", "1", "101A", "王老师,赵老师", "周一 8:00-10:00", "A101"));
-        allTeachingClasses.add(new TeachingClassRecord(
-                "2", c2.getCourseName(), c2.getCourseNum(), "2024", "2", "102B", "李老师", "周三 10:00-12:00", "B201"));
-        allTeachingClasses.add(new TeachingClassRecord(
-                "3", c1.getCourseName(), c1.getCourseNum(), "2023", "2", "103C", "孙老师", "周四 14:00-16:00", "A102"));
-        allTeachingClasses.add(new TeachingClassRecord(
-                "4", c3.getCourseName(), c3.getCourseNum(), "2024", "1", "201A", "刘老师,陈老师", "周五 8:00-10:00", "C301"));
+                }}
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 加载失败时使用部分模拟数据
+        }
+    }    /**
+     * 从后端API加载教学班数据
+     */
+    @SuppressWarnings("unchecked")
+    private void loadTeachingClasses() {
+        try {
+            DataRequest request = new DataRequest();
+            request.add("year", yearField.getText().trim());
+            request.add("semester", termComboBox.getValue());
+            DataResponse response = HttpRequestUtil.request("/api/teachplan/getCurrentSemesterClasses", request);
+            
+            if (response != null && response.getCode() == 0) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<Map<String, Object>>>(){}.getType();
+                List<Map<String, Object>> classData = gson.fromJson(gson.toJson(response.getData()), listType);
+                
+                allTeachingClasses.clear();
+                for (Map<String, Object> classMap : classData) {
+                    Integer classScheduleId = Integer.parseInt( classMap.get("classScheduleId").toString());
+                    String year = String.valueOf(classMap.get("year"));
+                    String semester = String.valueOf(classMap.get("semester"));
+                    String classTime = String.valueOf(classMap.get("classTime"));
+                    String classLocation = String.valueOf(classMap.get("classLocation"));
+                    Integer classNumber =((Double) classMap.get("classNumber")).intValue();
+                    String courseId =Integer.toString(((Double) classMap.get("courseId")).intValue());
+                    String courseNum = classMap.get("courseNumber").toString();
+                    String courseName = classMap.get("courseName").toString();
+                    
+                    // 获取教师信息
+                    List<Double> teacherIds = (List<Double>) classMap.get("teacherIds");
+                    StringBuilder teachers = new StringBuilder();
+                    for (var teacherId : teacherIds) {
+
+                        allTeachers.stream()
+                                .filter(t ->t.getId() == teacherId.intValue())
+                                .findFirst().ifPresent(teacher -> teachers.append(teacher.getName()).append(","));
+                    }
+                    
+                    TeachingClassRecord record = new TeachingClassRecord(
+                        String.valueOf(classScheduleId),
+                        courseName,
+                        courseNum,
+                        year,
+                        semester,
+                        String.valueOf(classNumber),
+                            teachers.toString(),
+                        classTime != null ? classTime : "",
+                        classLocation != null ? classLocation : ""
+                    );
+                    allTeachingClasses.add(record);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 加载失败时使用部分模拟数据
+          }
+    }
+
+    @FXML
+    public void onRefreshButtonClick(ActionEvent event) {
+        loadDataFromAPIs();
+        teachingClassTableView.setItems(allTeachingClasses);
+        showAlert("刷新完成", "数据已从服务器重新加载");
     }
 }
