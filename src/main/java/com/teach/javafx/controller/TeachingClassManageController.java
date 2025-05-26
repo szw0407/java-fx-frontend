@@ -477,14 +477,14 @@ public class TeachingClassManageController {
     
     /**
      * 将复选框选择转换为时间字符串
-     * 格式：周一1-2节,周一3-4节,周三5-6节
+     * 格式：周一 8:00-10:00,周四 14:00-16:00
      */
     private String convertCheckBoxesToClassTime(CheckBox[][] timeCheckBoxes, String[] weekdays, String[] timeSlots) {
         List<String> selectedTimes = new ArrayList<>();
         for (int i = 0; i < weekdays.length; i++) {
             for (int j = 0; j < timeSlots.length; j++) {
                 if (timeCheckBoxes[i][j].isSelected()) {
-                    selectedTimes.add(weekdays[i] + timeSlots[j]);
+                    selectedTimes.add(weekdays[i] + " " + timeSlots[j]);
                 }
             }
         }
@@ -493,7 +493,7 @@ public class TeachingClassManageController {
     
     /**
      * 解析时间字符串并设置复选框状态
-     * 解析格式：周一1-2节,周一3-4节,周三5-6节
+     * 格式：周一 8:00-10:00,周四 14:00-16:00
      */
     private void parseClassTimeToCheckBoxes(String classTime, CheckBox[][] timeCheckBoxes, String[] weekdays, String[] timeSlots) {
         if (classTime == null || classTime.trim().isEmpty()) {
@@ -505,7 +505,7 @@ public class TeachingClassManageController {
             time = time.trim();
             for (int i = 0; i < weekdays.length; i++) {
                 for (int j = 0; j < timeSlots.length; j++) {
-                    if (time.equals(weekdays[i] + timeSlots[j])) {
+                    if (time.equals(weekdays[i] + " " + timeSlots[j])) {
                         timeCheckBoxes[i][j].setSelected(true);
                         break;
                     }
