@@ -1,5 +1,7 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.request.DataRequest;
+import com.teach.javafx.request.HttpRequestUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -282,5 +284,25 @@ public class CourseSelectionController {
                 String.join(",", t3.getTeachers()), t3.getClassTime(), t3.getClassLocation(),
                 "2023", "2"
         ));
+    }
+    private void initData() {
+        // real data
+        // students list
+        var dr = new DataRequest();
+        var s = HttpRequestUtil.request("/api/student/getStudentList", dr);
+        if (s != null && s.getCode() == 200) {
+            List<Map<String, Object>> dataList = (List<Map<String, Object>>) s.getData();
+            allStudents.clear();
+            for (Map<String, Object> m : dataList) {
+                String num = (String) m.get("num");
+                String name = (String) m.get("name");
+                allStudents.add(new Student(num, name));
+            }
+        }
+
+        // courses list
+        dr = new DataRequest();
+        var cl = HttpRequestUtil.
+
     }
 }

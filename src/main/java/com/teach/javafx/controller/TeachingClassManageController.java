@@ -42,9 +42,9 @@ public class TeachingClassManageController {
         Calendar calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
         if (month >= 2 && month <= 7) {
-            termComboBox.setValue("1");
-        } else {
             termComboBox.setValue("2");
+        } else {
+            termComboBox.setValue("1");
         }
         yearField.setText(
                 calendar.get(Calendar.YEAR) + ""
@@ -108,7 +108,10 @@ public class TeachingClassManageController {
     private void showTeachingClassDialog(TeachingClassRecord editRecord) {
         Dialog<TeachingClassRecord> dialog = new Dialog<>();
         dialog.setTitle(editRecord == null ? "添加教学班" : "编辑教学班");
-
+        // refresh teacher list
+        loadTeachers();
+        // refresh course list
+        loadCourses();
         // ----课程搜索选择----
         TextField courseSearchField = new TextField();
         courseSearchField.setPromptText("课程名/号搜索");
@@ -252,16 +255,18 @@ public class TeachingClassManageController {
                 new Label("上课时间:"), timeScrollPane,
                 new Label("上课地点:"), classLocationField
         );
-
+        // set default values
+        Calendar cal = Calendar.getInstance();
+        yearField.setText(cal.get(Calendar.YEAR) + "");
+        termBox.setValue(cal.get(Calendar.MONTH) < 7 && cal.get(Calendar.MONTH) > 1 ? "2" : "1");
         HBox content = new HBox(20, leftBox, rightBox);
         content.setPadding(new Insets(10, 10, 10, 10));
         dialog.getDialogPane().setContent(content);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);        dialog.setResultConverter(btn -> {
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.setResultConverter(btn -> {
             if (btn == ButtonType.OK && courseBox.getValue() != null &&
                     !yearField.getText().isEmpty() && termBox.getValue() != null &&
-                    !teachClassNumField.getText().isEmpty() &&
-                    !selectedTeachers.isEmpty() &&
-                    hasSelectedTime(timeCheckBoxes) && !classLocationField.getText().isEmpty()) {
+                    !teachClassNumField.getText().isEmpty()) {
                 Course course = courseBox.getValue();
                 String teachers = selectedTeachers.stream()
                         .map(Teacher::getName).collect(Collectors.joining(","));
@@ -280,15 +285,6 @@ public class TeachingClassManageController {
             }
             return null;
         });        Optional<TeachingClassRecord> result = dialog.showAndWait();
-        if (result.isEmpty()) {
-            // alert invalid
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("输入错误");
-            alert.setHeaderText(null);
-            alert.setContentText("无效输入，请确保所有必填项已填写且格式正确。");
-            alert.show();
-
-        }
         result.ifPresent(record -> {
             if (editRecord == null) {
                 // 创建新教学班
