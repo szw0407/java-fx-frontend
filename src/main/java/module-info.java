@@ -1,4 +1,5 @@
 module com.teach.javafx {
+    requires transitive javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.swing;
