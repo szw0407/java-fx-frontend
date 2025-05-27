@@ -36,10 +36,23 @@ public class CourseSelectionController {
 
     @FXML
     public void initialize() {
-        initMockData();
+//        initMockData();
 
         termComboBox.setItems(FXCollections.observableArrayList("1", "2"));
+        var cal = Calendar.getInstance();
+        // set year
+        yearField.setText(String.valueOf(cal.get(Calendar.YEAR)));
+        // set term
+        switch (cal.get(Calendar.MONTH)) {
+            case Calendar.JULY, Calendar.FEBRUARY, Calendar.MARCH, Calendar.APRIL, Calendar.MAY, Calendar.JUNE -> {
+                termComboBox.setValue("2");
+            }
+            case Calendar.JANUARY, Calendar.AUGUST, Calendar.SEPTEMBER, Calendar.OCTOBER, Calendar.NOVEMBER, Calendar.DECEMBER -> {
+                termComboBox.setValue("1");
+            }
 
+        }
+        initData();
         studentComboBox.setItems(allStudents);
         courseComboBox.setItems(allCourses);
 
@@ -67,6 +80,8 @@ public class CourseSelectionController {
 
     @FXML
     public void onQueryButtonClick(ActionEvent event) {
+        // reload data all
+        initData();
         String year = yearField.getText().trim();
         String term = termComboBox.getValue();
         Student stu = studentComboBox.getValue();
@@ -119,41 +134,63 @@ public class CourseSelectionController {
             }
         });
 
-        ComboBox<String> yearBox = new ComboBox<>(FXCollections.observableArrayList("2023", "2024"));
-        ComboBox<String> termBox = new ComboBox<>(FXCollections.observableArrayList("1", "2"));
-
         VBox content = new VBox(10,
                 new Label("学生:"),
                 stuField, stuBox,
                 new Label("课程:"),
                 courseField, courseBox,
                 new Label("教学班:"),
-                teachClassBox,
-                new Label("学年:"), yearBox,
-                new Label("学期:"), termBox
+                teachClassBox
         );
         dialog.getDialogPane().setContent(content);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        dialog.setResultConverter(btn -> {
-            if (btn == ButtonType.OK && stuBox.getValue() != null && teachClassBox.getValue() != null &&
-                    yearBox.getValue() != null && termBox.getValue() != null) {
-                Student stu = stuBox.getValue();
-                TeachingClass tc = teachClassBox.getValue();
-                Course c = tc.getCourse();
-                return new CourseSelectionRecord(
-                        stu.getStudentName(), stu.getStudentNum(),
-                        c.getCourseName(), c.getCourseNum(),
-                        tc.getTeachClassNum(),
-                        String.join(",", tc.getTeachers()),
-                        tc.getClassTime(), tc.getClassLocation(),
-                        yearBox.getValue(), termBox.getValue()
-                );
+        dialog.setResultConverter(button -> {
+            if (button == ButtonType.OK) {
+                Student selectedStudent = stuBox.getValue();
+                Course selectedCourse = courseBox.getValue();
+                TeachingClass selectedClass = teachClassBox.getValue();
+                if (selectedStudent != null && selectedCourse != null && selectedClass != null) {
+                    // try to connect server
+                    var dr = new DataRequest();
+                    dr.add("studentNum", selectedStudent.getStudentNum());
+                    dr.add("courseNum", selectedCourse.getCourseNum());
+                    dr.add("classNum", selectedClass.getTeachClassNum());
+                    dr.add("year", yearField.getText().trim());
+                    dr.add("semester", termComboBox.getValue());
+                    var a = HttpRequestUtil.request("/api/courseSelection/selectCourseForStudent", dr);
+                    if (a == null || a.getCode() != 0) {
+                        // show error message
+                        Alert alert = null;
+                        if (a != null) {
+                            alert = new Alert(Alert.AlertType.ERROR, "添加选课记录失败，请稍后重试。" + a.getMsg() + "<UNK>", ButtonType.OK);
+                        } else {
+                            alert = new Alert(Alert.AlertType.ERROR, "添加选课记录失败，请稍后重试。", ButtonType.OK);
+                        }
+                        alert.showAndWait();
+                        return null;
+                    }
+                    return new CourseSelectionRecord(
+                            selectedStudent.getStudentName(),
+                            selectedStudent.getStudentNum(),
+                            selectedCourse.getCourseName(),
+                            selectedCourse.getCourseNum(),
+                            selectedClass.getTeachClassNum(),
+                            String.join(",", selectedClass.getTeachers()),
+                            selectedClass.getClassTime(),
+                            selectedClass.getClassLocation(),
+                            yearField.getText().trim(),
+                            termComboBox.getValue()
+                    );
+                }
             }
             return null;
         });
 
-        Optional<CourseSelectionRecord> result = dialog.showAndWait();
+        dialog.showAndWait();
+
+        // 如果添加成功，更新表格
+        Optional<CourseSelectionRecord> result = Optional.ofNullable(dialog.getResult());
         result.ifPresent(record -> {
             allSelections.add(record);
             selectionTableView.setItems(FXCollections.observableArrayList(allSelections));
@@ -164,6 +201,26 @@ public class CourseSelectionController {
     public void onDeleteButtonClick(ActionEvent event) {
         CourseSelectionRecord selected = selectionTableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            // try to connect server to delete
+            var dr = new DataRequest();
+            dr.add("studentNum", selected.getStudentNum());
+            dr.add("courseNum", selected.getCourseNum());
+            dr.add("classNum", selected.getTeachClassNum());
+            dr.add("year", selected.getYear());
+            dr.add("semester", selected.getTerm());
+            var response = HttpRequestUtil.request("/api/courseSelection/dropCourseForStudent", dr);
+            if (response == null || response.getCode() != 0) {
+                // show error message
+                Alert alert = null;
+                if (response != null) {
+                    alert = new Alert(Alert.AlertType.ERROR, "删除选课记录失败，请稍后重试。" + response.getMsg() + "<UNK>", ButtonType.OK);
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR, "删除选课记录失败，请稍后重试。", ButtonType.OK);
+                }
+                alert.showAndWait();
+
+                return;
+            }
             allSelections.remove(selected);
             selectionTableView.setItems(FXCollections.observableArrayList(allSelections));
         }
@@ -241,58 +298,17 @@ public class CourseSelectionController {
         public SimpleStringProperty classLocationProperty() { return classLocation; }
     }
 
-    // ==== mock数据 ====
-    private void initMockData() {
-        // 学生
-        Student s1 = new Student("2023001", "张三");
-        Student s2 = new Student("2023002", "李四");
-        Student s3 = new Student("2023003", "王五");
-        allStudents.addAll(s1, s2, s3);
-
-        // 课程
-        Course c1 = new Course("CS101", "程序设计");
-        Course c2 = new Course("MA101", "高等数学");
-        Course c3 = new Course("EN101", "大学英语");
-        allCourses.addAll(c1, c2, c3);
-
-        // 教学班
-        TeachingClass t1 = new TeachingClass("T101A", c1, Arrays.asList("王老师", "赵老师"), "周一 8:00-10:00", "A101");
-        TeachingClass t2 = new TeachingClass("T102B", c2, List.of("李老师"), "周三 10:00-12:00", "B201");
-        TeachingClass t3 = new TeachingClass("T103C", c1, List.of("孙老师"), "周四 14:00-16:00", "A102");
-        TeachingClass t4 = new TeachingClass("T201A", c3, Arrays.asList("刘老师", "陈老师"), "周五 8:00-10:00", "C301");
-
-        courseTeachClassMap.put(c1.getCourseNum(), Arrays.asList(t1, t3));
-        courseTeachClassMap.put(c2.getCourseNum(), List.of(t2));
-        courseTeachClassMap.put(c3.getCourseNum(), List.of(t4));
-
-        // 选课记录
-        allSelections.add(new CourseSelectionRecord(
-                s1.getStudentName(), s1.getStudentNum(),
-                c1.getCourseName(), c1.getCourseNum(), t1.getTeachClassNum(),
-                String.join(",", t1.getTeachers()), t1.getClassTime(), t1.getClassLocation(),
-                "2024", "1"
-        ));
-        allSelections.add(new CourseSelectionRecord(
-                s2.getStudentName(), s2.getStudentNum(),
-                c2.getCourseName(), c2.getCourseNum(), t2.getTeachClassNum(),
-                String.join(",", t2.getTeachers()), t2.getClassTime(), t2.getClassLocation(),
-                "2024", "1"
-        ));
-        allSelections.add(new CourseSelectionRecord(
-                s3.getStudentName(), s3.getStudentNum(),
-                c1.getCourseName(), c1.getCourseNum(), t3.getTeachClassNum(),
-                String.join(",", t3.getTeachers()), t3.getClassTime(), t3.getClassLocation(),
-                "2023", "2"
-        ));
-    }
     private void initData() {
+
         // real data
         // students list
         var dr = new DataRequest();
+        allStudents.clear();
+        dr.add("numName", ""); // empty means all students
         var s = HttpRequestUtil.request("/api/student/getStudentList", dr);
-        if (s != null && s.getCode() == 200) {
+        if (s != null && s.getCode() == 0) {
             List<Map<String, Object>> dataList = (List<Map<String, Object>>) s.getData();
-            allStudents.clear();
+
             for (Map<String, Object> m : dataList) {
                 String num = (String) m.get("num");
                 String name = (String) m.get("name");
@@ -301,8 +317,82 @@ public class CourseSelectionController {
         }
 
         // courses list
+//        dr = new DataRequest();
+        allCourses.clear();
+        var cl = HttpRequestUtil.request("/api/course/getCourseList", dr);
+        if (cl != null && cl.getCode() == 0) {
+            List<Map<String, Object>> dataList = (List<Map<String, Object>>) cl.getData();
+
+            for (Map<String, Object> m : dataList) {
+                String num = (String) m.get("num");
+                String name = (String) m.get("name");
+                allCourses.add(new Course(num, name));
+
+            }
+        }
         dr = new DataRequest();
-        var cl = HttpRequestUtil.
+        dr.add("semester", termComboBox.getValue());
+        dr.add("year", yearField.getText());
+        courseTeachClassMap.clear();
+        var c = HttpRequestUtil.request("/api/courseSelection/getAvailableCoursesAll", dr);
+        if (c != null && c.getCode() == 0) {
+            List<Map<String, Object>> dataList = (List<Map<String, Object>>) c.getData();
+//
+            allSelections.clear();
+            for (Map<String, Object> m : dataList) {
+                String courseNum = (String) m.get("courseNum");
+                String courseName = (String) m.get("courseName");
+                String teachClassNum = (String) m.get("classNumber");
+                String classTime = (String) m.get("classTime");
+                String classLocation = (String) m.get("classLocation");
+//                String teachers = (String) m.get("teachers");
+                String year = (String) m.get("year");
+                String term = (String) m.get("semester");
+                List<String> teachers = (List<String>) m.get("teachers");
+                Course course = new Course(courseNum, courseName);
+                TeachingClass tc = new TeachingClass(teachClassNum, course,
+                        teachers, classTime, classLocation);
+                StringBuilder teacher_csv = new StringBuilder();
+                for (var teacher:teachers) {
+                    if (!teacher_csv.isEmpty()) {
+                        teacher_csv.append(",");
+                    }
+                    teacher_csv.append(teacher);
+                }
+                allSelections.add(new CourseSelectionRecord(
+                        "", "", courseName, courseNum, teachClassNum, teacher_csv.toString()
+                        , classTime, classLocation, year, term
+                ));
+
+                courseTeachClassMap.computeIfAbsent(courseNum, k -> new ArrayList<>()).add(tc);
+            }
+        }
+
+        // course selection records
+        allSelections.clear();
+        var sc = HttpRequestUtil.request("/api/courseSelection/getSelectedCoursesAll", dr);
+        if (sc != null && sc.getCode() == 0) {
+            List<Map<String, Object>> dataList = (List<Map<String, Object>>) sc.getData();
+
+            for (Map<String, Object> m : dataList) {
+                String studentName = (String) m.get("studentName");
+                String studentNum = (String) m.get("studentNum");
+                String courseName = (String) m.get("courseName");
+                String courseNum = (String) m.get("courseNum");
+                String teachClassNum = (String) m.get("classNumber");
+                String classTime = (String) m.get("classTime");
+                String classLocation = (String) m.get("classLocation");
+                String year = (String) m.get("year");
+                String term = (String) m.get("semester");
+                String teachers = ((List<String>) m.get("teachers")).stream()
+                        .collect(Collectors.joining(","));
+                allSelections.add(new CourseSelectionRecord(
+                        studentName, studentNum, courseName, courseNum, teachClassNum,
+                        teachers, classTime, classLocation, year, term
+                ));
+            }
+        }
+
 
     }
 }
