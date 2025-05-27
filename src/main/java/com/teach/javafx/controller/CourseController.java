@@ -136,9 +136,19 @@ public class CourseController {
         flowPane.setHgap(10);
         flowPane.setAlignment(Pos.CENTER);
         Button saveButton = new Button("保存");
+        Button cancleButton = new Button("取消");
         saveButton.setId("saveNew");
         saveButton.setOnAction(e -> saveNewItem());
+        cancleButton.setId("cancelNew");
+        cancleButton.setOnAction(e->{
+            // 取消新建行，移除最后一行
+            observableList.remove(observableList.size() - 1);
+            hasNewRow = false;
+            dataTableView.scrollTo(observableList.size() - 1); // 滚动到最后一行
+
+        });
         flowPane.getChildren().add(saveButton);
+        flowPane.getChildren().add(cancleButton);
         newCourse.put("operate", flowPane);
         
         // 添加到表格末尾
