@@ -34,13 +34,6 @@
             <artifactId>json</artifactId>
             <version>20250517</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-bom</artifactId>
-            <version>20</version> <!-- Replace with the desired JavaFX version -->
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
 
         <!-- JavaFX Web Module -->
         <dependency>
