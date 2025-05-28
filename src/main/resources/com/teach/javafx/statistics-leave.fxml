@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.teach.javafx.controller.StatisticsLeaveController"
+            prefWidth="800.0" prefHeight="600.0">
+
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <Label fx:id="summaryLabel" text="请假统计概览"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="dataTableView">
+            <columns>
+                <TableColumn fx:id="studentIdColumn" prefWidth="100.0" text="学生ID"/>
+                <TableColumn fx:id="studentNameColumn" prefWidth="150.0" text="学生姓名"/>
+                <TableColumn fx:id="totalLeaveColumn" prefWidth="150.0" text="总请假次数"/>
+                <TableColumn fx:id="approvedLeaveColumn" prefWidth="150.0" text="批准请假次数"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <right>
+        <VBox spacing="10" alignment="TOP_CENTER" style="-fx-padding: 10;">
+            <PieChart fx:id="leavePieChart" prefHeight="300" prefWidth="300"/>
+            <Label fx:id="chartInfoLabel" text="点击饼图查看分布"/>
+        </VBox>
+    </right>
+
+</BorderPane>
