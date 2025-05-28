@@ -44,7 +44,8 @@ public class StatisticsGenderController extends ToolController {
         dataTableView.setItems(observableList);
         dataTableView.setEditable(false);
 
-        new Thread(this::loadData).start();
+        // 界面加载完成后自动刷新
+        Platform.runLater(this::loadData);
     }
 
     private void loadData() {
