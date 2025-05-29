@@ -37,7 +37,7 @@
                 <TableColumn fx:id="courseNameColumn" prefWidth="110.0" text="课程名称"/>
                 <TableColumn fx:id="creditColumn" prefWidth="60.0" text="学分"/>
                 <TableColumn fx:id="teachClassNumColumn" prefWidth="100.0" text="教学班号"/>
-                <TableColumn fx:id="yearColumn" prefWidth="80.0" text="学年"/>
+                <TableColumn fx:id="yearColumn" text="学年"/>
                 <TableColumn fx:id="termColumn" prefWidth="60.0" text="学期"/>
                 <TableColumn fx:id="markColumn" prefWidth="60.0" text="成绩"/>
                 <TableColumn fx:id="editColumn" prefWidth="120.0" text="操作"/>
