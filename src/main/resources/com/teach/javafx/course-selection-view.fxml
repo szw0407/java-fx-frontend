@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.teach.javafx.controller.CourseSelectionController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+            <Label text="学年:"/>
+            <TextField fx:id="yearField" promptText="如2024"/>
+            <Label text="学期:"/>
+            <ComboBox fx:id="termComboBox" prefWidth="60.0"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="学生:"/>
+            <ComboBox fx:id="studentComboBox" promptText="全部"/>
+            <Label text="课程:"/>
+            <ComboBox fx:id="courseComboBox" promptText="全部"/>
+            <Button mnemonicParsing="false" onAction="#onQueryButtonClick" text="查询"/>
+            <Button mnemonicParsing="false" onAction="#onAddButtonClick" text="添加选课"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="selectionTableView">
+            <columns>
+                <TableColumn fx:id="studentNameColumn" prefWidth="100.0" text="学生姓名"/>
+                <TableColumn fx:id="studentNumColumn" prefWidth="100.0" text="学号"/>
+                <TableColumn fx:id="courseNameColumn" prefWidth="120.0" text="课程名称"/>
+                <TableColumn fx:id="courseNumColumn" prefWidth="100.0" text="课程号"/>
+                <TableColumn fx:id="teachClassNumColumn" prefWidth="100.0" text="教学班"/>
+                <TableColumn fx:id="teachersColumn" prefWidth="180.0" text="班级老师"/>
+                <TableColumn fx:id="classTimeColumn" prefWidth="120.0" text="上课时间"/>
+                <TableColumn fx:id="classLocationColumn" prefWidth="120.0" text="上课地点"/>
+                <TableColumn fx:id="deleteColumn" prefWidth="80.0" text="操作"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

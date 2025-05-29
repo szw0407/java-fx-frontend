@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.teach.javafx.controller.TeacherScoreTableController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="5.0">
+            <padding>
+                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+            </padding>
+            <!-- 操作按钮 -->
+            <FlowPane prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <Button mnemonicParsing="false" onAction="#onAddButtonClick" text="重置"/>
+                <Button mnemonicParsing="false" onAction="#onEditButtonClick" text="修改"/>
+                <Button mnemonicParsing="false" onAction="#onDeleteButtonClick" text="删除"/>
+                <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER" hgap="5" vgap="5">
+                    <Label text="学生"/>
+                    <ComboBox fx:id="studentComboBox" promptText="全部"/>
+                    <Label text="课程"/>
+                    <ComboBox fx:id="courseComboBox" promptText="全部"/>
+                    <Label text="学年"/>
+                    <TextField fx:id="yearField"/>
+                    <Label text="学期"/>
+                    <ComboBox fx:id="termComboBox"/>
+                    <Button mnemonicParsing="false" onAction="#onQueryButtonClick" text="查询"/>
+                </FlowPane>
+            </FlowPane>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <!-- 筛选区域 -->
+
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="dataTableView">
+            <columns>
+                <TableColumn fx:id="studentNameColumn" prefWidth="90.0" text="姓名"/>
+                <TableColumn fx:id="classNameColumn" prefWidth="100.0" text="班级"/>
+                <TableColumn fx:id="courseNumColumn" prefWidth="90.0" text="课程号"/>
+                <TableColumn fx:id="courseNameColumn" prefWidth="110.0" text="课程名称"/>
+                <TableColumn fx:id="creditColumn" prefWidth="60.0" text="学分"/>
+                <TableColumn fx:id="teachClassNumColumn" prefWidth="100.0" text="教学班号"/>
+                <TableColumn fx:id="yearColumn" text="学年"/>
+                <TableColumn fx:id="termColumn" prefWidth="60.0" text="学期"/>
+                <TableColumn fx:id="markColumn" prefWidth="60.0" text="成绩"/>
+                <TableColumn fx:id="editColumn" prefWidth="120.0" text="操作"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
