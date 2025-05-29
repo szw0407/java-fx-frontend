@@ -658,12 +658,11 @@ public class TeachingClassManageController {
                     
                     // 获取教师信息
                     List<Double> teacherIds = (List<Double>) classMap.get("teacherIds");
-                    StringBuilder teachers = new StringBuilder();
+                    List<String> teachers = new ArrayList<String>();
                     for (var teacherId : teacherIds) {
-
                         allTeachers.stream()
                                 .filter(t ->t.getId() == teacherId.intValue())
-                                .findFirst().ifPresent(teacher -> teachers.append(teacher.getName()).append(","));
+                                .findFirst().ifPresent(teacher -> teachers.add(teacher.getName()));
                     }
                     
                     TeachingClassRecord record = new TeachingClassRecord(
@@ -673,7 +672,7 @@ public class TeachingClassManageController {
                         year,
                         semester,
                         String.valueOf(classNumber),
-                            teachers.toString(),
+                            String.join(",", teachers),
                         classTime != null ? classTime : "",
                         classLocation != null ? classLocation : ""
                     );
