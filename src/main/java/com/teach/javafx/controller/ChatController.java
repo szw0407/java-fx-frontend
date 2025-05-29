@@ -87,7 +87,7 @@ package com.teach.javafx.controller;
                 }).start();
             }
 
-            private String extractResponseContent(HttpResponse<String> response) {
+         private String extractResponseContent(HttpResponse<String> response) {
                 try {
                     if (response.statusCode() == 200) {
                         String responseBody = response.body();
@@ -117,7 +117,7 @@ package com.teach.javafx.controller;
                         if (contentValueStart == -1 || contentValueEnd == -1) {
                             return "解析失败: content 格式错误";
                         }
-                        return choicesArray.substring(contentValueStart, contentValueEnd);
+                        return choicesArray.substring(contentValueStart, contentValueEnd).replace("\n", "");
                     } else {
                         return "请求失败: " + response.body();
                     }
