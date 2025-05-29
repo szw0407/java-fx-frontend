@@ -1,5 +1,7 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.request.DataRequest;
+import com.teach.javafx.request.HttpRequestUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,13 +53,14 @@ public class StudentTimetableController {
         satColumn.setCellValueFactory(cell -> cell.getValue().sat);
         sunColumn.setCellValueFactory(cell -> cell.getValue().sun);
 
-        initMockData();
+        initData();
+//        initMockData();
         displayTimetable();
     }
 
     @FXML
     public void onQueryButtonClick() {
-        displayTimetable();
+        initData();displayTimetable();
     }
 
     // 构建课程表
@@ -89,7 +92,7 @@ public class StudentTimetableController {
                         String timeStr = slot.substring(day.length()).trim();
                         for (String t : times) {
                             if (t.equals(timeStr)) {
-                                String info = tc.getCourseName() + " [" + tc.getTeachClassNum() + "]\n" + tc.getClassLocation();
+                                String info = tc.getCourseName() + " [" + tc.getTeachClassNum() + "]\n" + tc.getClassLocation() + "\n" + tc.getTeachers() + "\n";
                                 table.get(t).get(day).add(info);
                             }
                         }
@@ -168,5 +171,33 @@ public class StudentTimetableController {
         mySelectedClasses.add(new TeachingClassVO(
                 "TCID-4", "线性代数", "MA102", "104C", "孙老师",
                 "周二 8:00-10:00,周四 14:00-16:00", "A102", "2024", "2"));
+    }
+    private void initData() {
+        var dr = new DataRequest();
+        dr.add("year", yearField.getText().trim());
+        dr.add("semester", termComboBox.getValue());
+        var l = HttpRequestUtil.request("/api/me/PlanList", dr);
+        if (l.getCode() == 0) {
+            // 解析返回的课程表数据
+            mySelectedClasses = ((List<Map>)l.getData()).stream().map(item -> {
+                Map<String, String> m = (Map<String, String>) item;
+                return new TeachingClassVO(
+                        m.get("classScheduleId"),
+                        m.get("courseName"),
+                        m.get("courseNum"),
+                        m.get("classNum"),
+                        m.get("teachers"),
+                        m.get("classTime"),
+                        m.get("classLocation"),
+                        m.get("year"),
+                        m.get("semester")
+                );
+            }).collect(Collectors.toList());
+        } else {
+            // 错误处理
+            Alert alert = new Alert(Alert.AlertType.ERROR, "获取课程表失败: " + l.getMsg());
+            alert.showAndWait();
+        }
+
     }
 }
