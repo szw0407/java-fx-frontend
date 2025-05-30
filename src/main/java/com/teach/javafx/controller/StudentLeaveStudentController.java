@@ -273,7 +273,7 @@ public class StudentLeaveStudentController extends ToolController {
         if (res != null && res.getCode() == 0) {
             MessageDialog.showDialog("请假申请提交成功！");
             loadLeaveList();
-//            clearForm();
+            clearForm();
         } else {
             MessageDialog.showDialog("申请失败：" + (res != null ? res.getMsg() : "res==null"));
         }
