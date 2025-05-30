@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<!-- 课程管理界面 FXML配置文件 对应页面交互控制类 com.teach.javafx.controller.CourseController -->
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             style= "-fx-background-image: url('shanda1.jpg'); -fx-background-repeat: no-repeat; -fx-background-size: cover;" fx:controller="com.teach.javafx.controller.CourseController">
    <top>
-      <VBox spacing="10" style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-padding: 10;">
-         <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="课程号或者课程名:" />
-            <TextField fx:id="queryNumField" promptText="请输入课程号" prefWidth="120" />
-            <Button fx:id="queryButton" text="查询" onAction="#onQueryButtonClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
-            <Button fx:id="addButton" text="新建课程" onAction="#onAddButtonClick" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" />
-         </HBox>
-      </VBox>
+      <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: rgba(255, 255, 255, 0.9);">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+         </padding>
+         <Label text="课程号或者课程名:" />
+         <TextField fx:id="queryNumField" promptText="请输入课程号" prefWidth="120" />
+         <Pane HBox.hgrow="ALWAYS"/>
+         <Button fx:id="queryButton" text="查询" onAction="#onQueryButtonClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
+         <Button fx:id="addButton" text="新建课程" onAction="#onAddButtonClick" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" />
+      </HBox>
    </top>
    <center>
       <TableView fx:id="dataTableView">
