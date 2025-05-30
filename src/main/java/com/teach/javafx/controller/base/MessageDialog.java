@@ -3,6 +3,8 @@ package com.teach.javafx.controller.base;
 import com.teach.javafx.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -93,5 +95,39 @@ public class MessageDialog {
         return instance.choiceController.choiceDialog(msg);
     }
 
+
+    /**
+     * 显示确认对话框
+     * @param title 对话框标题
+     * @param message 提示信息
+     * @return 用户点击"确认"返回true，点击"取消"或关闭窗口返回false
+     */
+    public static boolean showConfirmDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // 不显示头部文本
+        alert.setContentText(message);
+
+        // 设置按钮文本
+        ((javafx.scene.control.Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("确认");
+        ((javafx.scene.control.Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("取消");
+
+        // 应用样式
+        javafx.scene.control.DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+                MessageDialog.class.getResource("/com/teach/javafx/css/leave-style.css").toExternalForm());
+        dialogPane.getStyleClass().add("custom-alert");
+
+        // 阻止应用程序关闭
+        MainApplication.setCanClose(false);
+
+        // 显示对话框并等待用户响应
+        boolean result = alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+
+        // 恢复应用程序可关闭状态
+        MainApplication.setCanClose(true);
+
+        return result;
+    }
 
 }
