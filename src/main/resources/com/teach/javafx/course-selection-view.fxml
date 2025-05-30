@@ -14,7 +14,7 @@
             <Label text="学年:"/>
             <TextField fx:id="yearField" promptText="如2024"/>
             <Label text="学期:"/>
-            <ComboBox fx:id="termComboBox" prefWidth="60.0"/>
+            <ComboBox fx:id="termComboBox" prefWidth="80.0"/>
             <Pane HBox.hgrow="ALWAYS"/>
             <Label text="学生:"/>
             <ComboBox fx:id="studentComboBox" promptText="全部"/>
