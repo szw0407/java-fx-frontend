@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+            <?import javafx.scene.chart.*?>
+            <?import javafx.scene.control.*?>
+            <?import javafx.scene.layout.*?>
+
+            <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.teach.javafx.controller.PostStatisticsController">
+                <children>
+                    <VBox spacing="10" prefWidth="600" prefHeight="400" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+                        <!-- 搜索框和按钮 -->
+                        <HBox spacing="10">
+                            <Label text="日期：" />
+                            <TextField fx:id="searchDateField" promptText="输入日期 (YYYY-MM-DD)" />
+                            <Button text="查询" onAction="#onSearchByDateButtonClick" />
+                            <Button text="刷新" onAction="#onQueryButtonClick" />
+                        </HBox>
+
+                        <!-- 柱状图 -->
+                        <BarChart fx:id="postBarChart" title="帖子统计图" animated="true">
+                            <xAxis>
+                                <CategoryAxis fx:id="xAxis" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="yAxis" />
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                </children>
+            </AnchorPane>
