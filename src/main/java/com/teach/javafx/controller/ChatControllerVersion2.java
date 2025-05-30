@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -110,7 +111,7 @@ public class ChatControllerVersion2 {
                 JSONArray messages = new JSONArray();
                 JSONObject messageObj = new JSONObject();
                 messageObj.put("role", "user");
-                messageObj.put("content", prompt);
+                messageObj.put("content", prompt+" WARN: Do not use emoji in your reply.");
                 messages.put(messageObj);
 
                 requestBody.put("messages", messages);
@@ -213,6 +214,13 @@ public class ChatControllerVersion2 {
         timeLabel.getStyleClass().add("time-label");
 
         WebView webView = new WebView();
+        // 修正字体加载路径，使用正确的资源路径
+        try {
+            String fontPath = getClass().getResource("/com/teach/javafx/fonts/NotoSans.ttf").toExternalForm();
+            Font.loadFont(fontPath, 14);
+        } catch (Exception e) {
+            System.err.println("无法加载Noto Sans字体: " + e.getMessage());
+        }
         webView.getEngine().loadContent(renderMarkdownToHtml(message), "text/html");
         webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
         webView.setPrefHeight(calculateTextHeight(message, 500));
@@ -248,24 +256,66 @@ public class ChatControllerVersion2 {
 
     // Markdown转HTML方法
     private String renderMarkdownToHtml(String markdown) {
-        try {
-            // 简单处理代码块
-            String html = markdown.replaceAll("```(.*?)```", "<pre><code>$1</code></pre>");
+        // 使用 org.commonmark 渲染 Markdown
+        org.commonmark.parser.Parser parser = org.commonmark.parser.Parser.builder().build();
+        org.commonmark.renderer.html.HtmlRenderer renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build();
+        String htmlContent = renderer.render(parser.parse(markdown));
 
-            // 处理换行
-            html = html.replaceAll("\n", "<br>");
+        // 使用FontUtil工具生成base64编码的字体CSS
+        String base64FontFace = com.teach.javafx.util.FontUtil.generateBase64FontFace(
+            "Noto Sans",
+                "/com/teach/javafx/fonts/NotoSans.ttf"
+        );
 
-            // 处理加粗
-            html = html.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
-
-            // 处理斜体
-            html = html.replaceAll("\\*(.*?)\\*", "<em>$1</em>");
-
-            return "<div style='font-family: system-ui; font-size: 14px;'>" + html + "</div>";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "<div style='font-family: system-ui; font-size: 14px;'>" + markdown + "</div>";
-        }
+        // 包装 HTML 内容，设置字体和样式
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    %s
+                    body {
+                        font-family: 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+                        font-size: 14px;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #2c3e50;
+                    }
+                    a {
+                        color: #007bff;
+                        text-decoration: none;
+                    }
+                    a:hover {
+                        text-decoration: underline;
+                    }
+                    code {
+                        background-color: #f8f9fa;
+                        padding: 2px 4px;
+                        border-radius: 4px;
+                        font-family: 'Courier New', monospace;
+                    }
+                    pre {
+                        background-color: #f8f9fa;
+                        padding: 10px;
+                        border-radius: 4px;
+                        overflow-x: auto;
+                    }
+                    blockquote {
+                        border-left: 4px solid #dfe2e5;
+                        padding-left: 10px;
+                        color: #6a737d;
+                    }
+                </style>
+            </head>
+            <body>
+                %s
+            </body>
+            </html>
+            """.formatted(base64FontFace, htmlContent);
     }
 
     // 解析API响应
@@ -276,7 +326,7 @@ public class ChatControllerVersion2 {
                 JSONObject json = new JSONObject(responseBody);
                 JSONArray choices = json.getJSONArray("choices");
 
-                if (choices.length() == 0) {
+                if (choices.isEmpty()) {
                     return "解析失败: choices 为空";
                 }
 
@@ -291,3 +341,4 @@ public class ChatControllerVersion2 {
         }
     }
 }
+

@@ -1,152 +1,285 @@
 package com.teach.javafx.controller;
 
-import com.teach.javafx.AppStore;
-import com.teach.javafx.controller.base.MessageDialog;
-import com.teach.javafx.controller.base.ToolController;
-import com.teach.javafx.request.DataRequest;
-import com.teach.javafx.request.DataResponse;
-import com.teach.javafx.request.HttpRequestUtil;
-import com.teach.javafx.request.JwtResponse;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.DatePicker;
+    import com.teach.javafx.AppStore;
+    import com.teach.javafx.controller.base.MessageDialog;
+    import com.teach.javafx.controller.base.ToolController;
+    import com.teach.javafx.request.DataRequest;
+    import com.teach.javafx.request.DataResponse;
+    import com.teach.javafx.request.HttpRequestUtil;
+    import com.teach.javafx.request.JwtResponse;
+    import javafx.collections.FXCollections;
+    import javafx.collections.ObservableList;
+    import javafx.fxml.FXML;
+    import javafx.scene.control.*;
+    import javafx.scene.control.cell.MapValueFactory;
+    import javafx.scene.control.DatePicker;
+    import javafx.scene.control.TableRow;
+    import javafx.util.Callback;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+    import java.time.LocalDate;
+    import java.util.ArrayList;
+    import java.util.HashMap;
+    import java.util.Map;
 
-public class StudentLeaveStudentController extends ToolController {
-    @FXML
-    private TableView<Map> leaveTableView;
+    public class StudentLeaveStudentController extends ToolController {
+        @FXML
+        private TableView<Map> leaveTableView;
 
-    @FXML
-    private TableColumn<Map, String> idColumn;
-    @FXML
-    private TableColumn<Map, String> studentIdColumn;
-    @FXML
-    private TableColumn<Map, String> studentNameColumn;
-    @FXML
-    private TableColumn<Map, String> collegeColumn;
-    @FXML
-    private TableColumn<Map, String> startDateColumn;
-    @FXML
-    private TableColumn<Map, String> endDateColumn;
-    @FXML
-    private TableColumn<Map, String> reasonColumn;
-    @FXML
-    private TableColumn<Map, String> approverIdColumn;
-    @FXML
-    private TableColumn<Map, String> isApprovedColumn;
+        @FXML
+        private TableColumn<Map, String> idColumn;
+        @FXML
+        private TableColumn<Map, String> studentIdColumn;
+        @FXML
+        private TableColumn<Map, String> studentNameColumn;
+        @FXML
+        private TableColumn<Map, String> collegeColumn;
+        @FXML
+        private TableColumn<Map, String> startDateColumn;
+        @FXML
+        private TableColumn<Map, String> endDateColumn;
+        @FXML
+        private TableColumn<Map, String> reasonColumn;
+        @FXML
+        private TableColumn<Map, String> approverIdColumn;
+        @FXML
+        private TableColumn<Map, String> isApprovedColumn;
 
-    @FXML
-    private TextField studentIdField;
-    @FXML
-    private TextField studentNameField;
-    @FXML
-    private TextField collegeField;
-    @FXML
-    private TextField reasonField;
-    @FXML
-    private TextField approverIdField;
+        @FXML
+        private TextField studentIdField;
+        @FXML
+        private TextField studentNameField;
+        @FXML
+        private TextField collegeField;
+        @FXML
+        private TextArea reasonField;
+        @FXML
+        private TextField approverIdField;
 
-    @FXML
-    private DatePicker startDatePicker;
-    @FXML
-    private DatePicker endDatePicker;
+        @FXML
+        private DatePicker startDatePicker;
+        @FXML
+        private DatePicker endDatePicker;
 
-    private ObservableList<Map> leaveList = FXCollections.observableArrayList();
+        @FXML
+        private Button submitButton;
+        @FXML
+        private Button clearButton;
 
-    @FXML
-    public void initialize() {
-        idColumn.setCellValueFactory(new MapValueFactory<>("id"));
-        studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
-        studentNameColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
-        collegeColumn.setCellValueFactory(new MapValueFactory<>("college"));
-        startDateColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
-        endDateColumn.setCellValueFactory(new MapValueFactory<>("endDate"));
-        reasonColumn.setCellValueFactory(new MapValueFactory<>("reason"));
-        approverIdColumn.setCellValueFactory(new MapValueFactory<>("approverId"));
-        isApprovedColumn.setCellValueFactory(new MapValueFactory<>("isApproved"));
+        private ObservableList<Map> leaveList = FXCollections.observableArrayList();
 
-        leaveTableView.setItems(leaveList);
-        loadLeaveList();
-    }
+        @FXML
+        public void initialize() {
+            configureTableColumns();
+            setupTableRowFactory();
+            setupFormValidation();
+            setupDatePickers();
 
-private void loadLeaveList() {
-    DataRequest req = new DataRequest();
-    req.add("studentName", "");
-    DataResponse res = HttpRequestUtil.request("/api/studentLeave/getLeaveList", req);
-    if (res != null && res.getCode() == 0) {
-        String currentStudentId = getCurrentStudentId();
-        ArrayList<Map> filteredList = new ArrayList<>();
-        for (Map record : (ArrayList<Map>) res.getData()) {
-            // 将 record.get("studentId") 转换为字符串后再比较
-            if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
-                // 检查 isApproved 字段是否为 null
-                if (record.get("isApproved") == null) {
-                    record.put("isApproved", ""); // 设置为空字符串或其他默认值
+            // 自动填充学生ID
+            String currentStudentId = getCurrentStudentId();
+            if (currentStudentId != null) {
+                studentIdField.setText(currentStudentId);
+                studentIdField.setEditable(false); // 锁定学生ID不可编辑
+            }
+
+            loadLeaveList();
+        }
+
+        private void configureTableColumns() {
+            idColumn.setCellValueFactory(new MapValueFactory<>("id"));
+            studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
+            studentNameColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
+            collegeColumn.setCellValueFactory(new MapValueFactory<>("college"));
+            startDateColumn.setCellValueFactory(new MapValueFactory<>("startDate"));
+            endDateColumn.setCellValueFactory(new MapValueFactory<>("endDate"));
+            reasonColumn.setCellValueFactory(new MapValueFactory<>("reason"));
+            approverIdColumn.setCellValueFactory(new MapValueFactory<>("approverId"));
+            isApprovedColumn.setCellValueFactory(new MapValueFactory<>("isApproved"));
+
+            // 设置列宽自动调整
+            leaveTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+            // 为审批状态列添加自定义单元格工厂
+            isApprovedColumn.setCellFactory(column -> new TableCell<Map, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                        getStyleClass().removeAll("status-pending", "status-approved", "status-rejected");
+                    } else {
+                        if ("1".equals(item) || "1.0".equals(item) || "true".equals(item)) {
+                            setText("已批准");
+                            getStyleClass().add("status-approved");
+                        } else if ("0".equals(item) || "0.0".equals(item) || "false".equals(item)) {
+                            setText("已拒绝");
+                            getStyleClass().add("status-rejected");
+                        } else {
+                            setText("待审批");
+                            getStyleClass().add("status-pending");
+                        }
+                    }
                 }
-                filteredList.add(record);
+            });
+
+            leaveTableView.setItems(leaveList);
+        }
+
+        private void setupTableRowFactory() {
+            leaveTableView.setRowFactory(tv -> new TableRow<Map>() {
+                @Override
+                protected void updateItem(Map item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item != null) {
+                        // 为不同状态的行添加不同样式
+                        String status = String.valueOf(item.get("isApproved"));
+                        if ("1".equals(status) || "1.0".equals(status) || "true".equals(status)) {
+                            getStyleClass().add("row-approved");
+                        } else if ("0".equals(status) || "0.0".equals(status) || "false".equals(status)) {
+                            getStyleClass().add("row-rejected");
+                        } else {
+                            getStyleClass().add("row-pending");
+                        }
+                    }
+                }
+            });
+        }
+
+        private void setupFormValidation() {
+            // 添加实时表单验证
+            submitButton.disableProperty().bind(
+                studentIdField.textProperty().isEmpty()
+                .or(studentNameField.textProperty().isEmpty())
+                .or(collegeField.textProperty().isEmpty())
+                .or(approverIdField.textProperty().isEmpty())
+                .or(reasonField.textProperty().isEmpty())
+                .or(startDatePicker.valueProperty().isNull())
+                .or(endDatePicker.valueProperty().isNull())
+            );
+        }
+
+        private void setupDatePickers() {
+            // 设置日期选择器默认值和约束
+            startDatePicker.setValue(LocalDate.now());
+            endDatePicker.setValue(LocalDate.now().plusDays(1));
+
+            // 确保结束日期不早于开始日期
+            startDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null && endDatePicker.getValue() != null &&
+                    endDatePicker.getValue().isBefore(newVal)) {
+                    endDatePicker.setValue(newVal.plusDays(1));
+                }
+            });
+        }
+
+        private void loadLeaveList() {
+            DataRequest req = new DataRequest();
+            req.add("studentName", "");
+            DataResponse res = HttpRequestUtil.request("/api/studentLeave/getLeaveList", req);
+            if (res != null && res.getCode() == 0) {
+                String currentStudentId = getCurrentStudentId();
+                ArrayList<Map> filteredList = new ArrayList<>();
+                for (Map record : (ArrayList<Map>) res.getData()) {
+                    // 将 record.get("studentId") 转换为字符串后再比较
+                    if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
+                        // 检查 isApproved 字段是否为 null
+                        if (record.get("isApproved") == null) {
+                            record.put("isApproved", ""); // 设置为空字符串或其他默认值
+                        }
+                        filteredList.add(record);
+                    }
+                }
+                leaveList.setAll(FXCollections.observableArrayList(filteredList));
+            } else {
+                MessageDialog.showDialog("加载数据失败：" + (res != null ? res.getMsg() : ""));
             }
         }
-        leaveList.setAll(FXCollections.observableArrayList(filteredList));
-    } else {
-        MessageDialog.showDialog("加载数据失败：" + (res != null ? res.getMsg() : ""));
-    }
-}
 
-    @FXML
-  protected void onSaveButtonClick() {
-        String currentStudentId = getCurrentStudentId();
-        String enteredStudentId = studentIdField.getText().trim();
-
-        // 检查申请者 ID 是否与当前登录用户 ID 一致
-        if (!currentStudentId.equals(enteredStudentId)) {
-            MessageDialog.showDialog("申请者 ID 与当前登录用户不一致，无法提交申请！"+'\n'+"不要给别人请假！");
-            return;
-        }
-
-        Map<String, Object> form = new HashMap<>();
-        form.put("leaveId", null); // 新增记录
-        form.put("studentId", currentStudentId);
-        form.put("studentName", studentNameField.getText().trim());
-        form.put("college", collegeField.getText().trim());
-        form.put("startDate", startDatePicker.getValue() != null ? startDatePicker.getValue().toString() : "");
-        form.put("endDate", endDatePicker.getValue() != null ? endDatePicker.getValue().toString() : "");
-        form.put("reason", reasonField.getText().trim());
-        form.put("approverId", approverIdField.getText().trim());
-        form.put("isApproved", null); // 默认未审批
-
-        DataRequest req = new DataRequest();
-        req.add("form", form);
-        DataResponse res = HttpRequestUtil.request("/api/studentLeave/saveLeave", req);
-        if (res != null && res.getCode() == 0) {
-            MessageDialog.showDialog("申请成功！");
+        @FXML
+        public void refreshData() {
             loadLeaveList();
-            clearForm();
-        } else {
-            MessageDialog.showDialog("申请失败：" + (res != null ? res.getMsg() : "res==null"));
+        }
+
+        @FXML
+        public void onSaveButtonClick() {
+            if (!validateForm()) {
+                return;
+            }
+
+            String currentStudentId = getCurrentStudentId();
+            String enteredStudentId = studentIdField.getText().trim();
+
+            // 检查申请者 ID 是否与当前登录用户 ID 一致
+            if (!currentStudentId.equals(enteredStudentId)) {
+                MessageDialog.showDialog("申请者 ID 与当前登录用户不一致，无法提交申请！"+'\n'+"不要给别人请假！");
+                return;
+            }
+
+            Map<String, Object> form = new HashMap<>();
+            form.put("leaveId", null); // 新增记录
+            form.put("studentId", currentStudentId);
+            form.put("studentName", studentNameField.getText().trim());
+            form.put("college", collegeField.getText().trim());
+            form.put("startDate", startDatePicker.getValue() != null ? startDatePicker.getValue().toString() : "");
+            form.put("endDate", endDatePicker.getValue() != null ? endDatePicker.getValue().toString() : "");
+            form.put("reason", reasonField.getText().trim());
+            form.put("approverId", approverIdField.getText().trim());
+            form.put("isApproved", null); // 默认未审批
+
+            DataRequest req = new DataRequest();
+            req.add("form", form);
+            DataResponse res = HttpRequestUtil.request("/api/studentLeave/saveLeave", req);
+            if (res != null && res.getCode() == 0) {
+                MessageDialog.showDialog("请假申请提交成功！");
+                loadLeaveList();
+                clearForm();
+            } else {
+                MessageDialog.showDialog("申请失败：" + (res != null ? res.getMsg() : "res==null"));
+            }
+        }
+
+        private boolean validateForm() {
+            // 验证日期
+            if (startDatePicker.getValue() != null && endDatePicker.getValue() != null) {
+                if (endDatePicker.getValue().isBefore(startDatePicker.getValue())) {
+                    MessageDialog.showDialog("结束日期不能早于开始日期！");
+                    return false;
+                }
+            }
+
+            // 验证请假理由长度
+            if (reasonField.getText().length() < 5) {
+                MessageDialog.showDialog("请假理由太短，请详细描述请假原因");
+                return false;
+            }
+
+            return true;
+        }
+
+        private String getCurrentStudentId() {
+            JwtResponse jwtResponse = AppStore.getJwt();
+            if (jwtResponse != null) {
+                return String.valueOf(jwtResponse.getId());
+            }
+            System.out.println("获取当前学生ID失败");
+            return null;
+        }
+
+        @FXML
+        public void clearForm() {
+            // 保留学生ID
+            String currentId = studentIdField.getText();
+
+            studentNameField.clear();
+            collegeField.clear();
+            startDatePicker.setValue(LocalDate.now());
+            endDatePicker.setValue(LocalDate.now().plusDays(1));
+            reasonField.clear();
+            approverIdField.clear();
+
+            // 恢复学生ID
+            studentIdField.setText(currentId);
         }
     }
-
-    private String getCurrentStudentId() {
-        JwtResponse jwtResponse = AppStore.getJwt();
-        if (jwtResponse != null) {
-            return String.valueOf(jwtResponse.getId());
-        }
-        System.out.println("获取当前学生ID失败");
-        return null;
-    }
-
-    private void clearForm() {
-        studentNameField.setText("");
-        collegeField.setText("");
-        startDatePicker.setValue(null);
-        endDatePicker.setValue(null);
-        reasonField.setText("");
-        approverIdField.setText("");
-    }
-}

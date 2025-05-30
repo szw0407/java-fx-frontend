@@ -1,0 +1,330 @@
+/* 基础颜色变量 - 教育系统配色方案 */
+    * {
+        /* 主色调 - 专业蓝 */
+        -fx-primary: #1976d2;
+        -fx-primary-light: #4791db;
+        -fx-primary-dark: #115293;
+
+        /* 辅助色 - 成功绿 */
+        -fx-secondary: #2e7d32;
+        -fx-secondary-light: #4caf50;
+        -fx-secondary-dark: #1b5e20;
+
+        /* 中性色 */
+        -fx-light-gray: #f8f9fa;
+        -fx-medium-gray: #e9ecef;
+        -fx-dark-gray: #495057;
+
+        /* 强调色和状态色 */
+        -fx-accent: #f44336;
+        -fx-warning: #ff9800;
+        -fx-info: #03a9f4;
+
+        /* 字体 */
+        -fx-font-family: "Segoe UI", "Microsoft YaHei", "微软雅黑", noto-sans, sans, sans-serif;
+    }
+
+    /* ===== 布局容器样式 ===== */
+    .border-pane {
+        -fx-background-color: white;
+    }
+
+    .split-pane {
+        -fx-background-color: transparent;
+        -fx-background-insets: 0;
+        -fx-padding: 0;
+    }
+
+    .split-pane:horizontal > .split-pane-divider,
+    .split-pane:vertical > .split-pane-divider {
+        -fx-background-color: -fx-medium-gray;
+        -fx-padding: 0 1px;
+    }
+
+    /* 卡片式容器 */
+    .card {
+        -fx-background-color: white;
+        -fx-background-radius: 8px;
+        -fx-border-radius: 8px;
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);
+        -fx-padding: 16px;
+    }
+
+    /* ===== 顶部工具栏样式 ===== */
+    .header-container {
+        -fx-background-color: -fx-primary;
+        -fx-padding: 8px 16px;
+        -fx-spacing: 10px;
+    }
+
+    .header-container .label {
+        -fx-text-fill: white;
+        -fx-font-size: 14px;
+        -fx-font-weight: bold;
+    }
+
+    /* ===== 导航和菜单样式 ===== */
+    .menu-bar {
+        -fx-background-color: -fx-primary-dark;
+        -fx-padding: 2px;
+    }
+
+    .menu-bar .menu .label {
+        -fx-text-fill: white;
+    }
+
+    .menu-bar .menu:hover {
+        -fx-background-color: -fx-primary;
+    }
+
+    .tree-view {
+        -fx-background-color: -fx-light-gray;
+        -fx-background-insets: 0;
+        -fx-padding: 8px 4px;
+    }
+
+    .tree-cell {
+        -fx-background-color: transparent;
+        -fx-padding: 10px 8px;
+        -fx-text-fill: -fx-dark-gray;
+    }
+
+    .tree-cell:selected {
+        -fx-background-color: -fx-primary-light;
+        -fx-text-fill: white;
+        -fx-background-radius: 4px;
+    }
+
+    /* Tab面板样式 */
+    .tab-pane {
+        -fx-tab-min-height: 40px;
+        -fx-tab-max-height: 40px;
+    }
+
+    .tab-pane .tab-header-area {
+        -fx-padding: 0;
+    }
+
+    .tab-pane .tab {
+        -fx-background-color: transparent;
+        -fx-background-radius: 0;
+        -fx-border-width: 0 0 3 0;
+        -fx-border-color: transparent;
+        -fx-padding: 0 15px;
+    }
+
+    .tab-pane .tab:selected {
+        -fx-background-color: white;
+        -fx-border-color: -fx-primary;
+    }
+
+    .tab-pane .tab-header-background {
+        -fx-background-color: -fx-light-gray;
+    }
+
+    /* ===== 表单和控件样式 ===== */
+    /* 按钮样式 */
+    .button {
+        -fx-background-color: -fx-primary;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 8px 16px;
+        -fx-background-radius: 4px;
+        -fx-cursor: hand;
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+        -fx-font-size: 13px;
+    }
+
+    .button:hover {
+        -fx-background-color: -fx-primary-light;
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0, 0, 1);
+        -fx-translate-y: -1px;
+    }
+
+    .button:pressed {
+        -fx-background-color: -fx-primary-dark;
+        -fx-translate-y: 1px;
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 1, 0, 0, 0);
+    }
+
+    .primary-button {
+        -fx-background-color: -fx-primary;
+    }
+
+    .secondary-button {
+        -fx-background-color: -fx-secondary;
+    }
+
+    .danger-button {
+        -fx-background-color: -fx-accent;
+    }
+
+    .warning-button {
+        -fx-background-color: -fx-warning;
+    }
+
+    .info-button {
+        -fx-background-color: -fx-info;
+    }
+
+    /* 文本输入框 */
+    .text-field, .text-area, .combo-box {
+        -fx-background-color: white;
+        -fx-border-color: #ced4da;
+        -fx-border-radius: 4px;
+        -fx-background-radius: 4px;
+        -fx-padding: 8px;
+        -fx-border-width: 1px;
+        -fx-font-size: 13px;
+    }
+
+    .text-field:focused, .text-area:focused, .combo-box:focused {
+        -fx-border-color: -fx-primary;
+        -fx-effect: dropshadow(gaussian, rgba(25, 118, 210, 0.25), 3, 0, 0, 0);
+        -fx-border-width: 2px;
+    }
+
+    .form-field {
+        -fx-pref-height: 35px;
+    }
+
+    /* 标签样式 */
+    .label {
+        -fx-text-fill: #343a40;
+        -fx-font-size: 13px;
+    }
+
+    .form-label {
+        -fx-font-weight: bold;
+        -fx-text-fill: #495057;
+    }
+
+    .title-label {
+        -fx-font-size: 20px;
+        -fx-font-weight: bold;
+        -fx-padding: 10px 0;
+        -fx-text-fill: -fx-primary-dark;
+    }
+
+    .subtitle-label {
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-padding: 8px 0;
+        -fx-text-fill: -fx-dark-gray;
+    }
+
+    /* 表单布局 */
+    .form-grid {
+        -fx-hgap: 10px;
+        -fx-vgap: 15px;
+        -fx-padding: 10px;
+    }
+
+    .button-container {
+        -fx-spacing: 10px;
+        -fx-padding: 15px 0;
+    }
+
+    /* ===== 表格样式 ===== */
+    .table-view {
+        -fx-background-color: transparent;
+        -fx-border-color: #dee2e6;
+        -fx-border-radius: 4px;
+        -fx-background-radius: 4px;
+        -fx-border-width: 1px;
+    }
+
+    .table-view .column-header-background {
+        -fx-background-color: -fx-primary-light;
+        -fx-background-radius: 4px 4px 0 0;
+        -fx-padding: 5px 0;
+    }
+
+    .table-view .column-header, .table-view .filler {
+        -fx-background-color: transparent;
+        -fx-size: 40px;
+        -fx-border-width: 0 1px 0 0;
+        -fx-border-color: derive(-fx-primary-light, 30%);
+    }
+
+    .table-view .column-header .label {
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10px 5px;
+    }
+
+    .table-row-cell {
+        -fx-background-color: white;
+        -fx-padding: 5px 0;
+        -fx-cell-size: 40px;
+        -fx-border-color: #f2f2f2;
+        -fx-border-width: 0 0 1 0;
+        -fx-alignment: center-left;
+    }
+
+    .table-row-cell:odd {
+        -fx-background-color: #f9f9f9;
+    }
+
+    .table-row-cell:selected {
+        -fx-background-color: derive(-fx-primary, 90%);
+        -fx-text-fill: -fx-primary;
+    }
+
+    .table-row-cell:hover {
+        -fx-background-color: derive(-fx-primary, 95%);
+    }
+
+    .custom-table-view {
+        -fx-padding: 10px;
+    }
+
+    /* ===== 状态指示样式 ===== */
+    .status-indicator {
+        -fx-border-radius: 50%;
+        -fx-background-radius: 50%;
+        -fx-min-width: 12px;
+        -fx-min-height: 12px;
+        -fx-max-width: 12px;
+        -fx-max-height: 12px;
+    }
+
+    .status-active {
+        -fx-background-color: -fx-secondary;
+    }
+
+    .status-inactive {
+        -fx-background-color: -fx-dark-gray;
+    }
+
+    .status-warning {
+        -fx-background-color: -fx-warning;
+    }
+
+    .status-error {
+        -fx-background-color: -fx-accent;
+    }
+
+    /* ===== 底部状态栏 ===== */
+    #HBox {
+        -fx-background-color: -fx-primary-dark;
+        -fx-border-width: 1px 0 0 0;
+        -fx-border-color: -fx-primary;
+    }
+
+    #HBox .label {
+        -fx-text-fill: white;
+        -fx-font-size: 12px;
+    }
+
+    /* ===== 响应式设计 ===== */
+    .responsive-container {
+        -fx-spacing: 10px;
+        -fx-fill-width: true;
+    }
+
+    @media (max-width: 800px) {
+        .responsive-container {
+            -fx-orientation: vertical;
+        }
+    }
