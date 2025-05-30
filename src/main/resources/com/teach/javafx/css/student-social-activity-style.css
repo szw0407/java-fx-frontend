@@ -1,0 +1,189 @@
+/* 全局样式 */
+* {
+    -fx-font-family: "Microsoft YaHei", "SimSun", sans-serif;
+}
+
+.main-container {
+    -fx-background-color: #f5f7fa;
+    -fx-padding: 20px;
+}
+
+/* 标题样式 */
+.header-container {
+    -fx-padding: 0 0 10px 0;
+    -fx-border-color: transparent transparent #e0e6ed transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e3a59;
+}
+
+/* 卡片样式 */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+    -fx-padding: 20px;
+    -fx-spacing: 15;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3f51b5;
+    -fx-padding: 0 0 5px 0;
+}
+
+.instruction-text {
+    -fx-fill: #6b7897;
+    -fx-font-size: 13px;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* 表单样式 */
+.form-grid {
+    -fx-padding: 10px 0;
+}
+
+.form-label {
+    -fx-text-fill: #4c566a;
+    -fx-font-weight: normal;
+}
+
+.form-field, .date-picker {
+    -fx-background-color: #f5f7fa;
+    -fx-background-radius: 4px;
+    -fx-border-color: #e0e6ed;
+    -fx-border-radius: 4px;
+    -fx-padding: 4px;
+    -fx-pref-width: 140px; /* 调整宽度 */
+    -fx-pref-height: 25px;
+}
+
+.form-field:focused, .date-picker:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3f51b5;
+    -fx-effect: dropshadow(gaussian, rgba(63, 81, 181, 0.2), 4, 0, 0, 0);
+}
+
+.form-textarea {
+    -fx-background-color: #f5f7fa;
+    -fx-background-radius: 4px;
+    -fx-border-color: #e0e6ed;
+    -fx-border-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.form-textarea:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3f51b5;
+    -fx-effect: dropshadow(gaussian, rgba(63, 81, 181, 0.2), 4, 0, 0, 0);
+}
+
+/* 按钮样式 */
+.button-container {
+    -fx-padding: 10px 0 0 0;
+    -fx-spacing: 10;
+}
+
+.primary-button {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #303f9f;
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1a237e;
+}
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #3f51b5;
+    -fx-text-fill: #3f51b5;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: rgba(63, 81, 181, 0.1);
+}
+
+.refresh-button {
+    -fx-background-color: #f5f7fa;
+    -fx-text-fill: #3f51b5;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #e0e6ed;
+}
+
+/* 表格样式 */
+.data-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.data-table .column-header {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f0f3f8 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: #f9fafc;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: #edf0f7;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: #e8eaf6;
+}
+
+.data-table .table-cell {
+    -fx-alignment: center-left;
+    -fx-padding: 8px;
+    -fx-text-fill: #2e3a59;
+}
+
+/* 状态指示样式 - 将在控制器中应用 */
+.status-pending {
+    -fx-text-fill: #ff9800;
+}
+
+.status-approved {
+    -fx-text-fill: #4caf50;
+}
+
+.status-rejected {
+    -fx-text-fill: #f44336;
+}
