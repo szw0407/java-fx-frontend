@@ -9,9 +9,9 @@
     <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
                 fx:controller="com.teach.javafx.controller.ChatControllerVersion2"
                 styleClass="chat-container">
-        <stylesheets>
-            <URL value="@css/chat-styles.css" />
-        </stylesheets>
+<!--        <stylesheets>-->
+<!--            <URL value="@css/chat-styles.css" />-->
+<!--        </stylesheets>-->
 
         <top>
             <HBox styleClass="header-container" alignment="CENTER_LEFT" spacing="15">
@@ -43,7 +43,7 @@
 
                 <HBox styleClass="input-box-container" alignment="CENTER">
                     <TextArea fx:id="promptTextArea" wrapText="true" styleClass="prompt-text-area"
-                              promptText="输入您的问题..." prefRowCount="2"/>
+                              promptText="输入您的问题..." prefRowCount="6" prefHeight="120" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="sendButton" onAction="#sendPrompt" styleClass="send-button" text="发送"/>
                 </HBox>
                 <Label styleClass="hint-text" text="提示：按Shift+Enter换行，按Enter发送" />

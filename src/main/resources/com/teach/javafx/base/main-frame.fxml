@@ -14,7 +14,7 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.teach.javafx.controller.base.MainFrameController"
-            stylesheets="@../css/lxj-styles.css">
+            stylesheets="@../css/lxj-styles-version2.css">
   <top>
     <MenuBar fx:id="menuBar" />
   </top>
