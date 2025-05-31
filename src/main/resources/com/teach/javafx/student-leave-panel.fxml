@@ -29,7 +29,7 @@
           <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
               <VBox spacing="20">
                   <!-- 申请表单卡片 - 可伸缩 -->
-                  <TitledPane text="请假申请管理" expanded="true" styleClass="card">
+                  <TitledPane text="请假申请管理（离开此页面前请折叠）" expanded="true" styleClass="card">
                       <VBox spacing="15">
                           <!-- 添加表单标题标签 -->
                           <Label fx:id="formTitleLabel" text="请假申请详情" styleClass="card-title"/>

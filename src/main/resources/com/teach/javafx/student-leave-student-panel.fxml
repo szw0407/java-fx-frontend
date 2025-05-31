@@ -21,7 +21,7 @@
               </HBox>
 
               <!-- 请假申请表单卡片 - 可伸缩 -->
-              <TitledPane text="新建请假申请" expanded="true" styleClass="card">
+              <TitledPane text="新建请假申请（离开此页面前请折叠）" expanded="true" styleClass="card">
                   <VBox>
                       <Text styleClass="instruction-text"
                             text="请填写以下信息完成请假申请，带*的为必填项"/>
