@@ -246,7 +246,7 @@ webView.getEngine().loadContent("<html><body style='margin:0;padding:0;backgroun
     // 根据文本长度计算WebView高度
     private double calculateTextHeight(String text, double maxHeight) {
         int lineCount = text.split("\n").length;
-        double estimatedHeight = lineCount * 20 + 20; // 每行大约20像素加上边距
+        double estimatedHeight = lineCount * 25 + 10; // 每行大约20像素加上边距
         return Math.min(estimatedHeight, maxHeight);
     }
 
