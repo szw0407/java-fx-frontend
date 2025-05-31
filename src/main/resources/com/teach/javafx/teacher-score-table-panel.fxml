@@ -15,7 +15,7 @@
             <!-- 操作按钮 -->
             <FlowPane prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 
-                <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER" hgap="5" vgap="5">
+                <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" hgap="5" vgap="5">
                     <Button mnemonicParsing="false" onAction="#onAddButtonClick" text="重置"/><Label text="学生"/>
                     <ComboBox fx:id="studentComboBox" promptText="全部"/>
                     <Label text="课程"/>
@@ -25,6 +25,8 @@
                     <Label text="学期"/>
                     <ComboBox fx:id="termComboBox"/>
                     <Button mnemonicParsing="false" onAction="#onQueryButtonClick" text="查询"/>
+                    <Button fx:id="viewStatisticsButton" mnemonicParsing="false"
+                            onAction="#onViewStatisticsButtonClick" text="查看统计"/>
                 </FlowPane>
             </FlowPane>
             <Pane HBox.hgrow="ALWAYS"/>
