@@ -1,4 +1,5 @@
 /* Teacher Score Table Panel - Modern Material & Fluent Design */
+/* 整理版本 - 消除冲突和重复定义 */
 
 /* ============================================
    ROOT & GLOBAL STYLES
@@ -27,13 +28,13 @@
     -fx-background-radius: 12px 12px 0 0;
     -fx-border-color: transparent transparent #e9ecef transparent;
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 24px 12px 12px 12px; /* 增加顶部空间 */
+    -fx-padding: 24px 12px 12px 12px;
 }
 
 .flow-pane {
     -fx-background-color: transparent;
-    -fx-hgap: 8px; /* 减小间距 */
-    -fx-vgap: 6px; /* 减小间距 */
+    -fx-hgap: 8px;
+    -fx-vgap: 6px;
 }
 
 /* ============================================
@@ -42,8 +43,8 @@
 .label {
     -fx-text-fill: #495057;
     -fx-font-weight: 500;
-    -fx-font-size: 12px; /* 缩小字体 */
-    -fx-padding: 0 3px 0 0; /* 减小内边距 */
+    -fx-font-size: 12px;
+    -fx-padding: 0 3px 0 0;
 }
 
 /* ============================================
@@ -53,15 +54,15 @@
     -fx-background-color: linear-gradient(to bottom, #007bff 0%, #0056b3 100%);
     -fx-text-fill: white;
     -fx-font-weight: 500;
-    -fx-font-size: 12px; /* 缩小字体 */
-    -fx-padding: 6px 12px; /* 减小内边距 */
-    -fx-background-radius: 5px; /* 稍微减小圆角 */
+    -fx-font-size: 12px;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 5px;
     -fx-border-radius: 5px;
     -fx-border-color: transparent;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.3), 6, 0, 0, 1); /* 减小阴影 */
-    -fx-min-width: 60px; /* 缩小最小宽度 */
-    -fx-pref-height: 30px; /* 缩小高度 */
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.3), 6, 0, 0, 1);
+    -fx-min-width: 60px;
+    -fx-pref-height: 30px;
 }
 
 .button:hover {
@@ -72,10 +73,12 @@
 }
 
 .button:pressed {
-    -fx-background-color: #004085;
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.2), 4, 0, 0, 1);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
+}
+
+.button:focused {
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 12, 0, 0, 0);
 }
 
 /* Reset Button - Secondary Style */
@@ -106,13 +109,13 @@
 .combo-box {
     -fx-background-color: #ffffff;
     -fx-border-color: #ced4da;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px; /* 稍微减小圆角 */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-padding: 4px 8px; /* 减小内边距 */
-    -fx-min-width: 100px; /* 减小最小宽度 */
-    -fx-pref-height: 30px; /* 缩小高度 */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1); /* 减小阴影 */
+    -fx-padding: 9px 11px;
+    -fx-min-width: 120px;
+    -fx-pref-height: 26px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
 }
 
 .combo-box:focused {
@@ -123,6 +126,7 @@
 
 .combo-box:hover {
     -fx-border-color: #007bff;
+    -fx-border-width: 2px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
 }
 
@@ -175,14 +179,14 @@
     -fx-background-color: #ffffff;
     -fx-border-color: #ced4da;
     -fx-border-width: 1px;
-    -fx-border-radius: 5px; /* 稍微减小圆角 */
+    -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-padding: 4px 8px; /* 减小内边距 */
-    -fx-font-size: 12px; /* 缩小字体 */
+    -fx-padding: 4px 8px;
+    -fx-font-size: 12px;
     -fx-text-fill: #495057;
-    -fx-min-width: 80px; /* 减小最小宽度 */
-    -fx-pref-height: 30px; /* 缩小高度 */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1); /* 减小阴影 */
+    -fx-min-width: 80px;
+    -fx-pref-height: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
 }
 
 .text-field:focused {
@@ -217,13 +221,13 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent #dee2e6 transparent transparent;
     -fx-border-width: 0 1 0 0;
-    -fx-padding: 10px 6px; /* 减小内边距 */
+    -fx-padding: 10px 6px;
 }
 
 .table-view .column-header .label {
     -fx-text-fill: #495057;
     -fx-font-weight: 600;
-    -fx-font-size: 12px; /* 缩小字体 */
+    -fx-font-size: 12px;
 }
 
 .table-view .column-header:last {
@@ -250,14 +254,15 @@
 .table-row-cell:selected {
     -fx-background-color: #bbdefb;
     -fx-text-fill: #0d47a1;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.2), 8, 0, 0, 2);
 }
 
 /* Table Cells */
 .table-cell {
-    -fx-padding: 6px; /* 减小内边距 */
+    -fx-padding: 6px;
     -fx-text-fill: #495057;
     -fx-border-color: transparent;
-    -fx-font-size: 12px; /* 缩小字体 */
+    -fx-font-size: 12px;
 }
 
 .table-cell:selected {
@@ -268,39 +273,13 @@
    OPERATION BUTTONS IN TABLE (编辑/删除)
    ============================================ */
 .table-cell .button {
-    -fx-min-width: 45px; /* 减小最小宽度 */
-    -fx-pref-height: 24px; /* 缩小高度 */
-    -fx-padding: 3px 6px; /* 减小内边距 */
-    -fx-font-size: 11px; /* 缩小字体 */
-    -fx-background-radius: 3px; /* 减小圆角 */
+    -fx-min-width: 45px;
+    -fx-pref-height: 24px;
+    -fx-padding: 3px 6px;
+    -fx-font-size: 11px;
+    -fx-background-radius: 3px;
     -fx-border-radius: 3px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1); /* 减小阴影 */
-}
-
-/* Edit Button */
-.table-cell .button:contains("编辑") {
-    -fx-background-color: linear-gradient(to bottom, #ffc107 0%, #e0a800 100%);
-    -fx-text-fill: #212529;
-    -fx-effect: dropshadow(gaussian, rgba(255,193,7,0.3), 4, 0, 0, 1);
-}
-
-.table-cell .button:contains("编辑"):hover {
-    -fx-background-color: linear-gradient(to bottom, #e0a800 0%, #d39e00 100%);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
-/* Delete Button */
-.table-cell .button:contains("删除") {
-    -fx-background-color: linear-gradient(to bottom, #dc3545 0%, #c82333 100%);
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(220,53,69,0.3), 4, 0, 0, 1);
-}
-
-.table-cell .button:contains("删除"):hover {
-    -fx-background-color: linear-gradient(to bottom, #c82333 0%, #bd2130 100%);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);
 }
 
 /* ============================================
@@ -351,32 +330,6 @@
 }
 
 /* ============================================
-   ENHANCED HOVER EFFECTS & VISUAL FEEDBACK
-   ============================================ */
-
-/* Enhanced button hover animations */
-.button:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
-/* Ripple effect simulation for buttons */
-.button:pressed {
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
-}
-
-/* ============================================
-   FOCUS INDICATORS
-   ============================================ */
-.button:focused,
-.combo-box:focused,
-.text-field:focused {
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 12, 0, 0, 0);
-}
-
-/* ============================================
    RESPONSIVE DESIGN UTILITIES
    ============================================ */
 @media (max-width: 800px) {
@@ -400,17 +353,7 @@
 }
 
 /* ============================================
-   GLASSMORPHISM EFFECTS (Optional)
-   ============================================ */
-.glass-effect {
-    -fx-background-color: rgba(255, 255, 255, 0.8);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 20, 0, 0, 10);
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
-}
-
-/* ============================================
-   DARK MODE SUPPORT (Optional)
+   DARK MODE SUPPORT
    ============================================ */
 .root.dark-mode {
     -fx-background-color: #1a1a1a;
@@ -456,8 +399,6 @@
 /* ============================================
    LOADING INDICATORS & NOTIFICATIONS
    ============================================ */
-
-/* Loading Spinner */
 .loading-indicator {
     -fx-background-color: rgba(255, 255, 255, 0.9);
     -fx-background-radius: 50%;
@@ -469,7 +410,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
 }
 
-/* Progress Bar - Material Design Style */
 .progress-bar {
     -fx-background-color: #e9ecef;
     -fx-background-radius: 4px;
@@ -483,7 +423,6 @@
     -fx-border-insets: 0;
 }
 
-/* Toast Notification Style */
 .notification-toast {
     -fx-background-color: rgba(40, 167, 69, 0.95);
     -fx-background-radius: 8px;
@@ -497,12 +436,10 @@
     -fx-font-weight: 500;
 }
 
-/* Error Toast */
 .notification-toast.error {
     -fx-background-color: rgba(220, 53, 69, 0.95);
 }
 
-/* Warning Toast */
 .notification-toast.warning {
     -fx-background-color: rgba(255, 193, 7, 0.95);
 }
@@ -512,9 +449,8 @@
 }
 
 /* ============================================
-   ENHANCED STATISTICS DIALOG
+   DIALOG AND CARD STYLES
    ============================================ */
-
 .dialog-pane {
     -fx-background-color: #ffffff;
     -fx-background-radius: 12px;
@@ -539,39 +475,6 @@
     -fx-background-color: #ffffff;
     -fx-background-radius: 0 0 12px 12px;
 }
-
-/* Statistics Content Styling */
-.statistics-content {
-    -fx-background-color: #f8f9fa;
-    -fx-background-radius: 8px;
-    -fx-padding: 16px;
-    -fx-border-color: #e9ecef;
-    -fx-border-width: 1px;
-    -fx-border-radius: 8px;
-}
-
-.statistics-section {
-    -fx-padding: 8px 0;
-    -fx-border-color: transparent transparent #e9ecef transparent;
-    -fx-border-width: 0 0 1 0;
-}
-
-.statistics-title {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #495057;
-    -fx-padding: 0 0 8px 0;
-}
-
-.statistics-value {
-    -fx-font-size: 14px;
-    -fx-text-fill: #6c757d;
-    -fx-padding: 2px 0;
-}
-
-/* ============================================
-   CARD-BASED LAYOUT ENHANCEMENTS
-   ============================================ */
 
 .card {
     -fx-background-color: #ffffff;
@@ -602,31 +505,8 @@
 }
 
 /* ============================================
-   MICROINTERACTIONS & FEEDBACK
-   ============================================ */
-
-/* Button Ripple Effect Simulation */
-.button:pressed {
-    -fx-background-color: derive(-fx-background-color, -15%);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 1);
-}
-
-/* Table Row Selection Animation */
-.table-row-cell:selected {
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.2), 8, 0, 0, 2);
-}
-
-/* Input Focus Glow */
-.combo-box:focused,
-.text-field:focused {
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 12, 0, 0, 0);
-}
-
-/* ============================================
    ACCESSIBILITY ENHANCEMENTS
    ============================================ */
-
-/* High Contrast Mode Support */
 .high-contrast .button {
     -fx-border-color: #ffffff;
     -fx-border-width: 2px;
@@ -634,13 +514,5 @@
 
 .high-contrast .table-view {
     -fx-border-color: #ffffff;
-    -fx-border-width: 2px;
-}
-
-/* Keyboard Navigation Indicators */
-.button:focused,
-.combo-box:focused,
-.text-field:focused {
-    -fx-border-color: #007bff;
     -fx-border-width: 2px;
 }

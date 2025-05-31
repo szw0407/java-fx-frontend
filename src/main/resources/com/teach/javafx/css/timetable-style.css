@@ -121,15 +121,13 @@
         -fx-background: white;
         -fx-border-color: transparent;
         -fx-padding: 0;
-    }
-
-    .timetable-view {
+    }    .timetable-view {
         -fx-background-color: white;
         -fx-border-color: #e0e0e0;
-        -fx-fixed-cell-size: 110px; /* 固定高度使显示更整齐 */
-        -fx-pref-height: 550px; /* 5行 * 110px = 550px */
-        -fx-max-height: 550px;
-        -fx-min-height: 550px;
+        -fx-fixed-cell-size: 95px; /* 固定高度使显示更整齐 */
+        -fx-pref-height: 480px; /* 5行 * 95px = 475px */
+        -fx-max-height: 485px;
+        -fx-min-height: 475px;
     }
 
     .timetable-view .column-header-background {
