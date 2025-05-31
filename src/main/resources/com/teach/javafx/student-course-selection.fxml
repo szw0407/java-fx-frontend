@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.teach.javafx.controller.StudentCourseSelectController"
-            stylesheets="@material-student-course-selection.css">
+            stylesheets="@css/material-student-course-selection.css">
     <top>
         <HBox fx:id="topControlsHBox" alignment="CENTER_LEFT" spacing="10.0" styleClass="top-filter-bar">
             <padding>
