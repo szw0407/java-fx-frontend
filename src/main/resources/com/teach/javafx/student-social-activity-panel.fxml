@@ -70,10 +70,10 @@
 <!--                        <TableColumn fx:id="id" prefWidth="75.0" text="序号" />-->
                         <TableColumn fx:id="nameColumn" prefWidth="125.0" text="活动名称" />
                         <TableColumn fx:id="studentId" prefWidth="125.0" text="学号或工号" />
-                        <TableColumn fx:id="typeColumn" prefWidth="75.0" text="活动类型" />
+                        <TableColumn fx:id="typeColumn" prefWidth="85.0" text="活动类型" />
                         <TableColumn fx:id="startTimeColumn" prefWidth="125.0" text="开始时间" />
                         <TableColumn fx:id="endTimeColumn" prefWidth="125.0" text="结束时间" />
-                        <TableColumn fx:id="locationColumn" prefWidth="75.0" text="活动地点" />
+                        <TableColumn fx:id="locationColumn" prefWidth="85.0" text="活动地点" />
                         <TableColumn fx:id="roleColumn" prefWidth="75.0" text="角色" />
                         <TableColumn fx:id="descriptionColumn" prefWidth="125.0" text="活动描述" />
                     </columns>
