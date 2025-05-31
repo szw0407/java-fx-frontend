@@ -226,6 +226,17 @@ public class MainFrameController {
         Scene scene;
         Object c;
         if(tab == null) {
+
+            if(contentTabPane.getTabs().size() >= 10) {
+                // 已达到最大标签页数量限制
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("标签页数量限制");
+                alert.setHeaderText(null);
+                alert.setContentText("最多只能打开10个标签页，请先关闭一些标签页后再打开新的页面。");
+                alert.showAndWait();
+                return;
+            }
+
             scene = sceneMap.get(name);
             if(scene == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(name + ".fxml"));
