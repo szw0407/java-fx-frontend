@@ -327,7 +327,12 @@ public class PostController extends ToolController {
     protected void onAddButtonClick() {
         titleField.clear();
         contentField.clear();
-        userIdField.clear();
+        if (!userIdField.isEditable()) {
+            userIdField.setText(getCurrentUserId()); // 默认填入当前用户ID
+        } else {
+            userIdField.clear(); // 管理员可编辑，清空输入框
+        }
+        //userIdField.clear();
         postId = null;
     }
     private String getCurrentStudentId() {
