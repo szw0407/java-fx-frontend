@@ -140,7 +140,7 @@ public class TeacherScoreTableController {
 
         // Add statistics button programmatically
         // Button viewStatisticsButton = new Button("查看统计数据");
-        viewStatisticsButton.setOnAction(this::onViewStatisticsButtonClick);
+//        viewStatisticsButton.setOnAction(this::onViewStatisticsButtonClick);
 
         // Add the button to the layout. This is an example.
         // You might need to adjust this based on your FXML structure.
@@ -434,6 +434,8 @@ public class TeacherScoreTableController {
                 statsBuilder.append(courseDesc).append("\n");
             }
         }
+
+
 
         showStatisticsDialog(statsBuilder.toString());
     }
