@@ -28,11 +28,13 @@ jobs:
         distribution: 'microsoft'
         cache: maven
     - name: Build with Maven
-      run: mvn javafx:jlink clean package --file pom.xml
-    - name: Upload dist files
+      run: mvn javafx:jlink --file pom.xml
+    - name: Zip the output
+      run: zip -r javafx.zip target/javafx
+    - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: java-fx
-        path: target/*
+        name: javafx-output
+        directory: target/*.zip
         
         
