@@ -78,6 +78,7 @@ public class StudentLeaveStudentController extends ToolController {
         setupTableRowFactory();
         setupFormValidation();
         setupDatePickers();
+        setupDatePickerListeners();
         setupPagination();
 
         // 自动填充学生ID
@@ -154,6 +155,30 @@ public class StudentLeaveStudentController extends ToolController {
                         getStyleClass().add("row-pending");
                     }
                 }
+            }
+        });
+    }
+
+    private void setupDatePickerListeners() {
+        // 监听开始日期变化
+        startDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // 如果结束日期早于新的开始日期，调整结束日期
+            if (endDatePicker.getValue() != null && endDatePicker.getValue().isBefore(newValue)) {
+                endDatePicker.setValue(newValue);
+                MessageDialog.showDialog("结束日期不能早于开始日期，已自动调整");
+            }
+        });
+
+        // 监听结束日期变化
+        endDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // 如果新的结束日期早于开始日期，重置为原来的值或设为开始日期
+            if (startDatePicker.getValue() != null && newValue != null && newValue.isBefore(startDatePicker.getValue())) {
+                if (oldValue != null && !oldValue.isBefore(startDatePicker.getValue())) {
+                    endDatePicker.setValue(oldValue);
+                } else {
+                    endDatePicker.setValue(startDatePicker.getValue());
+                }
+                MessageDialog.showDialog("结束日期不能早于开始日期");
             }
         });
     }
