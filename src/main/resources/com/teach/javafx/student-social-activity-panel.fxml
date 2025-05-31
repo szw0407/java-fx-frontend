@@ -67,7 +67,7 @@
             <items>
                 <TableView fx:id="dataTableView" styleClass="data-table">
                     <columns>
-                        <TableColumn fx:id="id" prefWidth="75.0" text="序号" />
+<!--                        <TableColumn fx:id="id" prefWidth="75.0" text="序号" />-->
                         <TableColumn fx:id="nameColumn" prefWidth="125.0" text="活动名称" />
                         <TableColumn fx:id="studentId" prefWidth="125.0" text="学号或工号" />
                         <TableColumn fx:id="typeColumn" prefWidth="75.0" text="活动类型" />
@@ -99,22 +99,22 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <Label text="序号" GridPane.rowIndex="0" styleClass="form-label" />
-                            <TextField fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field" />
+<!--                            <Label text="序号" GridPane.rowIndex="0" styleClass="form-label" />-->
+<!--                            <TextField fx:id="idField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field" />-->
 
-                            <Label text="活动名称" GridPane.rowIndex="1" styleClass="form-label" />
-                            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field" />
+                            <Label text="活动名称" GridPane.rowIndex="0" styleClass="form-label" />
+                            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field" />
 
-                            <Label text="学号或工号" GridPane.rowIndex="2" styleClass="form-label" />
-                            <TextField fx:id="studentField" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field" />
+                            <Label text="学号或工号" GridPane.rowIndex="1" styleClass="form-label" />
+                            <TextField fx:id="studentField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field" />
 
-                            <Label text="活动类型" GridPane.rowIndex="3" styleClass="form-label" />
-                            <ComboBox fx:id="typeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="form-field" />
+                            <Label text="活动类型" GridPane.rowIndex="2" styleClass="form-label" />
+                            <ComboBox fx:id="typeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field" />
 
-                            <Label text="日期范围" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                            <Label text="日期范围" GridPane.rowIndex="3" GridPane.columnIndex="0"
                                    style="-fx-font-size: 13; -fx-padding: 5 0 0 0;" GridPane.valignment="TOP"/>
 
-                            <VBox GridPane.rowIndex="4" GridPane.columnIndex="1" spacing="5"
+                            <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="5"
                                   style="-fx-padding: 0 0 0 10;" GridPane.valignment="TOP">
                                 <children>
                                     <DatePicker fx:id="rangeDatePicker" prefWidth="120.0" promptText="选择日期范围" styleClass="date-picker"/>

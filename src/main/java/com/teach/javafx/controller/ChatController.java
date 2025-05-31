@@ -59,7 +59,7 @@ package com.teach.javafx.controller;
                                   "content": "%s"
                                 }
                               ],
-                              "max_tokens": 100
+                              "max_tokens": 10000
                             }
                         """.formatted(prompt.replace("\n", "").trim());
 

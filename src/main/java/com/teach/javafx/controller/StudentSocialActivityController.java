@@ -23,8 +23,8 @@ public class StudentSocialActivityController {
     @FXML
     private TableView<Map> dataTableView;
 
-    @FXML
-    private TableColumn<Map, String> id;
+//    @FXML
+//    private TableColumn<Map, String> id;
 
     @FXML
     private TableColumn<Map, String> nameColumn;
@@ -152,7 +152,7 @@ public class StudentSocialActivityController {
             }
         }
 
-        id.setCellValueFactory(new MapValueFactory<>("id"));
+//        id.setCellValueFactory(new MapValueFactory<>("id"));
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         studentId.setCellValueFactory(new MapValueFactory<>("studentId"));
         typeColumn.setCellValueFactory(new MapValueFactory<>("type"));
@@ -253,12 +253,9 @@ public class StudentSocialActivityController {
 
     @FXML
     protected void onSaveButtonClick() {
-        if (idField.getText().isEmpty()) {
-            MessageDialog.showDialog("序号为空，不能保存");
-            return;
-        }
+
         Map<String, String> newSocialAct = new HashMap<>();
-        newSocialAct.put("id", idField.getText());
+        //newSocialAct.put("id", idField.getText());
         newSocialAct.put("name", nameField.getText());
         newSocialAct.put("studentId", studentField.getText());
 

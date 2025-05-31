@@ -115,14 +115,19 @@ public class StudentLeaveStudentController extends ToolController {
                     setGraphic(null);
                     getStyleClass().removeAll("status-pending", "status-approved", "status-rejected");
                 } else {
-                    if ("1".equals(item) || "1.0".equals(item) || "true".equals(item)) {
-                        setText("已批准");
+                    // 直接使用后端返回的状态文本
+                    String status = String.valueOf(item);
+                    if ("同意".equals(status)) {
+                        setText("已同意");
+                        getStyleClass().removeAll("status-pending", "status-rejected");
                         getStyleClass().add("status-approved");
-                    } else if ("0".equals(item) || "0.0".equals(item) || "false".equals(item)) {
+                    } else if ("拒绝".equals(status)) {
                         setText("已拒绝");
+                        getStyleClass().removeAll("status-pending", "status-approved");
                         getStyleClass().add("status-rejected");
                     } else {
-                        setText("待审批");
+                        setText("未审批");
+                        getStyleClass().removeAll("status-approved", "status-rejected");
                         getStyleClass().add("status-pending");
                     }
                 }

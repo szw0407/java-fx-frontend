@@ -17,7 +17,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -28,11 +28,21 @@ jobs:
         distribution: 'microsoft'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - name: Upload JAR file
+      run: mvn javafx:jlink --file pom.xml
+    - name: Zip the output
+      run: |
+        $zipFile = "javafx.zip"
+        $outputDir = "target\javafx"
+        if (Test-Path $zipFile) {
+            Remove-Item $zipFile
+        }
+        Compress-Archive -Path "$outputDir\*" -DestinationPath $zipFile -Force
+        Write-Host "Created zip file: $zipFile"
+        
+    - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: java-fx
-        path: target/*.jar
+        name: javafx-output
+        path: javafx.zip
         
         
