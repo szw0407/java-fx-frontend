@@ -475,8 +475,7 @@ public class TeacherScoreTableController {
         alert.showAndWait();
     }
 
-
-    // 添加成绩
+    // 重置按钮
     @FXML
     public void onResetButtonClick(ActionEvent event) {
         // 这个按钮改成了重置按钮
@@ -484,111 +483,6 @@ public class TeacherScoreTableController {
         courseComboBox.setValue(null);
         termComboBox.setValue(null);
         yearField.setText(null);
-//        Dialog<ScoreRecord> dialog = new Dialog<>();
-//        dialog.setTitle("添加成绩");
-//
-//        ComboBox<Student> studentBox = new ComboBox<>(allStudents);
-//        ComboBox<TeachingClass> teachClassBox = new ComboBox<>();
-//        TextField markField = new TextField();
-//        markField.setPromptText("成绩");
-//
-//        studentBox.setOnAction(e -> {
-//            Student stu = studentBox.getValue();
-//            if (stu != null) {
-//                // 查询这个学生选课的教学班
-//                var dr = new DataRequest();
-//
-//                dr.add("studentNum", stu.getStudentNum());
-//
-//                var response = HttpRequestUtil.request("/api/teachplan/getStudentPlanList", dr);
-//                if (response == null || response.getCode() != 0) {
-//                    var msg = response != null ? response.getMsg() : "<UNK>";
-//                    var a = new Alert(Alert.AlertType.WARNING);
-//                    a.setTitle("查询失败");
-//                    a.setHeaderText("查询教学班失败");
-//                    a.setContentText("错误信息: " + msg);
-//                    a.showAndWait();
-//                    return;
-//                }
-//                List<Map<String, Object>> dataList = (List<Map<String, Object>>) response.getData();
-//                List<TeachingClass> teachClasses = new ArrayList<>();
-//                for (Map<String, Object> m : dataList) {
-//                    // create studentteachclassmap accordingly
-//                    String tnum = Integer.toString(((Double) m.get("classNum")).intValue());
-//                    String year = (String) m.get("year");
-//                    String term = (String) m.get("semester");
-//                    String courseNum = (String) m.get("courseNumber");
-//                    String courseName = (String) m.get("courseName");
-//                    int credit = ((Double) m.get("credit")).intValue();
-//                    teachClasses.add(
-//                            new TeachingClass(
-//                                    tnum, year, term, allCourses.stream().filter(c -> c.getCourseNum().equals(courseNum))
-//                                            .findFirst()
-//                                            .orElse(new Course(courseNum, courseName, credit)) // 如果没有找到课程，创建一个空课程
-//                            )
-//                    );
-//                }
-//                // 更新学生教学班映射
-//                studentTeachClassMap.put(stu.getStudentNum(), teachClasses);
-//
-//                // 更新教学班下拉框
-//                teachClassBox.setItems(FXCollections.observableArrayList(
-//                        studentTeachClassMap.getOrDefault(stu.getStudentNum(), List.of())));
-//            }
-//        });
-//
-//        VBox content = new VBox(10, new Label("学生:"), studentBox, new Label("教学班:"), teachClassBox, new Label("成绩:"), markField);
-//        dialog.getDialogPane().setContent(content);
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        dialog.setResultConverter(btn -> {
-//            if (btn == ButtonType.OK && studentBox.getValue() != null && teachClassBox.getValue() != null && !markField.getText().isEmpty()) {
-//                Student stu = studentBox.getValue();
-//                TeachingClass tc = teachClassBox.getValue();
-//                Course c = tc.getCourse();
-//                return new ScoreRecord(stu.getStudentNum(), stu.getStudentName(), stu.getClassName(),
-//                        c.getCourseNum(), c.getCourseName(), String.valueOf(c.getCredit()),
-//                        tc.getTeachClassNum(), tc.getYear(), tc.getTerm(), markField.getText());
-//            } else return null;
-//        });
-//
-//        Optional<ScoreRecord> result = dialog.showAndWait();
-//        result.ifPresent(record -> {
-//            // upload to server
-//            var dr = new DataRequest();
-//            // search for id
-//            dr.add("studentNum", record.getStudentNum());
-//            dr.add("courseNum", record.getCourseNum());
-//            dr.add("classNumber", record.getTeachClassNum());
-//            dr.add("year", record.getYear());
-//            dr.add("semester", record.getTerm());
-//            var c = HttpRequestUtil.request("/api/teachplan/checkTeachPlanByInfo", dr);
-//            if (c == null || c.getCode() != 0) {
-//                var msg = c != null ? c.getMsg() : "";
-//                var a = new Alert(Alert.AlertType.WARNING);
-//                a.setTitle("添加失败");
-//                a.setHeaderText("课程信息有误");
-//                a.setContentText("错误信息: " + msg);
-//                a.showAndWait();
-//                return;
-//            }
-//            Integer id = ((Double) ((Map<String, Object>) c.getData()).get("classScheduleId")).intValue();
-//            dr.add("classId", id);
-//            dr.add("mark", record.getMark());
-//            var response = HttpRequestUtil.request("/api/score/scoreSave", dr);
-//            if (response == null || response.getCode() != 0) {
-//                var msg = response != null ? response.getMsg() : "";
-//                var a = new Alert(Alert.AlertType.WARNING);
-//                a.setTitle("添加失败");
-//                a.setHeaderText("添加成绩失败");
-//                a.setContentText("错误信息: " + msg);
-//                a.showAndWait();
-//                return;
-//            }
-//            // 成功后添加到表格
-//            allScores.add(record);
-//            dataTableView.setItems(FXCollections.observableArrayList(allScores));
-//        });
     }
 
     // 修改成绩

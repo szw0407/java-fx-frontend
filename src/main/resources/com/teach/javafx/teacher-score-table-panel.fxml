@@ -6,16 +6,16 @@
 
 <?import javafx.scene.text.Text?>
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.teach.javafx.controller.TeacherScoreTableController">
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="5.0">
+            fx:controller="com.teach.javafx.controller.TeacherScoreTableController"
+            stylesheets="@css/teacher-score-table.css"
+            styleClass="border-pane">    <top>
+        <HBox alignment="CENTER_LEFT" spacing="4.0">
             <padding>
-                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
-            </padding>
-            <!-- 操作按钮 -->
-            <FlowPane prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <Insets bottom="8.0" left="8.0" right="8.0" top="20.0"/>
+            </padding>            <!-- 操作按钮 -->
+            <FlowPane prefHeight="35.0" BorderPane.alignment="CENTER">
 
-                <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" hgap="5" vgap="5">
+                <FlowPane alignment="TOP_RIGHT" prefHeight="35.0" BorderPane.alignment="CENTER" hgap="4" vgap="4">
                     <Button mnemonicParsing="false" onAction="#onResetButtonClick" text="重置"/><Label text="学生"/>
                     <ComboBox fx:id="studentComboBox" promptText="全部"/>
                     <Label text="课程"/>
