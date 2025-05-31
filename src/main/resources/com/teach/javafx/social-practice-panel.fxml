@@ -20,9 +20,9 @@
 
     <!-- 顶部工具栏 -->
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="5.0">
+        <HBox alignment="CENTER_LEFT" spacing="5.0" >
             <children>
-                <FlowPane prefHeight="40.0" prefWidth="300.0">
+                <FlowPane prefHeight="40.0" prefWidth="400.0">
                     <children>
                         <Button fx:id="addButton" mnemonicParsing="false" text="新增" onAction="#onAddButtonClick">
                             <FlowPane.margin>
@@ -64,7 +64,7 @@
 
 <!--     底部表单-->
     <bottom>
-        <VBox alignment="TOP_CENTER" spacing="15.0">
+        <VBox alignment="TOP_CENTER" spacing="15.0" prefHeight="400">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
