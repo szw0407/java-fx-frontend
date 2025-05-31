@@ -40,6 +40,14 @@ public class TrainingTableController {
     @FXML
     private TableColumn<Map, String> editColumn;
 
+    @FXML
+    private Button saveButton; // 新增保存按钮的引用
+    @FXML
+    private Button deleteButton; // 新增删除按钮的引用
+
+    @FXML
+    private Button addButton;
+
     private ArrayList<Map> iList = new ArrayList<>();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
     @FXML
@@ -71,7 +79,7 @@ public class TrainingTableController {
                 }
             }
             iList = filteredList;
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) iList = (ArrayList<Map>) res.getData();
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")|| jwtResponse.getRole().equals("ROLE_TEACHER")) iList = (ArrayList<Map>) res.getData();
         }
         setTableViewData();
     }
@@ -103,6 +111,7 @@ public class TrainingTableController {
     }
     @FXML
     public void initialize() {
+        JwtResponse jwtResponse = AppStore.getJwt();
         idColumn.setCellValueFactory(new MapValueFactory<>("id"));
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
@@ -119,6 +128,15 @@ public class TrainingTableController {
         studentComboBox.getItems().addAll(studentList);
         dataTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         onQueryButtonClick();
+        if (jwtResponse.getRole().equals("ROLE_STUDENT")) {
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+            saveButton.setDisable(true);
+        } else {
+            addButton.setDisable(false);
+            saveButton.setDisable(false);
+            deleteButton.setDisable(false);
+        }
     }
     private void initDialog() {
         if(stage!= null)

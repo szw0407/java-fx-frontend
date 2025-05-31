@@ -44,7 +44,7 @@ public class InternshipEditController {
         OptionItem op;
         op = studentComboBox.getSelectionModel().getSelectedItem();
         if(op != null) {
-            if (!op.getValue().equals(currentStudentId)){
+            if (!op.getValue().equals(currentStudentId)&& !jwtResponse.getRole().equals("ROLE_ADMIN")){
                 MessageDialog.showDialog("不能添加其他学生的信息！");
                 return;
             }

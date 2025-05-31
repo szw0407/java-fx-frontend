@@ -49,6 +49,13 @@ public class TechnicalAchieveController {
     @FXML
     private TextField searchField;
 
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button saveButton;
+
     private Integer id = null;  //主键
     private ArrayList<Map> techList = new ArrayList<>();  // 实践数据列表
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
@@ -76,7 +83,7 @@ public class TechnicalAchieveController {
                 }
             }
             techList = filteredList;//把得到的键值列表返回
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) techList = (ArrayList<Map>) res.getData();
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")|| jwtResponse.getRole().equals("ROLE_TEACHER")) techList = (ArrayList<Map>) res.getData();
         }
 
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
@@ -90,6 +97,16 @@ public class TechnicalAchieveController {
         list.addListener(this::onTableRowSelect);
         loadList();
         setTableViewData();
+
+        if (jwtResponse.getRole().equals("ROLE_STUDENT")) {
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+            saveButton.setDisable(true);
+        } else {
+            addButton.setDisable(false);
+            deleteButton.setDisable(false);
+            saveButton.setDisable(false);
+        }
 
     }
     private void loadList() {
@@ -152,7 +169,7 @@ public class TechnicalAchieveController {
                 }
             }
             techList = filteredList;
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) techList = (ArrayList<Map>) res.getData();
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")|| jwtResponse.getRole().equals("ROLE_TEACHER")) techList = (ArrayList<Map>) res.getData();
             setTableViewData();
         }
     }
