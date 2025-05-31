@@ -1,6 +1,7 @@
 //待解决：主界面初始化
 package com.teach.javafx.controller;
 
+import com.teach.javafx.request.JwtResponse;
 import com.teach.javafx.AppStore;
 import com.teach.javafx.MainApplication;
 import com.teach.javafx.controller.base.MessageDialog;
@@ -43,6 +44,14 @@ public class InternshipTableController {
     @FXML
     private TableColumn<Map, Button> editColumn;
 
+    @FXML
+    private Button saveButton; // 新增保存按钮的引用
+    @FXML
+    private Button deleteButton; // 新增删除按钮的引用
+
+    @FXML
+    private Button addButton;
+
 
     private ArrayList<Map> iList = new ArrayList<>();
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
@@ -76,7 +85,7 @@ public class InternshipTableController {
                 }
             }
             iList = filteredList;
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) iList = (ArrayList<Map>) res.getData();
+            if (jwtResponse.getRole().equals("ROLE_ADMIN")|| jwtResponse.getRole().equals("ROLE_TEACHER")) iList = (ArrayList<Map>) res.getData();
         }
         setTableViewData();
 
@@ -109,6 +118,7 @@ public class InternshipTableController {
     }
     @FXML
     public void initialize() {
+        JwtResponse jwtResponse = AppStore.getJwt();
         idColumn.setCellValueFactory(new MapValueFactory<>("id"));
         studentNumColumn.setCellValueFactory(new MapValueFactory<>("studentNum"));
         studentNameColumn.setCellValueFactory(new MapValueFactory<>("studentName"));
@@ -117,7 +127,6 @@ public class InternshipTableController {
         startTimeColumn.setCellValueFactory(new MapValueFactory<>("startTime"));
         endTimeColumn.setCellValueFactory(new MapValueFactory<>("endTime"));
         descriptionColumn.setCellValueFactory(new MapValueFactory<>("description"));
-
 
         DataRequest req =new DataRequest();
         studentList = HttpRequestUtil.requestOptionItemList("/api/internship/getStudentItemOptionList",req);
@@ -128,6 +137,16 @@ public class InternshipTableController {
 
         dataTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         onQueryButtonClick();
+
+        if (jwtResponse.getRole().equals("ROLE_STUDENT")) {
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+            saveButton.setDisable(true);
+        } else {
+            addButton.setDisable(false);
+            saveButton.setDisable(false);
+            deleteButton.setDisable(false);
+        }
 
     }
     private void initDialog() {
