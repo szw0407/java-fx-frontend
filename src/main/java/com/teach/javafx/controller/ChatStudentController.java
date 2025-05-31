@@ -281,7 +281,7 @@ package com.teach.javafx.controller;
                                     JSONArray messages = new JSONArray();
                                     JSONObject systemMessage = new JSONObject();
                                     systemMessage.put("role", "system");
-                                    systemMessage.put("content", "你是一个学生助手，你需要基于提供的学生信息、课程表、请假记录和荣誉记录，提供有针对性的回答。");
+                                    systemMessage.put("content", "你是一个学生助手，你需要基于提供的学生信息、课程表、请假记录和荣誉记录，提供有针对性的回答。请不要使用emoji因为客户端不支持显示");
 
                                     JSONObject userMessage = new JSONObject();
                                     userMessage.put("role", "user");
@@ -390,7 +390,7 @@ package com.teach.javafx.controller;
                             }
                             webView.getEngine().loadContent(renderMarkdownToHtml(message), "text/html");
                             webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
-                            webView.setPrefHeight(calculateTextHeight(message, 500));
+                            webView.setPrefHeight(calculateTextHeight(message, 5000));
 
                             messageContainer.getChildren().addAll(senderLabel, webView, timeLabel);
 
@@ -417,7 +417,7 @@ package com.teach.javafx.controller;
                         // 根据文本长度计算WebView高度
                         private double calculateTextHeight(String text, double maxHeight) {
                             int lineCount = text.split("\n").length;
-                            double estimatedHeight = lineCount * 20 + 20; // 每行大约20像素加上边距
+                            double estimatedHeight = lineCount * 25 + 20; // 每行大约20像素加上边距
                             return Math.min(estimatedHeight, maxHeight);
                         }
 
