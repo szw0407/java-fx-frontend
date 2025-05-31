@@ -106,7 +106,7 @@ public class ChatControllerVersion2 {
             try {
                 // 构造请求体
                 JSONObject requestBody = new JSONObject();
-                requestBody.put("model", "deepseek");
+                requestBody.put("model", "deepseek_web");
 
                 JSONArray messages = new JSONArray();
                 JSONObject messageObj = new JSONObject();
@@ -186,7 +186,8 @@ public class ChatControllerVersion2 {
         timeLabel.getStyleClass().add("time-label");
 
         WebView webView = new WebView();
-        webView.getEngine().loadContent("<div style='font-family: system-ui; font-size: 14px;'>" + message + "</div>", "text/html");
+        webView.getEngine().setJavaScriptEnabled(true);
+webView.getEngine().loadContent("<html><body style='margin:0;padding:0;background-color:A8E3D1'><div style='font-family: system-ui; font-size: 14px; width:100%; height:100%; background-color:#A8E3D1'>" + message + "</div></body></html>", "text/html");
         webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
         webView.setPrefHeight(calculateTextHeight(message, 300));
 

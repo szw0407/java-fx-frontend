@@ -276,7 +276,7 @@ package com.teach.javafx.controller;
                                 try {
                                     // 构建API请求
                                     JSONObject requestBody = new JSONObject();
-                                    requestBody.put("model", "deepseek-chat");
+                                    requestBody.put("model", "deepseek_web");
 
                                     JSONArray messages = new JSONArray();
                                     JSONObject systemMessage = new JSONObject();
@@ -352,10 +352,11 @@ package com.teach.javafx.controller;
                             Label timeLabel = new Label(LocalDateTime.now().format(TIME_FORMATTER));
                             timeLabel.getStyleClass().add("time-label");
 
-                            WebView webView = new WebView();
-                            webView.getEngine().loadContent("<div style='font-family: system-ui; font-size: 14px;'>" + message + "</div>", "text/html");
-                            webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
-                            webView.setPrefHeight(calculateTextHeight(message, 300));
+                    WebView webView = new WebView();
+                    webView.getEngine().setJavaScriptEnabled(true);
+                    webView.getEngine().loadContent("<html><body style='margin:0;padding:0;background-color:#A8E3D1'><div style='font-family: system-ui; font-size: 14px; width:100%; height:100%; background-color:#A8E3D1'>" + message + "</div></body></html>", "text/html");
+                    webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
+                    webView.setPrefHeight(calculateTextHeight(message, 300));
 
                             messageContainer.getChildren().addAll(webView, timeLabel);
 
