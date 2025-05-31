@@ -1,5 +1,6 @@
 package com.teach.javafx.controller;
 
+import com.teach.javafx.AppStore;
 import com.teach.javafx.request.DataRequest;
 import com.teach.javafx.request.HttpRequestUtil;
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TeacherScoreTableController {
+    boolean isTeacher = AppStore.getJwt().getRole().equals("ROLE_TEACHER");
     @FXML
     public TextField yearField;
     @FXML
@@ -62,23 +64,25 @@ public class TeacherScoreTableController {
         yearColumn.setCellValueFactory(cell -> cell.getValue().yearProperty());
         termColumn.setCellValueFactory(cell -> cell.getValue().termProperty());
         markColumn.setCellValueFactory(cell -> cell.getValue().markProperty());
-        editColumn.setCellFactory(col -> new TableCell<>() {
-            final Button editBtn = new Button("编辑");
-            final Button delBtn = new Button("删除");
+        if (isTeacher) {
+            editColumn.setCellFactory(col -> new TableCell<>() {
+                final Button editBtn = new Button("编辑");
+                final Button delBtn = new Button("删除");
 
 
-            {
-                editBtn.setOnAction(e -> onEditButtonClick(null));
-                delBtn.setOnAction(e -> onDeleteButtonClick(null));
-            }
+                {
+                    editBtn.setOnAction(e -> onEditButtonClick(null));
+                    delBtn.setOnAction(e -> onDeleteButtonClick(null));
+                }
 
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else setGraphic(new HBox(5, editBtn, delBtn));
-            }
-        });
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) setGraphic(null);
+                    else setGraphic(new HBox(5, editBtn, delBtn));
+                }
+            });
+        }
 
         // 绑定下拉框
         studentComboBox.setItems(allStudents);
@@ -264,7 +268,14 @@ public class TeacherScoreTableController {
     @FXML
     public void onEditButtonClick(ActionEvent event) {
         ScoreRecord selected = dataTableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            var a = new Alert(Alert.AlertType.WARNING);
+            a.setTitle("修改失败");
+            a.setHeaderText("没有选中成绩");
+            a.setContentText("请先选择一条成绩记录进行修改");
+            a.showAndWait();
+            return;
+        }
         TextInputDialog dialog = new TextInputDialog(selected.getMark());
         dialog.setTitle("修改成绩");
         dialog.setHeaderText("请输入新成绩：");
@@ -565,6 +576,7 @@ public class TeacherScoreTableController {
 
         }
         var s = HttpRequestUtil.request("/api/me/StudentList", dr);
+
         if (s != null && s.getCode() == 0) {
             List<Map<String, Object>> dataList = (List<Map<String, Object>>) s.getData();
 

@@ -14,11 +14,9 @@
             </padding>
             <!-- 操作按钮 -->
             <FlowPane prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                <Button mnemonicParsing="false" onAction="#onAddButtonClick" text="重置"/>
-                <Button mnemonicParsing="false" onAction="#onEditButtonClick" text="修改"/>
-                <Button mnemonicParsing="false" onAction="#onDeleteButtonClick" text="删除"/>
+
                 <FlowPane alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER" hgap="5" vgap="5">
-                    <Label text="学生"/>
+                    <Button mnemonicParsing="false" onAction="#onAddButtonClick" text="重置"/><Label text="学生"/>
                     <ComboBox fx:id="studentComboBox" promptText="全部"/>
                     <Label text="课程"/>
                     <ComboBox fx:id="courseComboBox" promptText="全部"/>
@@ -48,6 +46,7 @@
                 <TableColumn fx:id="markColumn" prefWidth="60.0" text="成绩"/>
                 <TableColumn fx:id="editColumn" prefWidth="120.0" text="操作"/>
             </columns>
+
         </TableView>
     </center>
 </BorderPane>
