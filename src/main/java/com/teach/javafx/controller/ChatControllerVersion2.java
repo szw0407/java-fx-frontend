@@ -215,12 +215,7 @@ public class ChatControllerVersion2 {
 
         WebView webView = new WebView();
         // 修正字体加载路径，使用正确的资源路径
-        try {
-            String fontPath = getClass().getResource("/com/teach/javafx/fonts/NotoSans.ttf").toExternalForm();
-            Font.loadFont(fontPath, 14);
-        } catch (Exception e) {
-            System.err.println("无法加载Noto Sans字体: " + e.getMessage());
-        }
+
         webView.getEngine().loadContent(renderMarkdownToHtml(message), "text/html");
         webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
         webView.setPrefHeight(calculateTextHeight(message, 500));

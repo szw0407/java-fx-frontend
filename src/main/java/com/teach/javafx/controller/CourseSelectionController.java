@@ -81,12 +81,12 @@ public class CourseSelectionController {
     @FXML
     public void onQueryButtonClick(ActionEvent event) {
         // reload data all
-        initData();
+
         String year = yearField.getText().trim();
         String term = termComboBox.getValue();
         Student stu = studentComboBox.getValue();
         Course course = courseComboBox.getValue();
-
+        initData();
         List<CourseSelectionRecord> filtered = allSelections.stream().filter(r ->
                 (year.isEmpty() || r.getYear().equals(year)) &&
                         (term == null || r.getTerm().equals(term)) &&

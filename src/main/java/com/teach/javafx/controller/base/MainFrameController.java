@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import com.teach.javafx.request.DataRequest;
 import com.teach.javafx.request.DataResponse;
+import com.teach.javafx.request.LoginRequest;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -45,6 +46,10 @@ public class MainFrameController {
     protected TabPane contentTabPane;
     @FXML
     private Label systemPrompt;
+    @FXML
+    private Button switchStudentButton;
+    @FXML
+    private Button switchTeacherButton;
 
     private ChangePanelHandler handler= null;
 
@@ -176,7 +181,14 @@ public class MainFrameController {
         initMenuBar(mList);
         initMenuTree(mList);
         contentTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        contentTabPane.setStyle("-fx-background-image: url('shanda1.jpg'); -fx-background-repeat: no-repeat; -fx-background-size: cover;");  //inline选择器
+        contentTabPane.setStyle("-fx-background-image: url('shanda1.jpg'); -fx-background-repeat: no-repeat; -fx-background-size: cover;");
+        //inline选择器
+        if (switchStudentButton != null) {
+            switchStudentButton.setOnAction(e -> switchRole("student"));
+        }
+        if (switchTeacherButton != null) {
+            switchTeacherButton.setOnAction(e -> switchRole("teacher"));
+        }
 
 
     }
@@ -369,5 +381,27 @@ public class MainFrameController {
     }
     public ToolController getToolController(String name){
         return  controlMap.get(name);
+    }
+    private void switchRole(String role) {
+        String username = "202300180116"; // 缺省学生账号
+        String password = "123456";
+        if ("teacher".equals(role)) {
+            username = "10086"; // 缺省教师账号
+        }
+        LoginRequest loginRequest = new LoginRequest(username, password);
+        String msg = HttpRequestUtil.login(loginRequest);
+        if (msg != null) {
+            MessageDialog.showDialog(msg);
+            return;
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("base/main-frame.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), -1, -1);
+            AppStore.setMainFrameController((MainFrameController) fxmlLoader.getController());
+            MainApplication.resetStage("教学管理系统", scene);
+            MainApplication.getMainStage().setMaximized(true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
