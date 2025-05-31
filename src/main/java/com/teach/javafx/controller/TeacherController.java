@@ -108,11 +108,11 @@ public class TeacherController {
         deptColumn.setCellValueFactory(new MapValueFactory<>("dept"));
         titleColumn.setCellValueFactory(new MapValueFactory<>("title"));
         degreeColumn.setCellValueFactory(new MapValueFactory<>("degree"));
-        numColumn.setCellValueFactory(new MapValueFactory<>("num"));  //设置列值工程属性
-        nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
-        deptColumn.setCellValueFactory(new MapValueFactory<>("dept"));
-        titleColumn.setCellValueFactory(new MapValueFactory<>("major"));
-        degreeColumn.setCellValueFactory(new MapValueFactory<>("className"));
+        //numColumn.setCellValueFactory(new MapValueFactory<>("num"));  //设置列值工程属性
+        //nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
+        //deptColumn.setCellValueFactory(new MapValueFactory<>("dept"));
+        //titleColumn.setCellValueFactory(new MapValueFactory<>("major"));
+        //degreeColumn.setCellValueFactory(new MapValueFactory<>("className"));
         cardColumn.setCellValueFactory(new MapValueFactory<>("card"));
         genderColumn.setCellValueFactory(new MapValueFactory<>("genderName"));
         birthdayColumn.setCellValueFactory(new MapValueFactory<>("birthday"));
