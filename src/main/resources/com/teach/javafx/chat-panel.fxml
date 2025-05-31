@@ -25,7 +25,7 @@
         </top>
 
         <center>
-            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" styleClass="chat-scroll-pane">
+            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" styleClass="chat-scroll-pane" maxHeight="450">
                 <VBox fx:id="chatHistoryVBox" spacing="20" styleClass="chat-history-container">
                     <padding>
                         <Insets top="20" right="20" bottom="20" left="20"/>
