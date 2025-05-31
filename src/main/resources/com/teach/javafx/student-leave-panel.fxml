@@ -90,7 +90,7 @@
                           <HBox spacing="10" alignment="CENTER_RIGHT">
                               <Button text="清空表单" onAction="#clearForm" styleClass="secondary-button"/>
                               <Button text="删除申请" onAction="#onDeleteButtonClick" styleClass="danger-button"/>
-                              <Button text="新增申请" onAction="#onAddButtonClick" styleClass="primary-button"/>
+<!--                              <Button text="新增申请" onAction="#onAddButtonClick" styleClass="primary-button"/>-->
                               <Button text="保存申请" onAction="#onSaveButtonClick" styleClass="primary-button"/>
                           </HBox>
                       </VBox>
