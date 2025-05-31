@@ -222,6 +222,7 @@ public class TeacherScoreTableController {
         dataTableView.setItems(FXCollections.observableArrayList(filtered));
     }
 
+    @FXML
     private void onViewStatisticsButtonClick(ActionEvent event) {
         if (allScores.isEmpty()) {
             showAlert("统计数据", "没有可供统计的成绩记录。", Alert.AlertType.INFORMATION);
@@ -475,7 +476,7 @@ public class TeacherScoreTableController {
 
     // 添加成绩
     @FXML
-    public void onAddButtonClick(ActionEvent event) {
+    public void onResetButtonClick(ActionEvent event) {
         // 这个按钮改成了重置按钮
         studentComboBox.setValue(null);
         courseComboBox.setValue(null);
