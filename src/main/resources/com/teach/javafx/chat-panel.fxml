@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <?import javafx.geometry.Insets?>
+    <?import javafx.scene.control.*?>
+    <?import javafx.scene.layout.*?>
+    <?import javafx.scene.text.Font?>
+    <?import java.net.URL?>
+
+    <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+                fx:controller="com.teach.javafx.controller.ChatControllerVersion2"
+                styleClass="chat-container">
+<!--        <stylesheets>-->
+<!--            <URL value="@css/chat-styles.css" />-->
+<!--        </stylesheets>-->
+
+        <top>
+            <HBox styleClass="header-container" alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="15" right="20" bottom="15" left="20"/>
+                </padding>
+                <Label text="AI大模型对话" styleClass="header-title"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="clearChatButton" text="清空对话" onAction="#clearChat" styleClass="action-button"/>
+            </HBox>
+        </top>
+
+        <center>
+            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" styleClass="chat-scroll-pane">
+                <VBox fx:id="chatHistoryVBox" spacing="20" styleClass="chat-history-container">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                </VBox>
+            </ScrollPane>
+        </center>
+
+        <bottom>
+            <VBox styleClass="input-container">
+                <HBox fx:id="loadingIndicator" alignment="CENTER" visible="false" styleClass="loading-container">
+                    <Label text="AI思考中..." styleClass="loading-text"/>
+                    <ProgressIndicator styleClass="loading-indicator" prefWidth="20" prefHeight="20"/>
+                </HBox>
+
+                <HBox styleClass="input-box-container" alignment="CENTER">
+                    <TextArea fx:id="promptTextArea" wrapText="true" styleClass="prompt-text-area"
+                              promptText="输入您的问题..." prefRowCount="6" prefHeight="120" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="sendButton" onAction="#sendPrompt" styleClass="send-button" text="发送"/>
+                </HBox>
+                <Label styleClass="hint-text" text="提示：按Shift+Enter换行，按Enter发送" />
+
+                <padding>
+                    <Insets top="10" right="20" bottom="15" left="20"/>
+                </padding>
+            </VBox>
+        </bottom>
+    </BorderPane>

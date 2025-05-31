@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.teach.javafx.controller.StudentHonorStudentController">
+    <center>
+        <TableView fx:id="honorTableView">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="100.0" text="ID"/>
+                <TableColumn fx:id="studentIdColumn" prefWidth="100.0" text="学生ID"/>
+                <TableColumn fx:id="titleColumn" prefWidth="200.0" text="荣誉标题"/>
+                <TableColumn fx:id="descriptionColumn" prefWidth="300.0" text="描述"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

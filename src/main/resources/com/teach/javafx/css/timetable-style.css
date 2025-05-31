@@ -1,0 +1,258 @@
+/* 课程表专用样式 */
+    * {
+        -fx-font-family: "Microsoft YaHei", "SimSun", sans-serif;
+    }
+
+    /* 整体容器样式 */
+    .header-container {
+        -fx-spacing: 0;
+    }
+
+    /* 标题栏样式 */
+    .title-bar {
+        -fx-background-color: #1976d2;
+        -fx-padding: 15px;
+    }
+    .semester-label {
+        -fx-font-size: 16px;
+        -fx-text-fill: #e3f2fd;
+        -fx-padding: 0 0 0 15px;
+    }
+
+    .refresh-button {
+        -fx-background-color: transparent;
+        -fx-text-fill: white;
+        -fx-border-color: white;
+        -fx-border-radius: 4px;
+        -fx-padding: 5px 10px;
+    }
+
+    .refresh-button:hover {
+        -fx-background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .page-title {
+        -fx-font-size: 22px;
+        -fx-font-weight: bold;
+        -fx-text-fill: white;
+    }
+
+    /* 控制面板样式 */
+    .control-panel {
+        -fx-background-color: #f5f5f5;
+        -fx-padding: 10px 15px;
+        -fx-spacing: 10px;
+        -fx-alignment: center-left;
+        -fx-border-color: #e0e0e0;
+        -fx-border-width: 0 0 1 0;
+    }
+
+    .filter-group {
+        -fx-spacing: 10px;
+        -fx-alignment: center-left;
+    }
+
+    .filter-label {
+        -fx-font-weight: bold;
+        -fx-text-fill: #1976d2;
+    }
+
+    .filter-field {
+        -fx-background-color: white;
+        -fx-background-radius: 4px;
+        -fx-border-color: #bbdefb;
+        -fx-border-radius: 4px;
+        -fx-padding: 5px 8px;
+    }
+
+    .filter-field:focused {
+        -fx-border-color: #1976d2;
+    }
+
+    .primary-button {
+        -fx-background-color: #1976d2;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-background-radius: 4px;
+        -fx-padding: 7px 15px;
+    }
+
+    .primary-button:hover {
+        -fx-background-color: #1565c0;
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    }
+
+    /* 日期导航栏样式 */
+    .date-navigator {
+        -fx-background-color: #e3f2fd;
+        -fx-padding: 8px 15px;
+        -fx-spacing: 10px;
+        -fx-alignment: center-left;
+    }
+
+    .date-label {
+        -fx-font-weight: bold;
+        -fx-text-fill: #1976d2;
+        -fx-font-size: 14px;
+    }
+
+    .hint-label {
+        -fx-font-style: italic;
+        -fx-text-fill: #1976d2;
+        -fx-font-size: 12px;
+    }
+
+    /* 星期指示器样式 */
+    .day-indicator {
+        -fx-background-color: #1976d2;
+        -fx-padding: 0;
+        -fx-alignment: center;
+    }
+
+    .time-column-header, .day-column-header {
+        -fx-padding: 8px 0;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-alignment: center;
+    }
+
+    /* 课程表样式 */
+    .timetable-scroll {
+        -fx-background: white;
+        -fx-border-color: transparent;
+        -fx-padding: 0;
+    }
+
+    .timetable-view {
+        -fx-background-color: white;
+        -fx-border-color: #e0e0e0;
+        -fx-fixed-cell-size: 110px; /* 固定高度使显示更整齐 */
+        -fx-pref-height: 550px; /* 5行 * 110px = 550px */
+        -fx-max-height: 550px;
+        -fx-min-height: 550px;
+    }
+
+    .timetable-view .column-header-background {
+        -fx-max-height: 0;
+        -fx-pref-height: 0;
+        -fx-min-height: 0;
+        visibility: hidden;
+    }
+
+    .timetable-view .table-cell {
+        -fx-alignment: center;
+        -fx-padding: 5px;
+        -fx-border-color: #e0e0e0;
+        -fx-border-width: 0.5px;
+        -fx-font-size: 12px;
+        -fx-text-fill: #424242;
+        -fx-wrap-text: true;
+    }
+
+    .timetable-view .table-cell:filled:hover {
+        -fx-background-color: #e3f2fd;
+        -fx-cursor: hand;
+    }
+
+    /* 课程单元格基础样式 */
+    .course-cell {
+        -fx-background-radius: 8px;
+        -fx-border-radius: 8px;
+        -fx-border-width: 1px;
+        -fx-border-color: transparent;
+        -fx-padding: 8px;
+        -fx-cursor: hand;
+    }
+
+    /* 预定义的课程颜色样式 */
+    .course-color-1 {
+        -fx-background-color: #e3f2fd;
+        -fx-border-color: #bbdefb;
+    }
+
+    .course-color-2 {
+        -fx-background-color: #e8f5e9;
+        -fx-border-color: #c8e6c9;
+    }
+
+    .course-color-3 {
+        -fx-background-color: #fff8e1;
+        -fx-border-color: #ffecb3;
+    }
+
+    .course-color-4 {
+        -fx-background-color: #f3e5f5;
+        -fx-border-color: #e1bee7;
+    }
+
+    .course-color-5 {
+        -fx-background-color: #ffebee;
+        -fx-border-color: #ffcdd2;
+    }
+
+    .course-color-6 {
+        -fx-background-color: #e0f7fa;
+        -fx-border-color: #b2ebf2;
+    }
+
+    .course-color-7 {
+        -fx-background-color: #fffde7;
+        -fx-border-color: #fff9c4;
+    }
+
+    /* 悬停效果 */
+    .course-cell:hover {
+        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+        -fx-border-color: #42a5f5;
+    }
+
+    .time-column {
+        -fx-alignment: center;
+        -fx-font-weight: bold;
+        -fx-background-color: #e8eaf6;
+        -fx-min-width: 100px;
+        -fx-pref-width: 100px;
+        -fx-max-width: 100px;
+        -fx-border-color: #c5cae9;
+        -fx-border-width: 0 1 0 0;
+    }
+
+    .day-column {
+        -fx-alignment: center;
+        -fx-padding: 0;
+    }
+
+    /* 时间段样式 */
+    .time-detail {
+        -fx-font-size: 13px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #1976d2;
+    }
+
+    .time-secondary {
+        -fx-font-size: 11px;
+        -fx-text-fill: #757575;
+        -fx-font-style: italic;
+    }
+
+    .timetable-view .table-row-cell {
+        -fx-background-color: white;
+    }
+
+    .timetable-view .table-row-cell:odd {
+        -fx-background-color: #fafafa;
+    }
+
+    /* 底部信息区样式 */
+    .info-bar {
+        -fx-background-color: #f5f5f5;
+        -fx-padding: 10px 15px;
+        -fx-alignment: center-left;
+        -fx-border-color: #e0e0e0 transparent transparent transparent;
+        -fx-border-width: 1 0 0 0;
+    }
+
+    .info-text {
+        -fx-text-fill: #757575;
+        -fx-font-style: italic;
+    }

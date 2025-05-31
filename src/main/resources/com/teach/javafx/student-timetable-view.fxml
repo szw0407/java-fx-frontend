@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+                <?import javafx.geometry.Insets?>
+                <?import javafx.scene.control.*?>
+                <?import javafx.scene.layout.*?>
+                <?import javafx.scene.text.Font?>
+
+                <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+                            fx:controller="com.teach.javafx.controller.StudentTimetableController"
+                            stylesheets="@css/timetable-style.css">
+                    <top>
+                        <VBox styleClass="header-container">
+                            <!-- 标题栏 -->
+                            <HBox alignment="CENTER" styleClass="title-bar">
+                                <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="10">
+                                    <Label text="我的课程表" styleClass="page-title"/>
+                                    <Label fx:id="semesterLabel" text="2024学年 第1学期" styleClass="semester-label"/>
+                                </HBox>
+                                <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#onQueryButtonClick"
+                                        text="刷新" styleClass="refresh-button"/>
+                            </HBox>
+
+                            <!-- 日期信息栏 -->
+                            <HBox styleClass="date-navigator">
+                                <Label text="课程时间表" styleClass="date-label"/>
+                                <Pane HBox.hgrow="ALWAYS" />
+                                <Label text="提示: 双击课程可查看详情" styleClass="hint-label"/>
+                            </HBox>
+
+                            <!-- 星期指示器 -->
+                            <GridPane styleClass="day-indicator">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                <Label styleClass="time-column-header" text="时间/星期" GridPane.columnIndex="0" />
+                                <Label styleClass="day-column-header" text="周一" GridPane.columnIndex="1" />
+                                <Label styleClass="day-column-header" text="周二" GridPane.columnIndex="2" />
+                                <Label styleClass="day-column-header" text="周三" GridPane.columnIndex="3" />
+                                <Label styleClass="day-column-header" text="周四" GridPane.columnIndex="4" />
+                                <Label styleClass="day-column-header" text="周五" GridPane.columnIndex="5" />
+                                <Label styleClass="day-column-header" text="周六" GridPane.columnIndex="6" />
+                                <Label styleClass="day-column-header" text="周日" GridPane.columnIndex="7" />
+                            </GridPane>
+                        </VBox>
+                    </top>
+
+                   <center>
+                        <TableView fx:id="timetableTableView" styleClass="timetable-view">
+                            <columns>
+                                <TableColumn fx:id="timeColumn" text="时间\星期" styleClass="time-column"/>
+                                <TableColumn fx:id="monColumn" text="周一" styleClass="day-column"/>
+                                <TableColumn fx:id="tueColumn" text="周二" styleClass="day-column"/>
+                                <TableColumn fx:id="wedColumn" text="周三" styleClass="day-column"/>
+                                <TableColumn fx:id="thuColumn" text="周四" styleClass="day-column"/>
+                                <TableColumn fx:id="friColumn" text="周五" styleClass="day-column"/>
+                                <TableColumn fx:id="satColumn" text="周六" styleClass="day-column"/>
+                                <TableColumn fx:id="sunColumn" text="周日" styleClass="day-column"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TableView>
+                    </center>
+
+                    <bottom>
+                        <HBox styleClass="info-bar">
+                            <Label text="提示: 表格显示了当前学期所有课程安排" styleClass="info-text"/>
+                        </HBox>
+                    </bottom>
+                </BorderPane>

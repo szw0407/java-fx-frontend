@@ -1,10 +1,14 @@
 module com.teach.javafx {
+    requires transitive javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.swing;
     requires java.logging;
     requires com.google.gson;
     requires java.net.http;
+    requires org.json;
+    requires org.commonmark;
+    requires javafx.web;
 
     opens com.teach.javafx to javafx.fxml;
     opens com.teach.javafx.request to com.google.gson, javafx.fxml;

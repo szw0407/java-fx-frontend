@@ -1,0 +1,211 @@
+/* lxj-styles.css - 学生管理系统主框架样式 */
+
+    /* 全局样式 */
+    .root {
+        -fx-font-family: "Microsoft YaHei", "SimSun", sans-serif;
+        -fx-font-size: 14px;
+        -fx-background-color: #f7f9fa;
+
+        /* 定义小清新主题颜色变量 */
+        -fx-primary-color: #88d8c0;      /* 薄荷绿替代蓝色 */
+        -fx-secondary-color: #a3d0e8;    /* 淡蓝色替代绿色 */
+        -fx-accent-color: #ffaaa5;       /* 淡粉色替代红色 */
+        -fx-dark-color: #6b7a8f;         /* 柔和灰褐色替代深蓝色 */
+        -fx-light-color: #f7f5e6;        /* 暖米白替代浅灰 */
+    }
+
+    /* 标题样式 */
+    .title-label {
+        -fx-font-size: 20px;
+        -fx-font-weight: bold;
+        -fx-text-fill: -fx-dark-color;
+    }
+
+    .subtitle-label {
+        -fx-font-size: 16px;
+        -fx-font-weight: bold;
+        -fx-text-fill: -fx-dark-color;
+    }
+
+/* 按钮样式 - 降低高度
+.button {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 3px 15px; *//* 从6px减至3px *//*
+    -fx-cursor: hand;
+    -fx-min-height: 24px; *//* 设置最小高度 *//*
+}
+
+.button:hover {
+    -fx-background-color: derive(-fx-primary-color, 20%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(-fx-primary-color, -10%);
+}*/
+
+
+    /* 表格样式 */
+    .table-view {
+        -fx-background-color: white;
+        -fx-border-color: #e6e6e6;
+        -fx-border-radius: 4px;
+    }
+
+    /* 表格表头样式 - 浅色透明背景 */
+    .table-view .column-header {
+        -fx-background-color: rgba(163, 208, 232, 0.4); /* 淡蓝色(次要色调)基础，高透明度 */
+        -fx-text-fill: -fx-dark-color; /* 深色文字确保可读性 */
+        -fx-font-weight: bold;
+        -fx-padding: 10px;
+    }
+
+    /* 表头悬停效果 */
+    .table-view .column-header:hover {
+        -fx-background-color: rgba(163, 208, 232, 0.6); /* 悬停时稍微降低透明度 */
+    }
+
+    /* 确保表头边框可见 */
+    .table-view .column-header-background {
+        -fx-border-color: #e6e6e6;
+        -fx-border-width: 0 0 1px 0;
+    }
+
+    .table-row-cell {
+        -fx-background-color: white;
+        -fx-border-color: #f5f5f5;
+        -fx-table-cell-border-color: #f5f5f5;
+    }
+
+    .table-row-cell:odd {
+        -fx-background-color: #f9f9f9;
+    }
+
+    .table-row-cell:selected {
+        -fx-background-color: derive(-fx-primary-color, 30%);
+        -fx-text-fill: -fx-dark-color;
+    }
+
+    /* 容器样式 */
+    .card {
+        -fx-background-color: white;
+        -fx-background-radius: 8px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+        -fx-padding: 15px;
+    }
+
+    /* 分割面板样式 */
+    .split-pane {
+        -fx-background-color: transparent;
+        -fx-padding: 10px;
+    }
+
+    .split-pane-divider {
+        -fx-background-color: #e6e6e6;
+        -fx-padding: 0 1px;
+    }
+
+    /* 边框样式 */
+    .border_black_1 {
+        -fx-border-color: #e6e6e6;
+        -fx-border-width: 1px;
+        -fx-border-radius: 4px;
+    }
+
+    /* 标签样式 */
+    .label {
+        -fx-text-fill: -fx-dark-color;
+    }
+
+    /* 滚动面板样式 */
+    .scroll-pane {
+        -fx-background-color: transparent;
+        -fx-background: transparent;
+        -fx-border-color: transparent;
+    }
+
+    .scroll-pane > .viewport {
+        -fx-background-color: transparent;
+    }
+
+    .scroll-bar:vertical {
+        -fx-background-color: transparent;
+    }
+
+    .scroll-bar:vertical .thumb {
+        -fx-background-color: rgba(107, 122, 143, 0.2);
+        -fx-background-radius: 5em;
+    }
+
+    /* 聊天相关样式 */
+    .chat-container {
+        -fx-background-color: #f7f9fa;
+    }
+
+    .chat-history-container {
+        -fx-background-color: transparent;
+    }
+
+    .user-message {
+        -fx-background-color: derive(-fx-primary-color, 30%);
+        -fx-background-radius: 8px;
+        -fx-padding: 10px;
+    }
+
+    .ai-message {
+        -fx-background-color: white;
+        -fx-background-radius: 8px;
+        -fx-padding: 10px;
+    }
+
+    .header-container {
+        -fx-background-color: white;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 5);
+    }
+
+    .input-container {
+        -fx-background-color: white;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 5, 0);
+    }
+
+    .prompt-text-area {
+        -fx-background-color: #f9f9f9;
+        -fx-border-color: #e6e6e6;
+        -fx-border-radius: 4px;
+    }
+
+    .send-button {
+        -fx-background-color: -fx-primary-color;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+    }
+
+    /* 导航菜单样式 */
+    .nav-button {
+        -fx-background-color: transparent;
+        -fx-text-fill: -fx-dark-color;
+        -fx-padding: 10px 15px;
+        -fx-border-width: 0 0 3px 0;
+        -fx-border-color: transparent;
+    }
+
+    .nav-button:hover {
+        -fx-background-color: rgba(0, 0, 0, 0.05);
+        -fx-border-color: derive(-fx-primary-color, 20%);
+    }
+
+    .nav-button-selected {
+        -fx-border-color: -fx-primary-color;
+        -fx-font-weight: bold;
+    }
+
+    /* 搜索框容器 */
+    .search-container {
+        -fx-background-color: white;
+        -fx-padding: 10px;
+        -fx-spacing: 10px;
+        -fx-border-color: #e6e6e6;
+        -fx-border-width: 0 0 1px 0;
+    }

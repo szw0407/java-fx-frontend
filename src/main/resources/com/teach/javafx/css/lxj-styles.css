@@ -1,0 +1,663 @@
+/* 基础颜色变量 - 现代化统一色系 */
+    * {
+        /* 主色调 - 现代蓝色系 */
+        -fx-primary: #0078d4;
+        -fx-primary-light: #40bcf4;
+        -fx-primary-dark: #005a9e;
+        -fx-primary-alpha: rgba(0, 120, 212, 0.1);
+
+        /* 辅助色 - 同色系深浅变化 */
+        -fx-secondary: #106ebe;
+        -fx-secondary-light: #c7e0f4;
+        -fx-secondary-dark: #004578;
+
+        /* 中性色 - 更细腻的层次 */
+        -fx-background: #faf9f8;
+        -fx-surface: #ffffff;
+        -fx-surface-secondary: #f8f9fa;
+        -fx-surface-tertiary: #f3f2f1;
+        -fx-light-gray: #edebe9;
+        -fx-medium-gray: #d2d0ce;
+        -fx-dark-gray: #605e5c;
+        -fx-text-primary: #323130;
+        -fx-text-secondary: #605e5c;
+
+        /* 强调色和状态色 - 统一色调 */
+        -fx-accent: #e81123; /* Updated */
+        -fx-warning: #ff9f0a; /* Updated */
+        -fx-success: #28a745; /* Updated */
+        -fx-info: #0078d4; /* Kept same as primary */
+
+        /* 字体 */
+        -fx-font-family: "Segoe UI Variable", "Segoe UI", "Microsoft YaHei UI", "微软雅黑", sans-serif;
+
+        /* 现代化UI变量 */
+        -fx-default-border-radius: 8px; /* Updated */
+        -fx-card-border-radius: 12px; /* Updated */
+        -fx-button-border-radius: 6px; /* Updated */
+        -fx-focus-ring-color: rgba(0, 120, 212, 0.6);
+        -fx-shadow-color: rgba(0, 0, 0, 0.05);
+        -fx-shadow-hover: rgba(0, 0, 0, 0.08);
+        -fx-shadow-pressed: rgba(0, 0, 0, 0.12);
+        
+        /* 动画时间 */
+        -fx-animation-duration: 200ms;
+        -fx-animation-ease: EASE_BOTH; /* Changed from cubic-bezier to a standard JavaFX ease function */
+    }    /* ===== 布局容器样式 ===== */
+    .border-pane {
+        -fx-background-color: -fx-background;
+    }
+
+    .split-pane {
+        -fx-background-color: transparent;
+        -fx-background-insets: 0;
+        -fx-padding: 0;
+    }
+
+    .split-pane:horizontal > .split-pane-divider,
+    .split-pane:vertical > .split-pane-divider {
+        -fx-background-color: -fx-medium-gray;
+        -fx-padding: 0 0.5px; /* 更细的分割线 */
+    }
+
+    /* 卡片式容器 - 现代化设计 */
+    .card {
+        -fx-background-color: -fx-surface;
+        -fx-background-radius: -fx-card-border-radius;
+        -fx-border-radius: -fx-card-border-radius;
+        -fx-effect: dropshadow(gaussian, -fx-shadow-color, 12, 0, 0, 2);
+        -fx-padding: 16px; /* 缩小内边距 */
+        -fx-border-color: rgba(0, 0, 0, 0.05);
+        -fx-border-width: 1px;
+    }
+
+    /* 卡片悬停效果 - Fluent Design风格 */
+    .card:hover {
+        -fx-effect: dropshadow(gaussian, -fx-shadow-hover, 16, 0, 0, 4);
+        -fx-translate-y: -1px;
+        -fx-background-color: derive(-fx-surface, 2%);
+    }
+
+    /* ===== 顶部工具栏样式 ===== */
+    .header-container {
+        -fx-background-color: -fx-primary;
+        -fx-padding: 8px 16px;
+        -fx-spacing: 10px;
+    }
+
+    .header-container .label {
+        -fx-text-fill: white;
+        -fx-font-size: 14px;
+        -fx-font-weight: bold;
+    }
+
+    /* ===== 导航和菜单样式 ===== */
+    .menu-bar {
+        -fx-background-color: -fx-primary-dark;
+        -fx-padding: 2px;
+    }
+
+    .menu-bar .menu .label {
+        -fx-text-fill: rgb(0, 33, 110);
+    }
+
+    .menu-bar .menu:hover {
+        -fx-background-color: -fx-primary;
+    }
+
+    .tree-view {
+        -fx-background-color: -fx-light-gray;
+        -fx-background-insets: 0;
+        -fx-padding: 8px 4px;
+    }
+
+    .tree-cell {
+        -fx-background-color: transparent;
+        -fx-padding: 10px 8px;
+        -fx-text-fill: -fx-dark-gray;
+    }
+
+    .tree-cell:selected {
+        -fx-background-color: -fx-primary;
+        -fx-text-fill: white;
+        -fx-background-radius: -fx-default-border-radius; /* Updated from 3px */
+        -fx-effect: dropshadow(gaussian, rgba(0, 120, 212, 0.3), 4, 0, 0, 1);
+    }
+
+    /* TreeView Cell 悬停效果 (未选中时) */
+    .tree-cell:hover:not(:selected) {
+        -fx-background-color: derive(-fx-light-gray, -8%); /* 比默认背景稍深 */
+        -fx-background-radius: -fx-default-border-radius;
+    }
+
+    /* Tab面板样式 */
+    .tab-pane {
+        -fx-tab-min-height: 40px;
+        -fx-tab-max-height: 40px;
+    }
+
+    .tab-pane .tab-header-area {
+        -fx-padding: 0;
+    }
+
+    .tab-pane .tab {
+        -fx-background-color: transparent;
+        -fx-background-radius: 0;
+        -fx-border-width: 0 0 3 0;
+        -fx-border-color: transparent;
+        -fx-padding: 0 15px;
+    }
+
+    .tab-pane .tab:selected {
+        -fx-background-color: -fx-primary; /* Updated from -fx-surface */
+        -fx-border-color: -fx-primary;
+        -fx-text-fill: white; /* Updated */
+        -fx-font-weight: 500;
+        -fx-background-radius: -fx-default-border-radius -fx-default-border-radius 0 0; /* Added */
+    }
+
+    /* Tab 未选中时悬停效果 */
+    .tab-pane .tab:hover:not(:selected) {
+        -fx-background-color: derive(-fx-light-gray, -5%);
+    }
+
+    .tab-pane .tab-header-background {
+        -fx-background-color: -fx-light-gray;
+    }    /* ===== 表单和控件样式 ===== */
+    /* 按钮样式 - 现代化紧凑设计 */
+    .button {
+        -fx-background-color: -fx-primary;
+        -fx-text-fill: white;
+        -fx-font-weight: 500;
+        -fx-padding: 6px 16px; /* 缩小按钮尺寸 */
+        -fx-background-radius: -fx-button-border-radius;
+        -fx-cursor: hand;
+        -fx-effect: dropshadow(gaussian, -fx-shadow-color, 8, 0, 0, 1);
+        -fx-font-size: 12px; /* 缩小字体 */
+        -fx-border-width: 0;
+        -fx-min-height: 28px; /* 设置最小高度 */
+        -fx-pref-height: 28px;
+    }
+
+    .button:hover {
+        -fx-background-color: derive(-fx-primary, 15%);
+        -fx-effect: dropshadow(gaussian, -fx-shadow-hover, 12, 0, 0, 2);
+        -fx-translate-y: -0.5px;
+        -fx-scale-x: 1.01;
+        -fx-scale-y: 1.01;
+    }
+
+    .button:pressed {
+        -fx-background-color: -fx-primary-dark;
+        -fx-translate-y: 0px;
+        -fx-scale-x: 0.99;
+        -fx-scale-y: 0.99;
+        -fx-effect: dropshadow(gaussian, -fx-shadow-color, 4, 0, 0, 0.5);
+    }
+
+    .primary-button {
+        -fx-background-color: -fx-primary;
+    }
+
+    .secondary-button {
+        -fx-background-color: -fx-secondary;
+        -fx-text-fill: white;
+    }
+
+    .danger-button {
+        -fx-background-color: -fx-accent;
+    }    .warning-button {
+        -fx-background-color: -fx-warning;
+    }
+
+    .info-button {
+        -fx-background-color: -fx-info;
+    }
+
+    /* 文本输入框 - 现代化紧凑设计 */
+    .text-field, .text-area, .combo-box {
+        -fx-background-color: -fx-surface;
+        -fx-border-color: -fx-medium-gray;
+        -fx-border-radius: -fx-default-border-radius;
+        -fx-background-radius: -fx-default-border-radius;
+        -fx-padding: 6px 8px; /* 缩小内边距 */
+        -fx-border-width: 1px;
+        -fx-font-size: 11px; /* 缩小字体 */
+        -fx-text-fill: -fx-text-primary;
+        -fx-min-height: 36px; /* 设置最小高度 */
+        -fx-pref-height: 36px;
+    }
+
+    .text-field:focused, .text-area:focused, .combo-box:focused {
+        -fx-border-color: -fx-focus-ring-color;
+        -fx-effect: dropshadow(gaussian, rgba(0, 120, 212, 0.15), 6, 0, 0, 0);
+        -fx-border-width: 1.5px;
+        -fx-background-color: -fx-surface;
+    }
+
+    .form-field {
+        -fx-pref-height: 28px; /* 缩小表单字段高度 */
+    }
+
+    /* 标签样式 - 现代化 */
+    .label {
+        -fx-text-fill: -fx-text-primary;
+        -fx-font-size: 12px; /* 缩小字体 */
+    }
+
+    .form-label {
+        -fx-font-weight: 500; /* 减轻字重 */
+        -fx-text-fill: -fx-text-secondary;    }
+
+    .title-label {
+        -fx-font-size: 18px; /* 缩小标题字体 */
+        -fx-font-weight: 600;
+        -fx-padding: 8px 0; /* 缩小内边距 */
+        -fx-text-fill: -fx-primary-dark;
+    }
+
+    .subtitle-label {
+        -fx-font-size: 14px; /* 缩小副标题字体 */
+        -fx-font-weight: 500;
+        -fx-padding: 6px 0; /* 缩小内边距 */
+        -fx-text-fill: -fx-text-secondary;
+    }
+
+    /* 表单布局 - 紧凑设计 */
+    .form-grid {
+        -fx-hgap: 8px; /* 缩小间距 */
+        -fx-vgap: 12px; /* 缩小间距 */
+        -fx-padding: 8px; /* 缩小内边距 */
+    }
+
+    .button-container {
+        -fx-spacing: 8px; /* 缩小间距 */
+        -fx-padding: 12px 0; /* 缩小内边距 */
+    }    /* ===== 表格样式 ===== */
+    .table-view {
+        -fx-background-color: -fx-surface;
+        -fx-border-color: -fx-medium-gray;
+        -fx-border-radius: -fx-default-border-radius;
+        -fx-background-radius: -fx-default-border-radius;
+        -fx-border-width: 1px;
+    }
+
+    .table-view .column-header-background {
+        -fx-background-color: -fx-primary;
+        -fx-background-radius: -fx-default-border-radius -fx-default-border-radius 0 0;
+        -fx-padding: 3px 0; /* 缩小表头高度 */
+    }
+
+    .table-view .column-header, .table-view .filler {
+        -fx-background-color: transparent;
+        -fx-size: 32px; /* 缩小表头高度 */
+        -fx-border-width: 0 1px 0 0;
+        -fx-border-color: derive(-fx-primary, 30%);
+    }
+
+    .table-view .column-header .label {
+        -fx-text-fill: white;
+        -fx-font-weight: 500; /* 减轻字重 */
+        -fx-padding: 8px 6px; /* 缩小表头内边距 */
+        -fx-font-size: 12px; /* 缩小字体 */
+    }
+
+    .table-row-cell {
+        -fx-background-color: -fx-surface;
+        -fx-padding: 3px 0; /* 缩小行高 */
+        -fx-cell-size: 28px; /* 缩小单元格高度 */
+        -fx-border-color: -fx-light-gray;
+        -fx-border-width: 0 0 1 0;
+        -fx-alignment: center-left;
+        -fx-font-size: 12px; /* 缩小字体 */
+    }
+
+    .table-row-cell:odd {
+        -fx-background-color: -fx-surface-secondary;
+    }
+
+    .table-row-cell:selected {
+        -fx-background-color: rgba(0, 120, 212, 0.25); /* Updated from -fx-primary-alpha */
+        -fx-text-fill: -fx-primary-dark;
+        -fx-font-weight: 500;
+    }
+
+    .table-row-cell:hover:not(:selected) {
+        -fx-background-color: derive(-fx-surface-secondary, -5%);
+    }
+
+    .custom-table-view {
+        -fx-padding: 8px; /* 缩小内边距 */
+    }
+
+    /* ===== 状态指示样式 ===== */
+    .status-indicator {
+        -fx-border-radius: 50%;
+        -fx-background-radius: 50%;
+        -fx-min-width: 12px;
+        -fx-min-height: 12px;
+        -fx-max-width: 12px;
+        -fx-max-height: 12px;
+    }
+
+    .status-active {
+        -fx-background-color: -fx-secondary;
+    }
+
+    .status-inactive {
+        -fx-background-color: -fx-dark-gray;
+    }
+
+    .status-warning {
+        -fx-background-color: -fx-warning;
+    }
+
+    .status-error {
+        -fx-background-color: -fx-accent;
+    }
+
+    /* ===== 底部状态栏 ===== */
+    #HBox {
+        -fx-background-color: -fx-primary-dark;
+        -fx-border-width: 1px 0 0 0;
+        -fx-border-color: -fx-primary;
+    }
+
+    #HBox .label {
+        -fx-text-fill: white;
+        -fx-font-size: 12px;
+    }
+
+    /* ===== 滚动条样式 (新增) ===== */
+    .scroll-bar:horizontal, .scroll-bar:vertical {
+        -fx-background-color: transparent; /* 使滚动条背景透明 */
+        -fx-background-insets: 0;
+    }
+
+    .scroll-bar .thumb {
+        -fx-background-color: derive(-fx-dark-gray, 60%); /* 滑块颜色，更柔和 */
+        -fx-background-insets: 2;
+        -fx-background-radius: 0.5em; /* 圆角滑块 */
+    }
+
+    .scroll-bar .thumb:hover {
+        -fx-background-color: derive(-fx-dark-gray, 40%); /* 悬停时滑块颜色 */
+    }
+
+    /* 隐藏滚动条两端的箭头按钮 */
+    .scroll-bar .increment-button, .scroll-bar .decrement-button {
+        -fx-background-color: transparent;
+        -fx-background-radius: 0;
+        -fx-padding: 0;
+        -fx-min-width: 0;
+        -fx-pref-width: 0;
+        -fx-max-width: 0;
+        -fx-min-height: 0;
+        -fx-pref-height: 0;
+        -fx-max-height: 0;
+    }
+
+    .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+        -fx-shape: " "; /* 隐藏箭头形状 */
+        -fx-padding: 0;
+    }
+
+
+    /* ===== 响应式设计 ===== */
+    .responsive-container {
+        -fx-spacing: 10px;
+        -fx-fill-width: true;
+    }
+
+    @media (max-width: 800px) {
+        .responsive-container {
+            -fx-orientation: vertical;
+        }
+    }
+
+    /* ===== 现代化动画和微交互效果 ===== */
+    
+    /* 全局动画过渡 - 类似 Fluent Design */
+    .button, .text-field, .text-area, .combo-box, .card, .table-row-cell {
+        -fx-transition: all 150ms EASE_BOTH; /* Changed cubic-bezier to EASE_BOTH */
+    }
+
+    /* 按钮按下时的涟漪效果模拟 */
+    .button:pressed {
+        -fx-background-color: derive(-fx-primary, -20%);
+        -fx-effect: innershadow(gaussian, rgba(255, 255, 255, 0.1), 6, 0, 0, 1);
+    }
+
+    /* 输入框获得焦点时的光晕效果 */
+    .text-field:focused, .text-area:focused, .combo-box:focused {
+        -fx-background-color: derive(-fx-surface, 3%);
+        -fx-scale-x: 1.005;
+        -fx-scale-y: 1.005;
+    }
+
+    /* 表格行悬停时的微妙放大效果 */
+    .table-row-cell:hover {
+        -fx-scale-x: 1.002;
+        -fx-scale-y: 1.002;
+    }
+
+    /* 卡片点击时的反馈效果 */
+    .card:pressed {
+        -fx-translate-y: 1px;
+        -fx-effect: dropshadow(gaussian, -fx-shadow-color, 8, 0, 0, 1);
+        -fx-scale-x: 0.998;
+        -fx-scale-y: 0.998;
+    }
+
+    /* 现代化导航菜单样式 */
+    .menu-bar {
+        -fx-background-color: derive(-fx-primary, -10%);
+        -fx-padding: 1px;
+        -fx-border-width: 0 0 1 0;
+        -fx-border-color: derive(-fx-primary, 20%);
+    }
+
+    .menu-bar .menu .label {
+        -fx-text-fill: white;
+        -fx-font-size: 12px;
+        -fx-font-weight: 500;
+    }
+
+    .menu-bar .menu:hover {
+        -fx-background-color: derive(-fx-primary, 15%);
+        -fx-background-radius: 4px;
+    }
+
+    /* 树视图现代化 */
+    .tree-view {
+        -fx-background-color: -fx-surface-secondary;
+        -fx-background-insets: 0;
+        -fx-padding: 6px 3px;
+        -fx-border-width: 0 1 0 0;
+        -fx-border-color: -fx-light-gray;
+    }
+
+    .tree-cell {
+        -fx-background-color: transparent;
+        -fx-padding: 6px 8px;
+        -fx-text-fill: -fx-text-primary;
+        -fx-font-size: 12px;
+        -fx-background-radius: 3px;
+    }
+
+    .tree-cell:selected {
+        -fx-background-color: -fx-primary;
+        -fx-text-fill: white;
+        -fx-background-radius: -fx-default-border-radius; /* Updated from 3px */
+        -fx-effect: dropshadow(gaussian, rgba(0, 120, 212, 0.3), 4, 0, 0, 1);
+    }
+
+    .tree-cell:hover:not(:selected) {
+        -fx-background-color: derive(-fx-surface-secondary, -8%);
+        -fx-background-radius: 3px;
+    }
+
+    /* Tab 面板现代化 */
+    .tab-pane {
+        -fx-tab-min-height: 32px; /* 缩小高度 */
+        -fx-tab-max-height: 32px;
+    }
+
+    .tab-pane .tab-header-area {
+        -fx-padding: 0;
+        -fx-border-width: 0 0 1 0;
+        -fx-border-color: -fx-light-gray;
+    }
+
+    .tab-pane .tab {
+        -fx-background-color: transparent;
+        -fx-background-radius: 0;
+        -fx-border-width: 0 0 2 0;
+        -fx-border-color: transparent;
+        -fx-padding: 0 12px; /* 缩小内边距 */
+        -fx-font-size: 12px; /* 缩小字体 */
+    }
+
+    .tab-pane .tab:selected {
+        -fx-background-color: -fx-primary; /* Updated from -fx-surface */
+        -fx-border-color: -fx-primary;
+        -fx-text-fill: white; /* Updated */
+        -fx-font-weight: 500;
+        -fx-background-radius: -fx-default-border-radius -fx-default-border-radius 0 0; /* Added */
+    }
+
+    .tab-pane .tab:hover:not(:selected) {
+        -fx-background-color: derive(-fx-surface-secondary, -3%);
+        -fx-border-color: derive(-fx-primary, 50%);
+    }
+
+    .tab-pane .tab-header-background {
+        -fx-background-color: -fx-surface-tertiary;
+    }
+
+    /* 状态指示器现代化 */
+    .status-indicator {
+        -fx-border-radius: 50%;
+        -fx-background-radius: 50%;
+        -fx-min-width: 10px; /* 缩小尺寸 */
+        -fx-min-height: 10px;
+        -fx-max-width: 10px;
+        -fx-max-height: 10px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 2, 0, 0, 0.5);
+    }
+
+    .status-active {
+        -fx-background-color: -fx-success;
+    }
+
+    .status-inactive {
+        -fx-background-color: -fx-text-secondary;
+    }
+
+    .status-warning {
+        -fx-background-color: -fx-warning;
+    }
+
+    .status-error {
+        -fx-background-color: -fx-accent;
+    }
+
+    /* 头部容器现代化 */
+    .header-container {
+        -fx-background-color: -fx-primary;
+        -fx-padding: 6px 12px; /* 缩小内边距 */
+        -fx-spacing: 8px;
+        -fx-border-width: 0 0 1 0;
+        -fx-border-color: derive(-fx-primary, 20%);
+    }
+
+    .header-container .label {
+        -fx-text-fill: white;
+        -fx-font-size: 13px; /* 缩小字体 */
+        -fx-font-weight: 500;
+    }
+
+    /* 底部状态栏现代化 */
+    #HBox {
+        -fx-background-color: -fx-surface-tertiary;
+        -fx-border-width: 1px 0 0 0;
+        -fx-border-color: -fx-light-gray;
+        -fx-padding: 4px 8px; /* 缩小内边距 */
+    }
+
+    #HBox .label {
+        -fx-text-fill: -fx-text-secondary;
+        -fx-font-size: 11px; /* 缩小字体 */
+    }
+
+    /* 滚动条现代化 - Fluent Design 风格 */
+    .scroll-bar:horizontal, .scroll-bar:vertical {
+        -fx-background-color: transparent;
+        -fx-background-insets: 0;
+        -fx-padding: 0;
+    }
+
+    .scroll-bar:horizontal {
+        -fx-pref-height: 12px; /* 缩小滚动条 */
+    }
+
+    .scroll-bar:vertical {
+        -fx-pref-width: 12px; /* 缩小滚动条 */
+    }
+
+    .scroll-bar .thumb {
+        -fx-background-color: derive(-fx-text-secondary, 40%);
+        -fx-background-insets: 2;
+        -fx-background-radius: 6px; /* 更圆润的滚动条 */
+        -fx-border-radius: 6px;
+    }
+
+    .scroll-bar .thumb:hover {
+        -fx-background-color: derive(-fx-text-secondary, 20%);
+    }
+
+    .scroll-bar .thumb:pressed {
+        -fx-background-color: -fx-text-secondary;
+    }
+
+    /* 隐藏滚动条箭头 */
+    .scroll-bar .increment-button, .scroll-bar .decrement-button {
+        -fx-background-color: transparent;
+        -fx-background-radius: 0;
+        -fx-padding: 0;
+        -fx-min-width: 0;
+        -fx-pref-width: 0;
+        -fx-max-width: 0;
+        -fx-min-height: 0;
+        -fx-pref-height: 0;
+        -fx-max-height: 0;
+    }
+
+    .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+        -fx-shape: " ";
+        -fx-padding: 0;
+    }
+
+    /* 微妙的玻璃态效果 - 类似 Fluent Design */
+    .card.glass-effect {
+        -fx-background-color: rgba(255, 255, 255, 0.85);
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 20, 0, 0, 8),
+                    innershadow(gaussian, rgba(255, 255, 255, 0.2), 1, 0, 0, 1);
+    }
+
+    /* 响应式布局优化 */
+    .responsive-container {
+        -fx-spacing: 8px; /* 缩小间距 */
+        -fx-fill-width: true;
+        -fx-padding: 8px; /* 缩小内边距 */
+    }
+
+    /* 现代化工具提示样式 */
+    .tooltip {
+        -fx-background-color: derive(-fx-text-primary, 90%);
+        -fx-text-fill: white;
+        -fx-background-radius: 4px;
+        -fx-padding: 4px 8px;
+        -fx-font-size: 11px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    }
