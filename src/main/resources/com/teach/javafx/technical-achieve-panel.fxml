@@ -63,7 +63,7 @@
 
     <!-- 底部表单 -->
     <bottom>
-        <VBox alignment="TOP_CENTER" spacing="15.0">
+        <VBox alignment="TOP_CENTER" spacing="15.0" prefHeight="400">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
