@@ -16,7 +16,6 @@ import com.teach.javafx.util.CommonMethod;
 import com.teach.javafx.util.DateTimeTool;
 import com.teach.javafx.controller.base.MessageDialog;
 
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,6 +55,13 @@ public class SocialPracticeController extends ToolController {
     @FXML
     private TextField searchField;  // 查询输入域
 
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button saveButton;
+
     private Integer id = null;  // 当前社会实践编号主键
     private ArrayList<Map> practiceList = new ArrayList<>();  // 实践数据列表
     private ObservableList<Map> observableList = FXCollections.observableArrayList();
@@ -70,12 +76,12 @@ public class SocialPracticeController extends ToolController {
 
     @FXML
     public void initialize() {
-        JwtResponse jwtResponse = AppStore. getJwt();
+        JwtResponse jwtResponse = AppStore.getJwt();
         String currentStudentId = String.valueOf(jwtResponse.getId());
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
-        res = HttpRequestUtil.request("/api/socialPractice/getPracticeList", req); //从后台获取所有学生信息列表集合（现在是获取所有列表，因为要查询的为‘’，也就是where中的条?1=‘’）
+        res = HttpRequestUtil.request("/api/socialPractice/getPracticeList", req);
         if (res != null && res.getCode() == 0) {
             ArrayList<Map> filteredList = new ArrayList<>();
             for(Map record : (ArrayList<Map>) res.getData()){
@@ -83,8 +89,10 @@ public class SocialPracticeController extends ToolController {
                     filteredList.add(record);
                 }
             }
-            practiceList = filteredList;//把得到的键值列表返回
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) practiceList = (ArrayList<Map>) res.getData();
+            practiceList = filteredList;
+            if (jwtResponse.getRole().equals("ROLE_ADMIN") || jwtResponse.getRole().equals("ROLE_TEACHER")) {
+                practiceList = (ArrayList<Map>) res.getData();
+            }
         }
 
         studentIdColumn.setCellValueFactory(new MapValueFactory<>("studentId"));
@@ -101,12 +109,23 @@ public class SocialPracticeController extends ToolController {
         ObservableList<Integer> list = tsm.getSelectedIndices();
         list.addListener(this::onTableRowSelect);
         setTableViewData();
+
+        // 根据用户角色控制按钮状态
+        if (jwtResponse.getRole().equals("ROLE_STUDENT")) {
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+            saveButton.setDisable(true);
+        } else {
+            addButton.setDisable(false);
+            deleteButton.setDisable(false);
+            saveButton.setDisable(false);
+        }
     }
 
 
     public void clearPanel() {
         id = null;
-        timePicker.getEditor().setText("");//是这么用吗？还是？timePicker.setValue(null);
+        timePicker.getEditor().setText("");
         studentIdField.setText("");
         locationField.setText("");
         organizationField.setText("");
@@ -147,7 +166,7 @@ public class SocialPracticeController extends ToolController {
 
     @FXML
     protected void onQueryButtonClick() {
-        JwtResponse jwtResponse = AppStore. getJwt();
+        JwtResponse jwtResponse = AppStore.getJwt();
         String currentStudentId = String.valueOf(jwtResponse.getId());
         String search = searchField.getText();
         DataRequest req = new DataRequest();
@@ -161,7 +180,9 @@ public class SocialPracticeController extends ToolController {
                 }
             }
             practiceList = filteredList;
-            if (jwtResponse.getRole().equals("ROLE_ADMIN")) practiceList = (ArrayList<Map>) res.getData();
+            if (jwtResponse.getRole().equals("ROLE_ADMIN") || jwtResponse.getRole().equals("ROLE_TEACHER")) {
+                practiceList = (ArrayList<Map>) res.getData();
+            }
             setTableViewData();
         }
     }
@@ -170,6 +191,7 @@ public class SocialPracticeController extends ToolController {
     protected void onAddButtonClick() {
         clearPanel();
     }
+
     @FXML
     protected void onDeleteButtonClick() {
         Map form = dataTableView.getSelectionModel().getSelectedItem();
@@ -233,8 +255,4 @@ public class SocialPracticeController extends ToolController {
     public void doDelete() {
         onDeleteButtonClick();
     }
-
-
-
-
 }

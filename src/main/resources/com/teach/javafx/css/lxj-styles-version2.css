@@ -84,7 +84,7 @@
     }
 
     .table-row-cell:selected {
-        -fx-background-color: derive(-fx-primary-color, 70%);
+        -fx-background-color: derive(-fx-primary-color, 30%);
         -fx-text-fill: -fx-dark-color;
     }
 
