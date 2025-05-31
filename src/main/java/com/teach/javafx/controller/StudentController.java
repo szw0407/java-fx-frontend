@@ -64,8 +64,8 @@ public class StudentController extends ToolController {
     private TableColumn<Map, String> phoneColumn; //学生信息表 电话列
     @FXML
     private TableColumn<Map, String> addressColumn;//学生信息表 地址列
-    @FXML
-    private Button photoButton;  //照片显示和上传按钮
+//    @FXML
+//    private Button photoButton;  //照片显示和上传按钮
 
     @FXML
     private TextField numField; //学生信息  学号输入域
@@ -120,7 +120,7 @@ public class StudentController extends ToolController {
         photoImageView = new ImageView();
         photoImageView.setFitHeight(100);
         photoImageView.setFitWidth(100);
-        photoButton.setGraphic(photoImageView);
+//        photoButton.setGraphic(photoImageView);
         DataResponse res;
         DataRequest req = new DataRequest();
         req.add("numName", "");
