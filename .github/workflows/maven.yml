@@ -30,7 +30,15 @@ jobs:
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
     - name: Zip the output
-      run: zip -r javafx.zip target/javafx
+      run: |
+        $zipFile = "javafx.zip"
+        $outputDir = "target\jlink"
+        if (Test-Path $zipFile) {
+            Remove-Item $zipFile
+        }
+        Compress-Archive -Path "$outputDir\*" -DestinationPath $zipFile -Force
+        Write-Host "Created zip file: $zipFile"
+        
     - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
