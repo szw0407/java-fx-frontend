@@ -13,15 +13,11 @@ package com.teach.javafx.controller;
                     import javafx.geometry.Pos;
                     import javafx.scene.control.*;
                     import javafx.scene.input.KeyCode;
-                    import javafx.scene.input.KeyEvent;
-                    import javafx.scene.layout.HBox;
+                    import javafx.scene.input.KeyEvent;                    import javafx.scene.layout.HBox;
                     import javafx.scene.layout.VBox;
-                    import javafx.scene.text.Font;  // 添加缺少的Font导入
                     import javafx.scene.web.WebView;
                     import org.json.JSONArray;
-                    import org.json.JSONObject;
-
-                    import java.net.URI;
+                    import org.json.JSONObject;                    import java.net.URI;
                     import java.net.http.HttpClient;
                     import java.net.http.HttpRequest;
                     import java.net.http.HttpResponse;
@@ -33,6 +29,7 @@ package com.teach.javafx.controller;
                     import java.util.List;
                     import java.util.Map;
                     import java.util.concurrent.CompletableFuture;
+                    import javax.net.ssl.SSLContext;
 
                     public class ChatStudentController {
 
@@ -45,21 +42,38 @@ package com.teach.javafx.controller;
                         @FXML
                         private HBox loadingIndicator;
                         @FXML
-                        private Button sendButton;
-                        @FXML
+                        private Button sendButton;                        @FXML
                         private Button clearChatButton;
 
                         private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
                         private static final String OPENAI_API_URL = "https://deepseek.wxmbz.com/v1/chat/completions";
-                        private static final String API_KEY = "sk-sFkRY3HYKTXvWWDheAPdVYwabHHAgiF1Q0nw6FbvJSSaoG0n";
 
-                        // 创建更稳健的HttpClient实例，增加超时时间
-                        private final HttpClient httpClient = HttpClient.newBuilder()
-                                .connectTimeout(Duration.ofSeconds(20))
-                                .build();
+                        // 创建支持TLS 1.3的HttpClient实例
+                        private final HttpClient httpClient = createTls13HttpClient();
 
                         // 添加发送状态属性
                         private final BooleanProperty isSending = new SimpleBooleanProperty(false);
+
+                        // 创建支持TLS 1.3的HttpClient
+                        private HttpClient createTls13HttpClient() {
+                            try {
+                                // 创建支持TLS 1.3的SSLContext
+                                SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
+                                sslContext.init(null, null, null);
+                                
+                                return HttpClient.newBuilder()
+                                        .connectTimeout(Duration.ofSeconds(20))
+                                        .sslContext(sslContext)
+                                        .version(HttpClient.Version.HTTP_2)  // HTTP/2 与 TLS 1.3 配合更好
+                                        .build();
+                            } catch (Exception e) {
+                                // 如果TLS 1.3不可用，回退到默认配置
+                                System.err.println("TLS 1.3 不可用，回退到默认SSL配置: " + e.getMessage());
+                                return HttpClient.newBuilder()
+                                        .connectTimeout(Duration.ofSeconds(20))
+                                        .build();
+                            }
+                        }
 
                         @FXML
                         public void initialize() {
@@ -295,7 +309,6 @@ package com.teach.javafx.controller;
                                     HttpRequest request = HttpRequest.newBuilder()
                                             .uri(URI.create(OPENAI_API_URL))
                                             .header("Content-Type", "application/json")
-                                            .header("Authorization", "Bearer " + API_KEY)
                                             .timeout(Duration.ofSeconds(60))
                                             .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                                             .build();
@@ -379,15 +392,7 @@ package com.teach.javafx.controller;
                             senderLabel.getStyleClass().add("sender-label");
 
                             Label timeLabel = new Label(LocalDateTime.now().format(TIME_FORMATTER));
-                            timeLabel.getStyleClass().add("time-label");
-
-                            WebView webView = new WebView();
-                            // 尝试加载字体
-                            try {
-                                Font.loadFont(getClass().getResourceAsStream("/com/teach/javafx/fonts/NotoSans.ttf"), 14);
-                            } catch (Exception e) {
-                                System.out.println("加载字体失败: " + e.getMessage());
-                            }
+                            timeLabel.getStyleClass().add("time-label");                            WebView webView = new WebView();
                             webView.getEngine().loadContent(renderMarkdownToHtml(message), "text/html");
                             webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
                             webView.setPrefHeight(calculateTextHeight(message, 5000));
@@ -428,11 +433,6 @@ package com.teach.javafx.controller;
                             org.commonmark.renderer.html.HtmlRenderer renderer = org.commonmark.renderer.html.HtmlRenderer.builder().build();
                             String htmlContent = renderer.render(parser.parse(markdown));
 
-                            // 使用FontUtil工具生成base64编码的字体CSS
-                            String base64FontFace = com.teach.javafx.util.FontUtil.generateBase64FontFace(
-                                "Noto Sans",
-                                "/com/teach/javafx/fonts/NotoSans.ttf"
-                            );
 
                             // 包装 HTML 内容，设置字体和样式
                             return """
@@ -440,7 +440,6 @@ package com.teach.javafx.controller;
                                 <html>
                                 <head>
                                     <style>
-                                        %s
                                         body {
                                             font-family: 'Noto Sans', sans-serif;
                                             font-size: 14px;
@@ -468,7 +467,7 @@ package com.teach.javafx.controller;
                                     %s
                                 </body>
                                 </html>
-                                """.formatted(base64FontFace, htmlContent);
+                                """.formatted(htmlContent);
                         }
 
                         // 解析API响应
