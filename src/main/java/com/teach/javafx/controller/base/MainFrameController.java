@@ -253,7 +253,7 @@ public class MainFrameController {
             if(scene == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(name + ".fxml"));
                 try {
-                    scene = new Scene(fxmlLoader.load(), 1024, 768);
+                    scene = new Scene(fxmlLoader.load());
                     sceneMap.put(name, scene);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -396,10 +396,12 @@ public class MainFrameController {
         }
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("base/main-frame.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), -1, -1);
+            // logout
+            MainApplication.loginStage("正在切换账户", new Scene(new Label("正在切换账户，请稍候...")));
+            Scene scene = new Scene(fxmlLoader.load(), -1,-1);
             AppStore.setMainFrameController((MainFrameController) fxmlLoader.getController());
+            // totally reload and re-login
             MainApplication.resetStage("教学管理系统", scene);
-            MainApplication.getMainStage().setMaximized(true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
