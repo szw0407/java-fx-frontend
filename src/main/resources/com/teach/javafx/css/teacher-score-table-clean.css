@@ -1,0 +1,518 @@
+/* Teacher Score Table Panel - Modern Material & Fluent Design */
+/* 整理版本 - 消除冲突和重复定义 */
+
+/* ============================================
+   ROOT & GLOBAL STYLES
+   ============================================ */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* ============================================
+   BORDER PANE LAYOUT
+   ============================================ */
+.border-pane {
+    -fx-background-color: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 16, 0, 0, 4);
+    -fx-border-radius: 12px;
+}
+
+/* ============================================
+   TOP PANEL (Controls Area)
+   ============================================ */
+.h-box {
+    -fx-background-color: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-border-color: transparent transparent #e9ecef transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 24px 12px 12px 12px;
+}
+
+.flow-pane {
+    -fx-background-color: transparent;
+    -fx-hgap: 8px;
+    -fx-vgap: 6px;
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
+.label {
+    -fx-text-fill: #495057;
+    -fx-font-weight: 500;
+    -fx-font-size: 12px;
+    -fx-padding: 0 3px 0 0;
+}
+
+/* ============================================
+   BUTTONS - Material Design Inspired
+   ============================================ */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #007bff 0%, #0056b3 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: 500;
+    -fx-font-size: 12px;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.3), 6, 0, 0, 1);
+    -fx-min-width: 60px;
+    -fx-pref-height: 30px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #0056b3 0%, #004085 100%);
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 12, 0, 0, 4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.button:focused {
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.4), 12, 0, 0, 0);
+}
+
+/* Reset Button - Secondary Style */
+.button:contains("重置") {
+    -fx-background-color: linear-gradient(to bottom, #6c757d 0%, #495057 100%);
+    -fx-effect: dropshadow(gaussian, rgba(108,117,125,0.3), 8, 0, 0, 2);
+}
+
+.button:contains("重置"):hover {
+    -fx-background-color: linear-gradient(to bottom, #495057 0%, #343a40 100%);
+    -fx-effect: dropshadow(gaussian, rgba(108,117,125,0.4), 12, 0, 0, 4);
+}
+
+/* Statistics Button - Accent Style */
+.button:contains("查看统计") {
+    -fx-background-color: linear-gradient(to bottom, #28a745 0%, #1e7e34 100%);
+    -fx-effect: dropshadow(gaussian, rgba(40,167,69,0.3), 8, 0, 0, 2);
+}
+
+.button:contains("查看统计"):hover {
+    -fx-background-color: linear-gradient(to bottom, #1e7e34 0%, #155724 100%);
+    -fx-effect: dropshadow(gaussian, rgba(40,167,69,0.4), 12, 0, 0, 4);
+}
+
+/* ============================================
+   COMBO BOXES - Fluent Design Inspired
+   ============================================ */
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 9px 11px;
+    -fx-min-width: 120px;
+    -fx-pref-height: 26px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.combo-box:focused {
+    -fx-border-color: #007bff;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.25), 8, 0, 0, 2);
+}
+
+.combo-box:hover {
+    -fx-border-color: #007bff;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #6c757d;
+    -fx-shape: "M7 10l5 5 5-5z";
+    -fx-scale-shape: true;
+    -fx-min-width: 12px;
+    -fx-min-height: 8px;
+}
+
+.combo-box:hover .arrow {
+    -fx-background-color: #007bff;
+}
+
+/* ComboBox Popup */
+.combo-box-popup .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 16, 0, 0, 8);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #495057;
+    -fx-padding: 8px 12px;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
+/* ============================================
+   TEXT FIELD - Material Design
+   ============================================ */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ced4da;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 4px 8px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #495057;
+    -fx-min-width: 80px;
+    -fx-pref-height: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0, 0, 1);
+}
+
+.text-field:focused {
+    -fx-border-color: #007bff;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.25), 8, 0, 0, 2);
+}
+
+.text-field:hover {
+    -fx-border-color: #007bff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 6, 0, 0, 2);
+}
+
+/* ============================================
+   TABLE VIEW - Modern Data Table
+   ============================================ */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0 0 12px 12px;
+    -fx-table-cell-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    -fx-border-color: transparent transparent #dee2e6 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent #dee2e6 transparent transparent;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 10px 6px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #495057;
+    -fx-font-weight: 600;
+    -fx-font-size: 12px;
+}
+
+.table-view .column-header:last {
+    -fx-border-color: transparent;
+}
+
+/* Table Rows */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent transparent #f8f9fa transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4px 0;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #e3f2fd;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.1), 4, 0, 0, 1);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #bbdefb;
+    -fx-text-fill: #0d47a1;
+    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.2), 8, 0, 0, 2);
+}
+
+/* Table Cells */
+.table-cell {
+    -fx-padding: 6px;
+    -fx-text-fill: #495057;
+    -fx-border-color: transparent;
+    -fx-font-size: 12px;
+}
+
+.table-cell:selected {
+    -fx-text-fill: #0d47a1;
+}
+
+/* ============================================
+   OPERATION BUTTONS IN TABLE (编辑/删除)
+   ============================================ */
+.table-cell .button {
+    -fx-min-width: 45px;
+    -fx-pref-height: 24px;
+    -fx-padding: 3px 6px;
+    -fx-font-size: 11px;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);
+}
+
+/* ============================================
+   SCROLL BARS - Fluent Design
+   ============================================ */
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 6px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 6px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #ced4da;
+    -fx-background-radius: 6px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 6px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #adb5bd;
+}
+
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #6c757d;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+/* ============================================
+   RESPONSIVE DESIGN UTILITIES
+   ============================================ */
+@media (max-width: 800px) {
+    .flow-pane {
+        -fx-hgap: 8px;
+        -fx-vgap: 6px;
+    }
+    
+    .button {
+        -fx-min-width: 70px;
+        -fx-pref-height: 32px;
+        -fx-font-size: 12px;
+        -fx-padding: 6px 12px;
+    }
+    
+    .combo-box,
+    .text-field {
+        -fx-min-width: 100px;
+        -fx-pref-height: 32px;
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+.root.dark-mode {
+    -fx-background-color: #1a1a1a;
+}
+
+.dark-mode .border-pane {
+    -fx-background-color: linear-gradient(to bottom, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+.dark-mode .h-box {
+    -fx-background-color: linear-gradient(to bottom, #2d2d2d 0%, #262626 100%);
+    -fx-border-color: transparent transparent #404040 transparent;
+}
+
+.dark-mode .label {
+    -fx-text-fill: #e9ecef;
+}
+
+.dark-mode .table-view {
+    -fx-background-color: #2d2d2d;
+}
+
+.dark-mode .table-row-cell {
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: transparent transparent #404040 transparent;
+}
+
+.dark-mode .table-row-cell:odd {
+    -fx-background-color: #262626;
+}
+
+.dark-mode .table-cell {
+    -fx-text-fill: #e9ecef;
+}
+
+.dark-mode .combo-box,
+.dark-mode .text-field {
+    -fx-background-color: #404040;
+    -fx-border-color: #6c757d;
+    -fx-text-fill: #e9ecef;
+}
+
+/* ============================================
+   LOADING INDICATORS & NOTIFICATIONS
+   ============================================ */
+.loading-indicator {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+}
+
+.progress-bar {
+    -fx-background-color: #e9ecef;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 6px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #007bff 0%, #0056b3 100%);
+    -fx-background-radius: 4px;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.notification-toast {
+    -fx-background-color: rgba(40, 167, 69, 0.95);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 12px 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 4);
+}
+
+.notification-toast .label {
+    -fx-text-fill: white;
+    -fx-font-weight: 500;
+}
+
+.notification-toast.error {
+    -fx-background-color: rgba(220, 53, 69, 0.95);
+}
+
+.notification-toast.warning {
+    -fx-background-color: rgba(255, 193, 7, 0.95);
+}
+
+.notification-toast.warning .label {
+    -fx-text-fill: #212529;
+}
+
+/* ============================================
+   DIALOG AND CARD STYLES
+   ============================================ */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 8);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to right, #007bff 0%, #0056b3 100%);
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-padding: 16px;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content {
+    -fx-padding: 20px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 0 12px 12px;
+}
+
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0, 0, 2);
+    -fx-padding: 16px;
+}
+
+.card-header {
+    -fx-background-color: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-border-color: transparent transparent #dee2e6 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 12px 16px;
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #495057;
+}
+
+.card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6c757d;
+    -fx-padding: 4px 0 0 0;
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+.high-contrast .button {
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2px;
+}
+
+.high-contrast .table-view {
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2px;
+}

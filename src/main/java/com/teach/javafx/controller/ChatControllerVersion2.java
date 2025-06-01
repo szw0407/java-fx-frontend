@@ -11,7 +11,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,6 +24,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.CompletableFuture;
+import javax.net.ssl.SSLContext;
 
 public class ChatControllerVersion2 {
 
@@ -42,13 +42,10 @@ public class ChatControllerVersion2 {
     private Button clearChatButton;
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    private static final String OPENAI_API_URL = "https://deepseek.wxmbz.com/v1/chat/completions";
-    private static final String API_KEY = "sk-sFkRY3HYKTXvWWDheAPdVYwabHHAgiF1Q0nw6FbvJSSaoG0n";
+    private static final String OPENAI_API_URL = "https://deepseek.wxmbz.com/v1/chat/completions";    private static final String API_KEY = "sk-sFkRY3HYKTXvWWDheAPdVYwabHHAgiF1Q0nw6FbvJSSaoG0n";
 
-    // 创建更稳健的HttpClient实例，增加超时时间
-    private final HttpClient httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(20))  // 增加连接超时
-            .build();
+    // 创建支持TLS 1.3的HttpClient实例
+    private final HttpClient httpClient = createTls13HttpClient();
 
     // 添加发送状态属性
     private final BooleanProperty isSending = new SimpleBooleanProperty(false);
@@ -334,6 +331,27 @@ webView.getEngine().loadContent("<html><body style='margin:0;padding:0;backgroun
         } catch (Exception e) {
             e.printStackTrace();
             return "解析响应失败: " + e.getMessage();
+        }
+    }
+
+    // 创建支持TLS 1.3的HttpClient
+    private HttpClient createTls13HttpClient() {
+        try {
+            // 创建支持TLS 1.3的SSLContext
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
+            sslContext.init(null, null, null);
+            
+            return HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(20))
+                    .sslContext(sslContext)
+                    .version(HttpClient.Version.HTTP_2)  // HTTP/2 与 TLS 1.3 配合更好
+                    .build();
+        } catch (Exception e) {
+            // 如果TLS 1.3不可用，回退到默认配置
+            System.err.println("TLS 1.3 不可用，回退到默认SSL配置: " + e.getMessage());
+            return HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(20))
+                    .build();
         }
     }
 }

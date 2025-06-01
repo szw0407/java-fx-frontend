@@ -67,8 +67,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
-            </plugin>
-            <plugin>
+            </plugin>            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
@@ -76,6 +75,13 @@
                     <jlinkImageName>javafx</jlinkImageName>
                     <launcher>launcher</launcher>
                     <mainClass>com.teach.javafx.MainApplication</mainClass>
+                    <jlinkExecutable>${java.home}/bin/jlink</jlinkExecutable>
+                    <additionalModules>
+                        <additionalModule>jdk.crypto.ec</additionalModule>
+                        <additionalModule>jdk.crypto.cryptoki</additionalModule>
+                        <additionalModule>java.security.jgss</additionalModule>
+                        <additionalModule>jdk.security.auth</additionalModule>
+                    </additionalModules>
                 </configuration>
             </plugin>
         </plugins>

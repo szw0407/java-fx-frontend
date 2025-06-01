@@ -92,9 +92,11 @@ public class PostController extends ToolController {
         titleColumn.setCellValueFactory(new MapValueFactory<>("title"));
         userNameColumn.setCellValueFactory(new MapValueFactory<>("userName"));
         createTimeColumn.setCellValueFactory(new MapValueFactory<>("createTime"));
+        searchTextField.setPromptText("请输入帖子标题搜索");
 
         // 新增是否置顶列
         TableColumn<Map, String> isTopColumn = new TableColumn<>("是否置顶");
+        isTopColumn.setMinWidth(100);
         isTopColumn.setCellValueFactory(cellData -> {
             Boolean isTop = (Boolean) cellData.getValue().get("isTop");
             return new SimpleStringProperty(isTop != null && isTop ? "是" : "否");
