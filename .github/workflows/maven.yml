@@ -23,21 +23,12 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
-    - name: Zip the output
-      run: |
-        zipFile="javafx-linux.zip"
-        outputDir="target/javafx"
-        if [ -f "$zipFile" ]; then
-            rm "$zipFile"
-        fi
-        cd "$outputDir" && zip -r "../../$zipFile" . && cd ../..
-        echo "Created zip file: $zipFile"
         
     - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-linux-output
-        path: javafx-linux.zip
+        name: javafx-linux
+        path: target/javafx
 
   build-macos:
     runs-on: macos-latest
@@ -52,21 +43,12 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
-    - name: Zip the output
-      run: |
-        zipFile="javafx-macos.zip"
-        outputDir="target/javafx"
-        if [ -f "$zipFile" ]; then
-            rm "$zipFile"
-        fi
-        cd "$outputDir" && zip -r "../../$zipFile" . && cd ../..
-        echo "Created zip file: $zipFile"
         
     - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-macos-output
-        path: javafx-macos.zip
+        name: javafx-macos
+        path: target/javafx
 
   build-windows:
     runs-on: windows-latest
@@ -81,20 +63,11 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
-    - name: Zip the output
-      run: |
-        $zipFile = "javafx-windows.zip"
-        $outputDir = "target\javafx"
-        if (Test-Path $zipFile) {
-            Remove-Item $zipFile
-        }
-        Compress-Archive -Path "$outputDir\*" -DestinationPath $zipFile -Force
-        Write-Host "Created zip file: $zipFile"
         
     - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-windows-output
-        path: javafx-windows.zip
+        name: javafx-windows
+        path: target/javafx
         
         
