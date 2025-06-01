@@ -1,107 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-          <?import javafx.geometry.Insets?>
-          <?import javafx.scene.control.*?>
-          <?import javafx.scene.layout.*?>
-          <?import javafx.scene.text.Text?>
-          <?import java.net.URL?>
+                          <?import javafx.geometry.Insets?>
+                          <?import javafx.scene.control.*?>
+                          <?import javafx.scene.layout.*?>
+                          <?import javafx.scene.text.Text?>
+                          <?import java.net.URL?>
 
-          <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-                fx:controller="com.teach.javafx.controller.StudentLeaveStudentController"
-                spacing="20" styleClass="main-container">
+                          <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+                                fx:controller="com.teach.javafx.controller.StudentLeaveStudentController"
+                                spacing="20" styleClass="main-container"
+                                prefHeight="700" maxHeight="700"> <!-- 添加固定高度 -->
 
-              <stylesheets>
-                  <URL value="@css/leave-style.css" />
-              </stylesheets>
+                              <stylesheets>
+                                  <URL value="@css/leave-style.css" />
+                              </stylesheets>
 
-              <HBox styleClass="header-container">
-                  <Label text="学生请假申请系统" styleClass="page-title"/>
-                  <Region HBox.hgrow="ALWAYS" />
-                  <Button text="刷新数据" onAction="#refreshData" styleClass="refresh-button"/>
-              </HBox>
+                              <HBox styleClass="header-container">
+                                  <Label text="学生请假申请系统" styleClass="page-title"/>
+                                  <Region HBox.hgrow="ALWAYS" />
+                                  <Button text="刷新数据" onAction="#refreshData" styleClass="refresh-button"/>
+                              </HBox>
 
-              <!-- 请假申请表单卡片 - 可伸缩 -->
-              <TitledPane text="新建请假申请（离开此页面前请折叠）" expanded="true" styleClass="card">
-                  <VBox>
-                      <Text styleClass="instruction-text"
-                            text="请填写以下信息完成请假申请，带*的为必填项"/>
+                              <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" fitToHeight="true"> <!-- 添加ScrollPane确保可滚动 -->
+                                  <VBox spacing="20">
+                                      <!-- 请假申请表单卡片 - 默认折叠 -->
+                                      <TitledPane text="新建请假申请（点击展开编辑）" expanded="false" styleClass="card"> <!-- 默认折叠 -->
+                                          <VBox>
+                                              <Text styleClass="instruction-text"
+                                                    text="请填写以下信息完成请假申请，带*的为必填项"/>
 
-                      <GridPane hgap="15" vgap="15" styleClass="form-grid">
-                          <columnConstraints>
-                              <ColumnConstraints minWidth="100" prefWidth="120"/>
-                              <ColumnConstraints prefWidth="250" hgrow="ALWAYS"/>
-                              <ColumnConstraints minWidth="100" prefWidth="120"/>
-                              <ColumnConstraints prefWidth="250" hgrow="ALWAYS"/>
-                          </columnConstraints>
+                                              <GridPane hgap="15" vgap="15" styleClass="form-grid">
+                                                  <columnConstraints>
+                                                      <ColumnConstraints minWidth="100" prefWidth="120"/>
+                                                      <ColumnConstraints prefWidth="250" hgrow="ALWAYS"/>
+                                                      <ColumnConstraints minWidth="100" prefWidth="120"/>
+                                                      <ColumnConstraints prefWidth="250" hgrow="ALWAYS"/>
+                                                  </columnConstraints>
 
-                          <Label text="*学生ID:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                          <TextField fx:id="studentIdField" promptText="请输入学生ID"
-                                    styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                                  <Label text="*学生ID:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                                  <TextField fx:id="studentIdField" promptText="请输入学生ID"
+                                                            styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                          <Label text="*姓名:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                          <TextField fx:id="studentNameField" promptText="请输入姓名"
-                                    styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                                                  <Label text="*姓名:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                                                  <TextField fx:id="studentNameField" promptText="请输入姓名"
+                                                            styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
-                          <Label text="*学院:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                          <TextField fx:id="collegeField" promptText="请输入学院名称"
-                                    styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                                  <Label text="*学院:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                                  <TextField fx:id="collegeField" promptText="请输入学院名称"
+                                                            styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                          <Label text="*审批人ID:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-                          <TextField fx:id="approverIdField" promptText="请输入审批人ID"
-                                    styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                                                  <Label text="*审批人ID:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                                                  <TextField fx:id="approverIdField" promptText="请输入审批人ID"
+                                                            styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-                          <!-- 删除了请假类型相关控件 -->
+                                                  <Label text="*开始日期:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                                  <DatePicker fx:id="startDatePicker" promptText="选择开始日期"
+                                                             styleClass="date-picker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-                          <Label text="*开始日期:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                          <DatePicker fx:id="startDatePicker" promptText="选择开始日期"
-                                     styleClass="date-picker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                                  <Label text="*结束日期:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                                                  <DatePicker fx:id="endDatePicker" promptText="选择结束日期"
+                                                             styleClass="date-picker" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
 
-                          <Label text="*结束日期:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-                          <DatePicker fx:id="endDatePicker" promptText="选择结束日期"
-                                     styleClass="date-picker" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+                                                  <Label text="*请假原因:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                                  <TextArea fx:id="reasonField" promptText="请详细描述请假原因..."
+                                                           styleClass="form-textarea" prefRowCount="3" wrapText="true"
+                                                           GridPane.rowIndex="3" GridPane.columnIndex="1"
+                                                           GridPane.columnSpan="3"/>
+                                              </GridPane>
 
-                          <Label text="*请假原因:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                          <TextArea fx:id="reasonField" promptText="请详细描述请假原因..."
-                                   styleClass="form-textarea" prefRowCount="3" wrapText="true"
-                                   GridPane.rowIndex="3" GridPane.columnIndex="1"
-                                   GridPane.columnSpan="3"/>
-                      </GridPane>
+                                              <HBox styleClass="button-container">
+                                                  <Button fx:id="clearButton" text="清空表单" onAction="#clearForm" styleClass="secondary-button"/>
+                                                  <Region HBox.hgrow="ALWAYS"/>
+                                                  <Button fx:id="submitButton" text="提交申请" onAction="#onSaveButtonClick" styleClass="primary-button"/>
+                                              </HBox>
+                                          </VBox>
+                                      </TitledPane>
 
-                      <HBox styleClass="button-container">
-                          <Button fx:id="clearButton" text="清空表单" onAction="#clearForm" styleClass="secondary-button"/>
-                          <Region HBox.hgrow="ALWAYS"/>
-                          <Button fx:id="submitButton" text="提交申请" onAction="#onSaveButtonClick" styleClass="primary-button"/>
-                      </HBox>
-                  </VBox>
-              </TitledPane>
+                                      <!-- 请假记录表格卡片 -->
+                                      <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                                          <Label text="我的请假记录" styleClass="card-title"/>
 
-              <!-- 请假记录表格卡片 -->
-              <VBox styleClass="card">
-                  <Label text="我的请假记录" styleClass="card-title"/>
+                                          <TableView fx:id="leaveTableView" styleClass="data-table" prefHeight="300" VBox.vgrow="ALWAYS"> <!-- 添加默认高度 -->
+                                              <columns>
+                                                  <TableColumn fx:id="idColumn" text="申请ID" prefWidth="70"/>
+                                                  <TableColumn fx:id="studentIdColumn" text="学号" prefWidth="80"/>
+                                                  <TableColumn fx:id="studentNameColumn" text="姓名" prefWidth="80"/>
+                                                  <TableColumn fx:id="collegeColumn" text="学院" prefWidth="120"/>
+                                                  <TableColumn fx:id="startDateColumn" text="开始日期" prefWidth="100"/>
+                                                  <TableColumn fx:id="endDateColumn" text="结束日期" prefWidth="100"/>
+                                                  <TableColumn fx:id="reasonColumn" text="请假原因" prefWidth="200"/>
+                                                  <TableColumn fx:id="approverIdColumn" text="审批人" prefWidth="80"/>
+                                                  <TableColumn fx:id="isApprovedColumn" text="审批状态" prefWidth="100"/>
+                                              </columns>
+                                              <placeholder>
+                                                  <Label text="暂无请假记录" style="-fx-font-style: italic;"/>
+                                              </placeholder>
+                                          </TableView>
 
-                  <TableView fx:id="leaveTableView" styleClass="data-table">
-                      <columns>
-                          <TableColumn fx:id="idColumn" text="申请ID" prefWidth="70"/>
-                          <TableColumn fx:id="studentIdColumn" text="学号" prefWidth="80"/>
-                          <TableColumn fx:id="studentNameColumn" text="姓名" prefWidth="80"/>
-                          <TableColumn fx:id="collegeColumn" text="学院" prefWidth="120"/>
-                          <TableColumn fx:id="startDateColumn" text="开始日期" prefWidth="100"/>
-                          <TableColumn fx:id="endDateColumn" text="结束日期" prefWidth="100"/>
-                          <TableColumn fx:id="reasonColumn" text="请假原因" prefWidth="200"/>
-                          <TableColumn fx:id="approverIdColumn" text="审批人" prefWidth="80"/>
-                          <TableColumn fx:id="isApprovedColumn" text="审批状态" prefWidth="100"/>
-                      </columns>
-                      <placeholder>
-                          <Label text="暂无请假记录" style="-fx-font-style: italic;"/>
-                      </placeholder>
-                  </TableView>
-
-                  <!-- 分页控件 -->
-                  <HBox alignment="CENTER" spacing="10">
-                      <padding>
-                          <Insets top="10" right="0" bottom="0" left="0"/>
-                      </padding>
-                      <Pagination fx:id="leavePagination" pageCount="1" maxPageIndicatorCount="5"/>
-                  </HBox>
-              </VBox>
-          </VBox>
+                                          <!-- 分页控件 -->
+                                          <HBox alignment="CENTER" spacing="10">
+                                              <padding>
+                                                  <Insets top="10" right="0" bottom="0" left="0"/>
+                                              </padding>
+                                              <Pagination fx:id="leavePagination" pageCount="1" maxPageIndicatorCount="5"/>
+                                          </HBox>
+                                      </VBox>
+                                  </VBox>
+                              </ScrollPane>
+                          </VBox>
