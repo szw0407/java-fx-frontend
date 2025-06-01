@@ -9,7 +9,7 @@
                           <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
                                 fx:controller="com.teach.javafx.controller.StudentLeaveStudentController"
                                 spacing="20" styleClass="main-container"
-                                prefHeight="700" maxHeight="700"> <!-- 添加固定高度 -->
+                                prefHeight="700" maxHeight="800"> <!-- 添加固定高度 -->
 
                               <stylesheets>
                                   <URL value="@css/leave-style.css" />
