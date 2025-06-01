@@ -9,6 +9,11 @@ module com.teach.javafx {
     requires org.json;
     requires org.commonmark;
     requires javafx.web;
+    
+    // SSL/TLS and crypto modules
+    requires java.base;
+    requires jdk.crypto.ec;
+    requires jdk.crypto.cryptoki;
 
     opens com.teach.javafx to javafx.fxml;
     opens com.teach.javafx.request to com.google.gson, javafx.fxml;
