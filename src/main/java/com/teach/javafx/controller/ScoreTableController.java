@@ -52,7 +52,39 @@ public class ScoreTableController {
     @FXML
     public void initialize() {
         initData();
-
+        var dr = new DataRequest();
+        var response = HttpRequestUtil.request("/api/score/getScoreListOfStudent", dr);
+        if (response == null || response.getCode() != 0) {
+            var msg = response != null ? response.getMsg() : "<UNK>";
+            var a = new Alert(Alert.AlertType.WARNING);
+            a.setTitle("查询失败");
+            a.setHeaderText("查询成绩失败");
+            a.setContentText("错误信息: " + msg);
+            a.showAndWait();
+            return;
+        }
+        List<Map<String, Object>> dataList = (List<Map<String, Object>>) response.getData();
+        allScores.clear();
+        for (Map<String, Object> m : dataList) {
+            String sn = (String) m.get("studentNum");
+            String name = (String) m.get("studentName");
+            String cls = (String) m.get("className");
+            String cnum = (String) m.get("courseNum");
+            String cname = (String) m.get("courseName");
+            String credit = (String) m.get("credit");
+            String tnum = ((Double) m.get("teachClassNum")).intValue() + "";
+            String year = (String) m.get("year");
+            String term = (String) m.get("term");
+            Double mark = (Double) m.get("mark");
+            if (mark == null) {
+                continue;
+            }
+            allScores.add(new ScoreRecord(sn, name, cls, cnum, cname, credit, tnum, year, term, Integer.toString(mark.intValue())));
+        }
+        List<ScoreRecord> filtered = allScores.stream().filter(s ->
+                        s.getMark() != null // 只显示有成绩的记录
+        ).collect(Collectors.toList());
+        dataTableView.setItems(FXCollections.observableArrayList(filtered));
         // 绑定表格列
         studentNameColumn.setCellValueFactory(cell -> cell.getValue().studentNameProperty());
         classNameColumn.setCellValueFactory(cell -> cell.getValue().classNameProperty());
@@ -246,7 +278,14 @@ public class ScoreTableController {
     @FXML
     public void onEditButtonClick(ActionEvent event) {
         ScoreRecord selected = dataTableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("修改失败");
+            alert.setHeaderText("没有选中成绩记录");
+            alert.setContentText("请先选择一条成绩记录进行修改。");
+            alert.showAndWait();
+            return;
+        }
         TextInputDialog dialog = new TextInputDialog(selected.getMark());
         dialog.setTitle("修改成绩");
         dialog.setHeaderText("请输入新成绩：");
@@ -326,6 +365,12 @@ public class ScoreTableController {
             }
             allScores.remove(selected);
             dataTableView.setItems(FXCollections.observableArrayList(allScores));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("删除失败");
+            alert.setHeaderText("没有选中成绩记录");
+            alert.setContentText("请先选择一条成绩记录进行删除。");
+            alert.showAndWait();
         }
     }
 

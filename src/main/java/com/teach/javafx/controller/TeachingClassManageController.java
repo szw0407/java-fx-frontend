@@ -101,7 +101,10 @@ public class TeachingClassManageController {
     @FXML
     public void onEditButtonClick(ActionEvent event) {
         TeachingClassRecord selected = teachingClassTableView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            showAlert("编辑失败", "请先选择一个教学班进行编辑");
+            return;
+        }
         showTeachingClassDialog(selected);
     }
 
@@ -294,6 +297,7 @@ public class TeachingClassManageController {
                 updateTeachingClass(record, selectedTeachers);
             }
         });
+        loadDataFromAPIs();
     }
 
     /**
@@ -424,7 +428,10 @@ public class TeachingClassManageController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 deleteTeachingClass(selected);
-            }
+            }// 刷新界面
+            loadDataFromAPIs();
+        } else {
+            showAlert("删除失败", "请先选择一个教学班进行删除");
         }
     }
 
@@ -445,7 +452,7 @@ public class TeachingClassManageController {
                 loadTeachingClasses();
                 showAlert("删除成功", "教学班删除成功！");
             } else {
-                showAlert("删除失败", response != null ? response.getMsg() : "服务器错误");
+                showAlert("删除失败", response != null ? response.getMsg() : "错误，可能是因为已经有人选课了");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -453,6 +460,9 @@ public class TeachingClassManageController {
             // 如果API调用失败，回退到本地删除
             allTeachingClasses.remove(record);
             teachingClassTableView.setItems(FXCollections.observableArrayList(allTeachingClasses));        }
+
+
+
     }
 
     // ==== 时间选择辅助方法 ====
@@ -685,10 +695,5 @@ public class TeachingClassManageController {
           }
     }
 
-    @FXML
-    public void onRefreshButtonClick(ActionEvent event) {
-        loadDataFromAPIs();
-        teachingClassTableView.setItems(allTeachingClasses);
-        showAlert("刷新完成", "数据已从服务器重新加载");
-    }
+
 }

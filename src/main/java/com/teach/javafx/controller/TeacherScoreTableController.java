@@ -535,6 +535,12 @@ public class TeacherScoreTableController {
             }
 
             selected.setMark(mark);
+            // 重置上方筛选器
+            studentComboBox.setValue(null);
+            courseComboBox.setValue(null);
+            termComboBox.setValue(null);
+            yearField.setText(null);
+            // 刷新表格
             dataTableView.refresh();
         });
     }

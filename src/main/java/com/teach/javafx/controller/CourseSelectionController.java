@@ -223,6 +223,10 @@ public class CourseSelectionController {
             }
             allSelections.remove(selected);
             selectionTableView.setItems(FXCollections.observableArrayList(allSelections));
+        } else {
+            // show warning message
+            Alert alert = new Alert(Alert.AlertType.WARNING, "请先选择要删除的选课记录。", ButtonType.OK);
+            alert.showAndWait();
         }
     }
 
