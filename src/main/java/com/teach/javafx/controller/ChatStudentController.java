@@ -385,7 +385,8 @@ package com.teach.javafx.controller;
 
                         private void addAIMessage(String message) {
                             VBox messageContainer = new VBox(5);
-                            messageContainer.setMaxWidth(chatScrollPane.getWidth() * 0.7);
+                            // 使用固定宽度值，而不是相对宽度
+                            messageContainer.setMaxWidth(700);
                             messageContainer.getStyleClass().add("ai-message");
 
                             Label senderLabel = new Label("AI助手");
@@ -394,7 +395,8 @@ package com.teach.javafx.controller;
                             Label timeLabel = new Label(LocalDateTime.now().format(TIME_FORMATTER));
                             timeLabel.getStyleClass().add("time-label");                            WebView webView = new WebView();
                             webView.getEngine().loadContent(renderMarkdownToHtml(message), "text/html");
-                            webView.setPrefWidth(messageContainer.getMaxWidth() - 30);
+                            // WebView宽度也相应调整为固定值
+                            webView.setPrefWidth(670);
                             webView.setPrefHeight(calculateTextHeight(message, 5000));
 
                             messageContainer.getChildren().addAll(senderLabel, webView, timeLabel);
