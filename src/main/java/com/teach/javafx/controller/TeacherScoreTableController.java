@@ -26,7 +26,7 @@ public class TeacherScoreTableController {
     @FXML
     private TableView<ScoreRecord> dataTableView;
     @FXML
-    private TableColumn<ScoreRecord, String> studentNameColumn, classNameColumn, courseNumColumn, courseNameColumn, creditColumn,
+    private TableColumn<ScoreRecord, String> studentNameColumn, courseNumColumn, courseNameColumn, creditColumn,
             teachClassNumColumn, yearColumn, termColumn, markColumn, editColumn;
     @FXML
     private ComboBox<Student> studentComboBox;
@@ -104,7 +104,7 @@ public class TeacherScoreTableController {
         initData();
         // 绑定表格列
         studentNameColumn.setCellValueFactory(cell -> cell.getValue().studentNameProperty());
-        classNameColumn.setCellValueFactory(cell -> cell.getValue().classNameProperty());
+//        classNameColumn.setCellValueFactory(cell -> cell.getValue().classNameProperty());
         courseNumColumn.setCellValueFactory(cell -> cell.getValue().courseNumProperty());
         courseNameColumn.setCellValueFactory(cell -> cell.getValue().courseNameProperty());
         creditColumn.setCellValueFactory(cell -> cell.getValue().creditProperty());
