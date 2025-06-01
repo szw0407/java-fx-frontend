@@ -1,6 +1,6 @@
 module com.teach.javafx {
     requires transitive javafx.base;
-    requires javafx.controls;
+    requires transitive javafx.controls; // Added transitive here
     requires javafx.fxml;
     requires javafx.swing;
     requires java.logging;

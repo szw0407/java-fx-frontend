@@ -1,0 +1,307 @@
+/* Material Design inspired styles for student-course-selection.fxml */
+
+/* General Styles */
+.root {
+    -fx-font-family: "Roboto", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ECEFF1 0%, #F5F5F5 100%);
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.08), 30, 0.2, 0, 8);
+    -fx-background-insets: 0;
+    -fx-background-radius: 0 0 24 24;
+}
+
+/* Top HBox container for filters */
+.top-filter-bar {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #FFFFFF 0%, #E3F2FD 100%);
+    -fx-padding: 18 24 18 24;
+    -fx-spacing: 14;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.10), 16, 0.3, 0, 4);
+    -fx-background-radius: 12 12 0 0;
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 15;
+    -fx-text-fill: #37474F;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.04), 2, 0.1, 0, 1);
+}
+
+/* TextFields */
+.text-field {
+    -fx-font-size: 15;
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #CFD8DC 0%, #FFFFFF 100%);
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-padding: 10 12 10 12;
+    -fx-prompt-text-fill: #90A4AE;
+    -fx-border-color: #B3E5FC;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.08), 4, 0.2, 0, 1);
+}
+
+.text-field:focused {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #03A9F4;
+    -fx-effect: dropshadow(gaussian, #03A9F4, 8, 0.2, 0, 2);
+}
+
+.text-field:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-effect: dropshadow(gaussian, #90CAF9, 6, 0.15, 0, 1);
+}
+
+/* ComboBox */
+.combo-box-base {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 6;
+    -fx-padding: 9 12 9 12;
+    -fx-font-size: 15;
+    -fx-border-color: #B3E5FC;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-radius: 6 6 0 0;
+}
+
+.combo-box-base:hover {
+    -fx-background-color: #F8F9FA;
+    -fx-border-color: #03A9F4;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #03A9F4;
+    -fx-border-width: 0 0 3 0;
+}
+
+/* ComboBox 下拉箭头 */
+.combo-box .arrow {
+    -fx-background-color: #607D8B;
+    -fx-shape: "M7 10l5 5 5-5z";
+    -fx-scale-shape: true;
+    -fx-padding: 4;
+}
+
+.combo-box:hover .arrow {
+    -fx-background-color: #03A9F4;
+}
+
+.combo-box:focused .arrow {
+    -fx-background-color: #0288D1;
+}
+
+/* ComboBox 下拉按钮 */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 6 0 0;
+    -fx-padding: 0 8 0 8;
+}
+
+.combo-box:hover .arrow-button {
+    -fx-background-color: #E3F2FD;
+    -fx-background-radius: 0 6 0 0;
+}
+
+/* 下拉菜单容器 */
+.combo-box-popup .list-view {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 0 0 8 8;
+    -fx-border-color: #03A9F4;
+    -fx-border-width: 0 2 2 2;
+    -fx-border-radius: 0 0 8 8;
+    -fx-effect: dropshadow(gaussian, rgba(3,169,244,0.2), 12, 0.3, 0, 4);
+    -fx-padding: 4 0 4 0;
+}
+
+/* 下拉菜单选项 */
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #37474F;
+    -fx-padding: 10 16 10 16;
+    -fx-font-size: 14;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #E3F2FD 0%, #BBDEFB 100%);
+    -fx-text-fill: #0277BD;
+    -fx-effect: dropshadow(gaussian, rgba(3,169,244,0.1), 2, 0.1, 0, 1);
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #03A9F4 0%, #0288D1 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(3,169,244,0.3), 4, 0.2, 0, 2);
+}
+
+.combo-box-popup .list-view .list-cell:selected:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #0288D1 0%, #0277BD 100%);
+    -fx-text-fill: white;
+}
+
+/* 焦点时的特殊效果 */
+.combo-box-popup .list-view .list-cell:focused {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #BBDEFB 0%, #90CAF9 100%);
+    -fx-text-fill: #01579B;
+    -fx-border-color: #03A9F4;
+    -fx-border-width: 1 0 1 0;
+}
+
+/* Buttons */
+.button {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #03A9F4 0%, #0288D1 100%);
+    -fx-background-radius: 6;
+    -fx-padding: 10 22 10 22;
+    -fx-effect: dropshadow(gaussian, #0288D1, 8, 0.2, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #0288D1 0%, #03A9F4 100%);
+    -fx-effect: dropshadow(gaussian, #0288D1, 12, 0.3, 0, 3);
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #01579B 0%, #0288D1 100%);
+    -fx-effect: dropshadow(gaussian, #01579B, 10, 0.4, 0, 2);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #FFFFFF 0%, #ECEFF1 100%);
+    -fx-border-color: #B0BEC5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-selection-bar-non-focused: #E3F2FD;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.10), 18, 0.2, 0, 4);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #607D8B 0%, #90A4AE 100%);
+    -fx-effect: dropshadow(gaussian, #607D8B, 6, 0.15, 0, 1);
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: #CFD8DC;
+    -fx-border-width: 0 1 0 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-padding: 12 0 12 0;
+    -fx-effect: dropshadow(gaussian, #0288D1, 2, 0.1, 0, 1);
+}
+
+.table-view .table-cell {
+    -fx-padding: 12 8 12 8;
+    -fx-font-size: 14;
+    -fx-border-color: #ECEFF1;
+    -fx-border-width: 0 1 0 0;
+    -fx-text-fill: #37474F;
+    -fx-background-color: transparent;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #F5F5F5;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #BBDEFB 0%, #E3F2FD 100%);
+    -fx-text-fill: #212121;
+    -fx-effect: dropshadow(gaussian, #03A9F4, 6, 0.15, 0, 1);
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #E3F2FD 0%, #BBDEFB 100%);
+    -fx-effect: dropshadow(gaussian, #90CAF9, 4, 0.1, 0, 1);
+}
+
+/* Style for action buttons within the table if any (placeholder) */
+.table-view .button {
+    -fx-font-size: 13;
+    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, #0288D1, 4, 0.15, 0, 1);
+}
+
+.table-view .button:hover {
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #0288D1 0%, #03A9F4 100%);
+}
+
+.table-view .button:pressed {
+    -fx-scale-x: 0.96;
+    -fx-scale-y: 0.96;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #01579B 0%, #0288D1 100%);
+}
+
+/* ScrollBar styles (optional, can be extensive) */
+.table-view .scroll-bar:horizontal .track,
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #CFD8DC 0%, #B0BEC5 100%);
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+.table-view .scroll-bar:horizontal .thumb,
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #90A4AE 0%, #B0BEC5 100%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, #90A4AE, 2, 0.1, 0, 1);
+}
+
+.table-view .scroll-bar:horizontal .increment-button ,
+.table-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0;
+    -fx-padding:0 0 10 0;
+}
+
+.table-view .scroll-bar:vertical .increment-button ,
+.table-view .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0;
+    -fx-padding:0 10 0 0;
+}
+
+.table-view .scroll-bar .increment-arrow,
+.table-view .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding:0.15em 0.15em;
+}
+
+/* Specific IDs from FXML if needed for more targeted styling */
+#yearField, #courseQueryField {
+    -fx-pref-width: 160;
+    -fx-background-radius: 6;
+}
+
+#termComboBox {
+    -fx-pref-width: 110;
+    -fx-background-radius: 6;
+}
+
+/* Add a style class to the HBox in FXML for这些样式生效 */
+.top-controls-hbox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 14;
+    -fx-background-radius: 12 12 0 0;
+}
+
+.top-controls-hbox .label {
+    -fx-padding: 0 7 0 0;
+}
+
+/* 动效说明：JavaFX CSS 不支持 transition/animation 关键帧，已用 scale/阴影等属性模拟动效 */

@@ -5,16 +5,17 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.teach.javafx.controller.StudentCourseSelectController">
+            fx:controller="com.teach.javafx.controller.StudentCourseSelectController"
+            stylesheets="@css/material-student-course-selection.css">
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <HBox fx:id="topControlsHBox" alignment="CENTER_LEFT" spacing="10.0" styleClass="top-filter-bar">
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
             </padding>
             <Label text="学年:"/>
             <TextField fx:id="yearField" promptText="如2024"/>
             <Label text="学期:"/>
-            <ComboBox fx:id="termComboBox" prefWidth="60.0"/>
+            <ComboBox fx:id="termComboBox" prefWidth="100.0"/>
             <Label text="课程名称/号:"/>
             <TextField fx:id="courseQueryField" promptText="输入关键字筛选"/>
             <Button mnemonicParsing="false" onAction="#onQueryButtonClick" text="查询"/>
@@ -29,7 +30,7 @@
                 <TableColumn fx:id="teachersColumn" prefWidth="180.0" text="老师"/>
                 <TableColumn fx:id="classTimeColumn" prefWidth="120.0" text="上课时间"/>
                 <TableColumn fx:id="classLocationColumn" prefWidth="120.0" text="上课地点"/>
-                <TableColumn fx:id="actionColumn" prefWidth="80.0" text="操作"/>
+                <TableColumn fx:id="actionColumn" text="操作"/>
             </columns>
         </TableView>
     </center>
