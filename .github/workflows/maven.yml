@@ -10,309 +10,91 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-unix:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # Linux distributions
-          - os: ubuntu-latest
-            platform: linux
-            arch: x64
-            runner: ubuntu-latest
-          - os: ubuntu-latest
-            platform: linux
-            arch: arm64
-            runner: ubuntu-latest
-          # macOS
-          - os: macos-latest
-            platform: macos
-            arch: x64
-            runner: macos-13
-          - os: macos-latest
-            platform: macos
-            arch: arm64
-            runner: macos-latest
-          # Self-hosted runners for additional architectures (uncomment when available)
-          - os: ubuntu-latest
-            platform: linux
-            arch: riscv64
-            runner: self-hosted-riscv64
-          - os: ubuntu-latest
-            platform: linux
-            arch: loongarch64
-            runner: self-hosted-loongarch64
-          - os: ubuntu-latest
-            platform: freebsd
-            arch: x64
-            runner: self-hosted-freebsd
-          - os: ubuntu-latest
-            platform: openbsd
-            arch: x64
-            runner: self-hosted-openbsd
-
-    runs-on: ${{ matrix.runner }}
-    name: Build ${{ matrix.platform }}-${{ matrix.arch }}
+  build-linux:
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
-    
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'microsoft'
         cache: maven
-        architecture: ${{ matrix.arch }}
-    
-    - name: Install zip utility (if needed)
-      if: matrix.platform != 'windows'
-      run: |
-        case "${{ matrix.platform }}" in
-          linux)
-            if ! command -v zip >/dev/null 2>&1; then
-              sudo apt-get update && sudo apt-get install -y zip
-            fi
-            ;;
-          freebsd)
-            if ! command -v zip >/dev/null 2>&1; then
-              sudo pkg install -y zip
-            fi
-            ;;
-          openbsd)
-            if ! command -v zip >/dev/null 2>&1; then
-              sudo pkg_add zip
-            fi
-            ;;
-        esac
-    
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
-    
-    - name: Create archive (POSIX)
-      if: matrix.platform != 'windows'
+    - name: Zip the output
       run: |
-        output_dir="target/javafx"
-        archive_name="javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip"
+        zipFile="javafx-linux.zip"
+        outputDir="target/javafx"
+        if [ -f "$zipFile" ]; then
+            rm "$zipFile"
+        fi
+        cd "$outputDir" && zip -r "../../$zipFile" . && cd ../..
+        echo "Created zip file: $zipFile"
         
-        # Remove existing archive if present
-        rm -f "$archive_name"
-        
-        # Create zip archive (simplified command)
-        (cd "$output_dir" && zip -r "../../$archive_name" .)
-        
-        echo "Created archive: $archive_name"
-        ls -la "$archive_name"
-        
-    - name: Upload artifact
+    - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-${{ matrix.platform }}-${{ matrix.arch }}-output
-        path: javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip
-    - name: Upload artifact
+        name: javafx-linux-output
+        path: javafx-linux.zip
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'microsoft'
+        cache: maven
+    - name: Build with Maven
+      run: mvn javafx:jlink --file pom.xml
+    - name: Zip the output
+      run: |
+        zipFile="javafx-macos.zip"
+        outputDir="target/javafx"
+        if [ -f "$zipFile" ]; then
+            rm "$zipFile"
+        fi
+        cd "$outputDir" && zip -r "../../$zipFile" . && cd ../..
+        echo "Created zip file: $zipFile"
+        
+    - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-${{ matrix.platform }}-${{ matrix.arch }}-output
-        path: javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip
+        name: javafx-macos-output
+        path: javafx-macos.zip
 
   build-windows:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: windows
-            arch: x64
-            runner: windows-latest
-          - platform: windows
-            arch: arm64
-            runner: windows-latest
-
-    runs-on: ${{ matrix.runner }}
-    name: Build ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
-    
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'microsoft'
         cache: maven
-        architecture: ${{ matrix.arch }}
-    
     - name: Build with Maven
       run: mvn javafx:jlink --file pom.xml
-    
-    - name: Create archive (Windows)
+    - name: Zip the output
       run: |
-        $archiveName = "javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip"
+        $zipFile = "javafx-windows.zip"
         $outputDir = "target\javafx"
-        
-        # Remove existing archive if present
-        if (Test-Path $archiveName) {
-            Remove-Item $archiveName -Force
+        if (Test-Path $zipFile) {
+            Remove-Item $zipFile
         }
+        Compress-Archive -Path "$outputDir\*" -DestinationPath $zipFile -Force
+        Write-Host "Created zip file: $zipFile"
         
-        # Create zip archive
-        Compress-Archive -Path "$outputDir\*" -DestinationPath $archiveName -Force
-        
-        Write-Host "Created archive: $archiveName"
-        Get-Item $archiveName | Select-Object Name, Length, LastWriteTime
-        
-    - name: Upload artifact
+    - name: Upload the zip file
       uses: actions/upload-artifact@v4
       with:
-        name: javafx-${{ matrix.platform }}-${{ matrix.arch }}-output
-        path: javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip
-
-  # Alternative build job for additional architectures using Docker
-  build-docker:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # Additional Linux architectures via Docker
-          - platform: linux
-            arch: arm
-            docker_platform: linux/arm/v7
-            image: arm32v7/openjdk:21-jdk
-          - platform: linux
-            arch: arm64
-            docker_platform: linux/arm64/v8
-            image: arm64v8/openjdk:21-jdk
-          - platform: linux
-            arch: riscv64
-            docker_platform: linux/riscv64
-            image: riscv64/openjdk:21-jdk
-          # Note: Uncomment when these images become available
-          - platform: linux
-            arch: loongarch64
-            docker_platform: linux/loong64
-            image: loongarch64/openjdk:21-jdk
-          - platform: linux
-            arch: s390x
-            docker_platform: linux/s390x
-            image: s390x/openjdk:21-jdk
-          - platform: linux
-            arch: ppc64le
-            docker_platform: linux/ppc64le
-            image: ppc64le/openjdk:21-jdk
-
-    runs-on: ubuntu-latest
-    name: Build (Docker) ${{ matrix.platform }}-${{ matrix.arch }}
-    
-    # Only run for specific architectures that need Docker
-    if: matrix.arch == 'arm' || matrix.arch == 'riscv64' || matrix.arch == 's390x' || matrix.arch == 'ppc64le'
-
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        platforms: ${{ matrix.docker_platform }}
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    
-    - name: Build with Docker
-      run: |
-        # Create a temporary Dockerfile for the build
-        cat > Dockerfile.build << 'EOF'
-        FROM ${{ matrix.image }}
+        name: javafx-windows-output
+        path: javafx-windows.zip
         
-        # Install required tools
-        RUN apt-get update && apt-get install -y \
-            maven \
-            zip \
-            && rm -rf /var/lib/apt/lists/*
         
-        WORKDIR /workspace
-        COPY . .
-        
-        # Build the project
-        RUN mvn javafx:jlink --file pom.xml
-        
-        # Create archive
-        RUN cd target/javafx && \
-            zip -r ../../javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip . && \
-            cd ../..
-        
-        # Copy the archive to output
-        CMD ["cp", "javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip", "/output/"]
-        EOF
-        
-        # Build and run the Docker container
-        docker buildx build \
-          --platform ${{ matrix.docker_platform }} \
-          -f Dockerfile.build \
-          -t javafx-builder:${{ matrix.arch }} \
-          --load \
-          .
-        
-        # Create output directory and run container
-        mkdir -p output
-        docker run \
-          --platform ${{ matrix.docker_platform }} \
-          -v "$(pwd)/output:/output" \
-          javafx-builder:${{ matrix.arch }}
-        
-        # Move the archive to the correct location
-        mv output/javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip .
-        
-        echo "Created archive for ${{ matrix.platform }}-${{ matrix.arch }}"
-        ls -la javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip
-    
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: javafx-${{ matrix.platform }}-${{ matrix.arch }}-output
-        path: javafx-${{ matrix.platform }}-${{ matrix.arch }}.zip
-
-  # # Summary job to create a release with all artifacts
-  # create-release:
-  #   needs: [build-unix, build-windows, build-docker]
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    
-  #   steps:
-  #   - name: Download all artifacts
-  #     uses: actions/download-artifact@v4
-  #     with:
-  #       path: artifacts
-    
-  #   - name: List all artifacts
-  #     run: |
-  #       echo "=== Available artifacts ==="
-  #       find artifacts -type f -name "*.zip" | sort
-  #       echo "=========================="
-        
-  #       # Create a summary file
-  #       echo "# Build Summary" > build-summary.md
-  #       echo "" >> build-summary.md
-  #       echo "## Available Platforms and Architectures" >> build-summary.md
-  #       echo "" >> build-summary.md
-        
-  #       for zip_file in artifacts/*/*.zip; do
-  #         if [ -f "$zip_file" ]; then
-  #           basename_file=$(basename "$zip_file")
-  #           size=$(du -h "$zip_file" | cut -f1)
-  #           echo "- $basename_file ($size)" >> build-summary.md
-  #         fi
-  #       done
-    
-  #   - name: Create Release
-  #     if: success()
-  #     uses: softprops/action-gh-release@v2
-  #     with:
-  #       tag_name: build-${{ github.run_number }}
-  #       name: Multi-Platform Build ${{ github.run_number }}
-  #       body_path: build-summary.md
-  #       files: artifacts/*/*.zip
-  #       draft: false
-  #       prerelease: true
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
