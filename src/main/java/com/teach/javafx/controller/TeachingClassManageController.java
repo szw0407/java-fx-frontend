@@ -1,7 +1,6 @@
 package com.teach.javafx.controller;
 
 import com.teach.javafx.request.*;
-import com.teach.javafx.util.DateTimeTool;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -335,10 +334,10 @@ public class TeachingClassManageController {
                 // click query button
                 showSuccessAlert("保存成功", "教学班创建成功！");
             } else {
-                showErrorAlert("保存失败", response != null ? response.getMsg() : "服务器错误");
+                showErrorAlert(response != null ? response.getMsg() : "服务器错误");
             }        } catch (Exception e) {
             e.printStackTrace();
-            showErrorAlert("保存失败", "保存过程中发生错误：" + e.getMessage());
+            showErrorAlert("保存过程中发生错误：" + e.getMessage());
         }
     }
 
@@ -398,9 +397,9 @@ public class TeachingClassManageController {
     /**
      * 显示错误提示对话框
      */
-    private void showErrorAlert(String title, String message) {
+    private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("保存失败");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

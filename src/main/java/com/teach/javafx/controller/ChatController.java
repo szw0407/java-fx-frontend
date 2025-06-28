@@ -27,8 +27,8 @@ package com.teach.javafx.controller;
             @FXML
             private Label loadingLabel;
 
-            private static final String OPENAI_API_URL = "https://deepseek.wxmbz.com/v1/chat/completions";
-            private static final String API_KEY = "sk-sFkRY3HYKTXvWWDheAPdVYwabHHAgiF1Q0nw6FbvJSSaoG0n";
+            private static final String OPENAI_API_URL = "";
+            private static final String API_KEY = "";
 
             @FXML
             public void sendPrompt() {

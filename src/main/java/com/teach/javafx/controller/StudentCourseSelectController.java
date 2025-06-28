@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,9 +26,9 @@ public class StudentCourseSelectController {
     @FXML private TableColumn<TeachingClassVO, String> courseNameColumn, courseNumColumn, teachClassNumColumn, teachersColumn, classTimeColumn, classLocationColumn, actionColumn;
 
     // mock数据
-    private ObservableList<TeachingClassVO> allTeachingClasses = FXCollections.observableArrayList();
+    private final ObservableList<TeachingClassVO> allTeachingClasses = FXCollections.observableArrayList();
     // 已选教学班id
-    private Set<ScoreRec> mySelectedClassIds = new HashSet<>();
+    private final Set<ScoreRec> mySelectedClassIds = new HashSet<>();
 
     // 假设当前学生ID
     private final String currentStudentId = "2023001";
@@ -228,7 +227,9 @@ initData();
                 allTeachingClasses.add(new TeachingClassVO(id, cname, cnum, tcNum, teachers, time, location, year, term));
             }
         } else {
-            showAlert("错误", "获取可选课程失败: " + avail.getMsg());
+            if (avail != null) {
+                showAlert("错误", "获取可选课程失败: " + avail.getMsg());
+            }
         }
 
         var mysel = HttpRequestUtil.request("/api/me/ScoreList", dr);
@@ -241,7 +242,9 @@ initData();
                 mySelectedClassIds.add(new ScoreRec(classId, scoreId));
             }
         } else {
-            showAlert("错误", "获取已选课程失败: " + mysel.getMsg());
+            if (mysel != null) {
+                showAlert("错误", "获取已选课程失败: " + mysel.getMsg());
+            }
         }
     }
 

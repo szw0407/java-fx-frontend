@@ -69,8 +69,8 @@ public class StudentLeaveStudentController extends ToolController {
     private Pagination leavePagination;
 
     private final int ROWS_PER_PAGE = 10;
-    private ObservableList<Map> masterLeaveList = FXCollections.observableArrayList(); // 存储所有数据
-    private ObservableList<Map> leaveList = FXCollections.observableArrayList();
+    private final ObservableList<Map> masterLeaveList = FXCollections.observableArrayList(); // 存储所有数据
+    private final ObservableList<Map> leaveList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -139,7 +139,7 @@ public class StudentLeaveStudentController extends ToolController {
     }
 
     private void setupTableRowFactory() {
-        leaveTableView.setRowFactory(tv -> new TableRow<Map>() {
+        leaveTableView.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Map item, boolean empty) {
                 super.updateItem(item, empty);
@@ -224,13 +224,11 @@ public class StudentLeaveStudentController extends ToolController {
         if (res != null && res.getCode() == 0) {
             String currentStudentId = getCurrentStudentId();
             ArrayList<Map> filteredList = new ArrayList<>();
-            for (Map record : (ArrayList<Map>) res.getData()) {
+            for (var record : (ArrayList<Map>) res.getData()) {
                 // 将 record.get("studentId") 转换为字符串后再比较
                 if (currentStudentId.equals(String.valueOf(record.get("studentId")).replace(".0", ""))) {
                     // 检查 isApproved 字段是否为 null
-                    if (record.get("isApproved") == null) {
-                        record.put("isApproved", ""); // 设置为空字符串或其他默认值
-                    }
+                    record.putIfAbsent("isApproved", ""); // 设置为空字符串或其他默认值
                     filteredList.add(record);
                 }
             }

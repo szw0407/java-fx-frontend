@@ -129,7 +129,7 @@ public class TechnicalAchieveController {
         achievementField.setText("");
     }
     protected void changePracticeInfo(){
-        Map<String, Object> form = dataTableView.getSelectionModel().getSelectedItem();
+        var form = dataTableView.getSelectionModel().getSelectedItem();
         if(form == null){
             clearPanel();
             return;
@@ -139,11 +139,13 @@ public class TechnicalAchieveController {
         DataRequest req = new DataRequest();
         req.add("id", id);
         DataResponse res = HttpRequestUtil.request("/api/technicalAchieve/getTechnicalAchieveInfo", req);
-        if(res.getCode()!=0){
+        if (res != null && res.getCode() != 0) {
             MessageDialog.showDialog(res.getMsg());
             return;
         }
-        form = (Map) res.getData();
+        if (res != null) {
+            form = (Map) res.getData();
+        }
         studentIdField.setText(CommonMethod.getString(form, "studentId"));
         subjectField.setText(CommonMethod.getString(form, "subject"));
         descriptionArea.setText(CommonMethod.getString(form, "description"));

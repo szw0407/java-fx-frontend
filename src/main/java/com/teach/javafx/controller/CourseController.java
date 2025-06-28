@@ -46,7 +46,8 @@ public class CourseController {
     @FXML
     private TableColumn<Map, String> creditColumn;
     @FXML
-    private TableColumn<Map, String> preCourseColumn;    @FXML
+    private TableColumn<Map, String> preCourseColumn;
+    @FXML
     private TableColumn<Map,FlowPane> operateColumn;
       // 查询条件字段
     @FXML
@@ -142,7 +143,7 @@ public class CourseController {
         cancleButton.setId("cancelNew");
         cancleButton.setOnAction(e->{
             // 取消新建行，移除最后一行
-            observableList.remove(observableList.size() - 1);
+            observableList.removeLast();
             hasNewRow = false;
             dataTableView.scrollTo(observableList.size() - 1); // 滚动到最后一行
 
@@ -219,19 +220,19 @@ public class CourseController {
         numColumn.setCellValueFactory(new MapValueFactory<>("num"));
         numColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         numColumn.setOnEditCommit(event -> {
-            Map<String,Object> map = event.getRowValue();
+            var map = event.getRowValue();
             map.put("num", event.getNewValue());
         });
         nameColumn.setCellValueFactory(new MapValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(event -> {
-            Map<String, Object> map = event.getRowValue();
+            var map = event.getRowValue();
             map.put("name", event.getNewValue());
         });
         creditColumn.setCellValueFactory(new MapValueFactory<>("credit"));
         creditColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         creditColumn.setOnEditCommit(event -> {
-            Map<String, Object> map = event.getRowValue();
+            Map map = event.getRowValue();
             map.put("credit", event.getNewValue());
         });
         preCourseColumn.setCellValueFactory(new MapValueFactory<>("preCourse"));

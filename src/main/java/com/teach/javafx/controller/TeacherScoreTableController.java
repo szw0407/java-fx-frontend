@@ -34,9 +34,9 @@ public class TeacherScoreTableController {
     private ComboBox<Course> courseComboBox;
     @FXML
     private Button viewStatisticsButton; // Button to view statistics
-    private ObservableList<ScoreRecord> allScores = FXCollections.observableArrayList();
-    private ObservableList<Student> allStudents = FXCollections.observableArrayList();
-    private ObservableList<Course> allCourses = FXCollections.observableArrayList();
+    private final ObservableList<ScoreRecord> allScores = FXCollections.observableArrayList();
+    private final ObservableList<Student> allStudents = FXCollections.observableArrayList();
+    private final ObservableList<Course> allCourses = FXCollections.observableArrayList();
     // private Map<String, List<TeachingClass>> studentTeachClassMap = new HashMap<>(); // Commented out as unused
 
     private static final double PASSING_GRADE = 60.0;
